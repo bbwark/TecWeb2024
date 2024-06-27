@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const { sequelize } = require("./models");
 
 const app = express();
 
@@ -10,3 +11,12 @@ app.get("/*", (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000, () => console.log("Server running..."));
+
+//change force:true to alter:true when developing finished
+sequelize.sync({ force: true }).then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}...`);
+    });
+}).catch(err => {
+    console.error('Unable to connect to the database:', err);
+});
