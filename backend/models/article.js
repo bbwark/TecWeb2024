@@ -9,6 +9,10 @@ module.exports = (sequelize) => {
         content: {
             type: DataTypes.TEXT,
             allowNull: false
+        },
+        tags: {
+            type: DataTypes.STRING,
+            allowNull: false
         }
     });
     return Article;
