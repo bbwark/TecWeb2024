@@ -2,7 +2,8 @@ const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('PressPortal', 'postgres', 'postgres', {
     host: 'localhost',
-    dialect: 'postgres'
+    dialect: 'postgres',
+    port: 5432
 });
 
 const User = require('./user')(sequelize);
