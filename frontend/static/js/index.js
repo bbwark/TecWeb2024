@@ -1,4 +1,4 @@
-import ArticleShowcase from "./views/ArticleShowcase.js";
+import ArticleShowcase from "../views/ArticleShowcase.js";
 
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
