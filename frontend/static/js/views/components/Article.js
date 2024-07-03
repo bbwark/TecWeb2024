@@ -3,25 +3,16 @@ import AbstractView from "../AbstractView.js";
 export default class extends AbstractView {
   constructor(params) {
     super(params);
+    this.article = params.article;
   }
 
   async getHtml() {
-    const {
-      title,
-      author,
-      publishedDate,
-      modifiedDate,
-      tags,
-      preview,
-      showEditDeleteButtons,
-    } = this.params;
-
     return `
             <div class="article">
                 <div class="article-header">
-                    <h2>${title}</h2>
+                    <h3>${this.article.title}</h3>
                     ${
-                      showEditDeleteButtons
+                      this.article.showEditDeleteButtons
                         ? `
                     <button class="edit-button">✏️</button>
                     <button class="delete-button">🗑️</button>`
@@ -29,11 +20,15 @@ export default class extends AbstractView {
                     }
                 </div>
                 <div class="article-details">
-                <p>Author: ${author}</p>
-                <p>Published on: ${publishedDate}</p>
-                <p>Last modified: ${modifiedDate}</p>
-                <p>Tags: ${tags.join(", ")}</p>
-                ${preview ? `<p class="preview">${preview}</p>` : ""}
+                  <p>Author: ${this.article.author}</p>
+                  <p>Published on: ${this.article.publishedDate}</p>
+                  <p>Last modified: ${this.article.modifiedDate}</p>
+                  <p>Tags: ${this.article.tags.join(", ")}</p>
+                  ${
+                    this.article.preview
+                      ? `<p class="preview">${this.article.content.substring(0,50)}...</p>`
+                      : ""
+                  }
                 </div>
             </div>
         `;
