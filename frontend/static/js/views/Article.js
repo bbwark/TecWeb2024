@@ -1,5 +1,4 @@
-// article.js
-import AbstractView from "./AbstractView.js"; // Assuming your abstract class is in a file named AbstractView.js
+import AbstractView from "./AbstractView.js";
 
 export default class extends AbstractView {
     constructor(params) {
