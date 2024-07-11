@@ -34,6 +34,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/list/:page", async (req, res) => {
+  try {
+    const page = parseInt(req.params.page, 10) || 1;
+    const users = await userService.getUsersPaginated(page);
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 router.put("/:id", async (req, res) => {
   try {
     const user = await userService.updateUser(req.params.id, req.body);

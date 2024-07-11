@@ -12,6 +12,12 @@ const getAllUsers = async () => {
   return await userCrud.getAllUsers();
 };
 
+const getUsersPaginated = async (page) => {
+  const limit = config.pagingNumber;
+  const offset = (page - 1) * limit;
+  return await userCrud.getUsersPaginated(limit, offset);
+};
+
 const updateUser = async (userId, updateData) => {
   return await userCrud.updateUser(userId, updateData);
 };
@@ -24,6 +30,7 @@ module.exports = {
   createUser,
   getUserById,
   getAllUsers,
+  getUsersPaginated,
   updateUser,
   deleteUser,
 };

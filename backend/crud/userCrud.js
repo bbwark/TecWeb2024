@@ -12,7 +12,7 @@ const getAllUsers = async () => {
   return await User.findAll();
 };
 
-const getRecentUsers = async (limit, offset) => {
+const getUsersPaginated = async (limit, offset) => {
   return await User.findAll({
     limit: limit,
     offset: offset,
@@ -41,7 +41,7 @@ module.exports = {
   createUser,
   getUserById,
   getAllUsers,
-  getRecentUsers,
+  getUsersPaginated,
   updateUser,
   deleteUser,
 };
