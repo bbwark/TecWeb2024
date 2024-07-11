@@ -1,6 +1,6 @@
 const config = {
     numberOfArticles: 10, // Number for pagination
-    apiBaseUrl: "https://api.example.com"
+    apiBaseUrl: "http://localhost:3000/api"
 };
 
 const state = {
