@@ -1,4 +1,5 @@
-const articleCrud = require("../crud/articleCrud");
+import { config } from "../config.js";
+const articleCrud = require("../crud/articleCrud.js");
 
 const createArticle = async (articleData) => {
   return await articleCrud.createArticle(articleData);
@@ -13,13 +14,13 @@ const getAllArticles = async () => {
 };
 
 const getRecentArticles = async (page) => {
-  const limit = 10;
+  const limit = config.pagingNumber;
   const offset = (page - 1) * limit;
   return await articleCrud.getRecentArticles(limit, offset);
 };
 
 const getRecentArticlesByTag = async (tag, page) => {
-  const limit = 10;
+  const limit = config.pagingNumber;
   const offset = (page - 1) * limit;
   return await articleCrud.getRecentArticlesByTag(tag, limit, offset);
 };
