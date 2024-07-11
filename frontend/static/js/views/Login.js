@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import { setUser } from "../config.js";
+import { state } from "../config.js";
 
 export default class extends AbstractView {
     constructor(params) {
@@ -45,7 +45,7 @@ export default class extends AbstractView {
             if (response.ok) {
                 // Gestione del login avvenuto con successo
                 // TODO: Gestire il salvataggio dello stato dell'utente e della sessione
-                setUser(data.user);
+                state.setUser(data.user);
                 alert("Login successful!");
                 // Reindirizzamento alla pagina principale
                 window.location.href = "/";
