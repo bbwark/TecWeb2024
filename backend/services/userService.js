@@ -1,3 +1,4 @@
+const config = require('../config.js');
 const userCrud = require("../crud/userCrud");
 
 const createUser = async (userData) => {
