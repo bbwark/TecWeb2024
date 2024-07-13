@@ -1,8 +1,8 @@
 const express = require("express");
 const path = require("path");
 const { sequelize, User, Article } = require("./databaseconn");
-const { userController } = require("./controllers/userController");
-const { articleController } = require("./controllers/articleController");
+const userController = require("./controllers/userController");
+const articleController = require("./controllers/articleController");
 
 const app = express();
 
