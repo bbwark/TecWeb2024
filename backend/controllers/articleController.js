@@ -1,9 +1,9 @@
 const express = require("express");
 const articleService = require("../services/articleService");
 
-const router = express.Router();
+const articleController = express.Router();
 
-router.post("/", async (req, res) => {
+articleController.post("/", async (req, res) => {
   try {
     const article = await articleService.createArticle(req.body);
     res.status(201).json(article);
@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+articleController.get("/:id", async (req, res) => {
   try {
     const article = await articleService.getArticleById(req.params.id);
     if (article) {
@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+articleController.get("/", async (req, res) => {
   try {
     const articles = await articleService.getAllArticles();
     res.status(200).json(articles);
@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/recent/:page", async (req, res) => {
+articleController.get("/recent/:page", async (req, res) => {
   try {
     const page = parseInt(req.params.page, 10) || 1;
     const articles = await articleService.getRecentArticles(page);
@@ -44,7 +44,7 @@ router.get("/recent/:page", async (req, res) => {
   }
 });
 
-router.get("/by-tag/:tag/:page", async (req, res) => {
+articleController.get("/by-tag/:tag/:page", async (req, res) => {
   try {
     const { tag, page } = req.params;
     const articles = await articleService.getRecentArticlesByTag(
@@ -57,7 +57,7 @@ router.get("/by-tag/:tag/:page", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+articleController.put("/:id", async (req, res) => {
   try {
     const article = await articleService.updateArticle(req.params.id, req.body);
     if (article) {
@@ -70,7 +70,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+articleController.delete("/:id", async (req, res) => {
   try {
     const success = await articleService.deleteArticle(req.params.id);
     if (success) {
@@ -83,4 +83,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = articleController;

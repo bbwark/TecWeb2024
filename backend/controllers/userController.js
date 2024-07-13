@@ -1,9 +1,9 @@
 const express = require("express");
 const userService = require("../services/userService");
 
-const router = express.Router();
+const userController = express.Router();
 
-router.post("/", async (req, res) => {
+userController.post("/", async (req, res) => {
   try {
     const user = await userService.createUser(req.body);
     res.status(201).json(user);
@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+userController.get("/:id", async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (user) {
@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+userController.get("/", async (req, res) => {
   try {
     const users = await userService.getAllUsers();
     res.status(200).json(users);
@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/list/:page", async (req, res) => {
+userController.get("/list/:page", async (req, res) => {
   try {
     const page = parseInt(req.params.page, 10) || 1;
     const users = await userService.getUsersPaginated(page);
@@ -44,7 +44,7 @@ router.get("/list/:page", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+userController.put("/:id", async (req, res) => {
   try {
     const user = await userService.updateUser(req.params.id, req.body);
     if (user) {
@@ -57,7 +57,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+userController.delete("/:id", async (req, res) => {
   try {
     const success = await userService.deleteUser(req.params.id);
     if (success) {
@@ -70,4 +70,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = userController;
