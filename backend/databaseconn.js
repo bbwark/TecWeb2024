@@ -9,8 +9,14 @@ const sequelize = new Sequelize("PressPortal", "postgres", "postgres", {
 const User = require("./models/user")(sequelize);
 const Article = require("./models/article")(sequelize);
 
-User.hasMany(Article, { as: "articles" });
-Article.belongsTo(User, { foreignKey: "userId", as: "user" });
+User.hasMany(Article, {
+  as: "articles",
+  foreignKey: "userId",
+});
+Article.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+});
 
 module.exports = {
   sequelize,

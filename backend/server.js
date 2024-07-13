@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 //change force:true to alter:true when developing finished
 sequelize
-  .sync({ force: true })
+  .sync({ alter: true })
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}...`);
