@@ -1,10 +1,12 @@
 import { config } from "./config.js";
-const axios = require('axios');
 
 // Article Endpoints
 const createArticle = async (articleData) => {
   try {
-    const response = await axios.post(`${config.apiBaseUrl}/articles`, articleData);
+    const response = await axios.post(
+      `${config.apiBaseUrl}/articles`,
+      articleData
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -31,7 +33,9 @@ const getAllArticles = async () => {
 
 const getRecentArticles = async (page) => {
   try {
-    const response = await axios.get(`${config.apiBaseUrl}/articles/recent/${page}`);
+    const response = await axios.get(
+      `${config.apiBaseUrl}/articles/recent/${page}`
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -40,7 +44,9 @@ const getRecentArticles = async (page) => {
 
 const getArticlesByTag = async (tag, page) => {
   try {
-    const response = await axios.get(`${config.apiBaseUrl}/articles/by-tag/${tag}/${page}`);
+    const response = await axios.get(
+      `${config.apiBaseUrl}/articles/by-tag/${tag}/${page}`
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -49,7 +55,10 @@ const getArticlesByTag = async (tag, page) => {
 
 const updateArticle = async (id, updateData) => {
   try {
-    const response = await axios.put(`${config.apiBaseUrl}/articles/${id}`, updateData);
+    const response = await axios.put(
+      `${config.apiBaseUrl}/articles/${id}`,
+      updateData
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -103,7 +112,10 @@ const getUsersPaginated = async (page) => {
 
 const updateUser = async (id, updateData) => {
   try {
-    const response = await axios.put(`${config.apiBaseUrl}/users/${id}`, updateData);
+    const response = await axios.put(
+      `${config.apiBaseUrl}/users/${id}`,
+      updateData
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -118,7 +130,7 @@ const deleteUser = async (id) => {
   }
 };
 
-module.exports = {
+export default {
   createArticle,
   getArticleById,
   getAllArticles,
@@ -131,5 +143,5 @@ module.exports = {
   getAllUsers,
   getUsersPaginated,
   updateUser,
-  deleteUser
+  deleteUser,
 };
