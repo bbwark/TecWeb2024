@@ -137,7 +137,7 @@ const articleBuilder = (data) => {
     data.id,
     data.title,
     data.content,
-    data.authorId,
+    data.userId,
     data.createdAt,
     data.updatedAt,
     data.tags
