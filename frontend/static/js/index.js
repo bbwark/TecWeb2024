@@ -54,9 +54,19 @@ const router = async () => {
     };
   }
 
-  const view = new match.route.view(getParams(match));
+  let view = new match.route.view(await matchHandler(match, routes));
 
   document.querySelector("#app").innerHTML = await view.getHtml();
+};
+
+const matchHandler = async (match, routes) => {
+  switch (match.route.path) {
+    case routes[0].path:
+      return await rest.getRecentArticles(1);
+
+    default:
+      break;
+  }
 };
 
 window.addEventListener("popstate", router);
