@@ -50,7 +50,8 @@ export default class extends AbstractView {
   async articleEditButton(articleId) {
     state.setArticleModifying(articleId);
     history.pushState(null, null, "/modify-article");
-    document.querySelector("#app").innerHTML = await new ModifyArticle().getHtml();
+    document.querySelector("#app").innerHTML =
+      await new ModifyArticle().getHtml();
   }
 
   async articleDeleteButton(articleId) {

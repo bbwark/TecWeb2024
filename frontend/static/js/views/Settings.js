@@ -57,8 +57,7 @@ export default class extends AbstractView {
     }
 
     logout() {
-        state.setLoggedInStatus(false);
-        state.setAdminStatus(false);
+        state.clearState();
         alert("Logged out successfully");
         window.location.href = "/login";
     }
