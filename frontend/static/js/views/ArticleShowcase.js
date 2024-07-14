@@ -12,7 +12,7 @@ export default class extends AbstractView {
   async getHtml() {
     const articleHtml = [];
     let firstArticle = true;
-    for (const article of this.params) {
+    for (const article of state.articlesToShow) {
       article.preview = firstArticle;
       firstArticle = false;
       if (article.authorId === state.userId || state.isAdmin) {
@@ -23,10 +23,7 @@ export default class extends AbstractView {
       articleHtml.push(await articleView.getHtml());
     }
 
-    const headerView = new HeaderShowcase({
-      isLogged: state.isLogged,
-      isAdmin: state.isAdmin,
-    });
+    const headerView = new HeaderShowcase({ isLogged: state.isLogged });
     const headerHtml = await headerView.getHtml();
 
     return `
