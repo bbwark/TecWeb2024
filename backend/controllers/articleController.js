@@ -57,6 +57,19 @@ articleController.get("/by-tag/:tag/:page", async (req, res) => {
   }
 });
 
+articleController.get("/by-user-id/:id/:page", async (req, res) => {
+  try {
+    const { userId, page } = req.params;
+    const articles = await articleService.getRecentArticlesByUserId(
+      userId,
+      parseInt(page, 10)
+    );
+    res.status(200).json(articles);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 articleController.put("/:id", async (req, res) => {
   try {
     const article = await articleService.updateArticle(req.params.id, req.body);

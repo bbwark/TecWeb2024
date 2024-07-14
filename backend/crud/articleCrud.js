@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const { Article } = require("../databaseconn");
 
 const createArticle = async (articleData) => {
@@ -31,6 +32,17 @@ const getRecentArticlesByTag = async (tag, limit, offset) => {
   });
 };
 
+const getRecentArticlesByUserId = async (userId, limit, offset) => {
+  return await Article.findAll({
+    where: {
+      userId: userId,
+    },
+    limit: limit,
+    offset: offset,
+    order: [["createdAt", "DESC"]],
+  });
+};
+
 const updateArticle = async (articleId, updateData) => {
   const article = await Article.findByPk(articleId);
   if (article) {
@@ -54,6 +66,7 @@ module.exports = {
   getAllArticles,
   getRecentArticles,
   getRecentArticlesByTag,
+  getRecentArticlesByUserId,
   updateArticle,
   deleteArticle,
 };

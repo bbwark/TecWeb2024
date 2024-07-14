@@ -55,6 +55,17 @@ const getArticlesByTag = async (tag, page) => {
   }
 };
 
+const getArticlesByUserId = async (userId, page) => {
+  try {
+    const response = await axios.get(
+      `${config.apiBaseUrl}/articles/by-user-id/${userId}/${page}`
+    );
+    return response.data.map((data) => articleBuilder(data));
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 const updateArticle = async (id, updateData) => {
   try {
     const response = await axios.put(
@@ -154,6 +165,7 @@ export default {
   getAllArticles,
   getRecentArticles,
   getArticlesByTag,
+  getArticlesByUserId,
   updateArticle,
   deleteArticle,
   createUser,
