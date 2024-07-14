@@ -4,11 +4,11 @@ const config = {
 };
 
 const state = {
-    isLoggedIn: false,
+    isLogged: false,
     isAdmin: false,
     user: null,
     setLoggedInStatus(status) {
-        this.isLoggedIn = status;
+        this.isLogged = status;
     },
     setAdminStatus(status) {
         this.isAdmin = status;
@@ -18,7 +18,7 @@ const state = {
     },
     clearUser() {
         this.user = null;
-        this.isLoggedIn = false;
+        this.isLogged = false;
         this.isAdmin = false;
     }
 };
