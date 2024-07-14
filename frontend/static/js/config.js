@@ -9,6 +9,7 @@ const state = {
   userId: null,
   openedPage: 1,
   articleModifying: 0,
+  articlesToShow: null,
   setLoggedInStatus(status) {
     this.isLogged = status;
     this.saveState();
@@ -23,11 +24,12 @@ const state = {
     this.saveState();
   },
   clearState() {
-    this.userId = null;
     this.isLogged = false;
     this.isAdmin = false;
+    this.userId = null;
     this.openedPage = 1;
     this.articleModifying = 0;
+    this.articlesToShow = null;
     this.saveState();
   },
   setOpenedPage(page) {
@@ -37,6 +39,10 @@ const state = {
   setArticleModifying(articleId) {
     this.articleModifying = articleId;
     this.saveState();
+  },
+  setArticlesToShow(params) {
+    this.articlesToShow = params;
+    this.saveState;
   },
 
   loadState() {
