@@ -17,8 +17,8 @@ export default class extends AbstractView {
                     ${
                       this.params.showEditDeleteButtons
                         ? `
-                    <button class="edit-button">✏️</button>
-                    <button class="delete-button">🗑️</button>`
+                    <button id="edit-button" class="edit-button">✏️</button>
+                    <button id="delete-button" class="delete-button">🗑️</button>`
                         : ""
                     }
                 </div>
