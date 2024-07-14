@@ -1,4 +1,6 @@
 import { config } from "./config.js";
+import ArticleDTO from "./models/articleDTO.js";
+import UserDTO from "./models/userDTO.js";
 
 // Article Endpoints
 const createArticle = async (articleData) => {
@@ -16,7 +18,7 @@ const createArticle = async (articleData) => {
 const getArticleById = async (id) => {
   try {
     const response = await axios.get(`${config.apiBaseUrl}/articles/${id}`);
-    return response.data;
+    return articleBuilder(response.data);
   } catch (error) {
     throw error.response.data;
   }
@@ -25,7 +27,7 @@ const getArticleById = async (id) => {
 const getAllArticles = async () => {
   try {
     const response = await axios.get(`${config.apiBaseUrl}/articles`);
-    return response.data;
+    return response.data.map((data) => articleBuilder(data));
   } catch (error) {
     throw error.response.data;
   }
@@ -36,7 +38,7 @@ const getRecentArticles = async (page) => {
     const response = await axios.get(
       `${config.apiBaseUrl}/articles/recent/${page}`
     );
-    return response.data;
+    return response.data.map((data) => articleBuilder(data));
   } catch (error) {
     throw error.response.data;
   }
@@ -47,7 +49,7 @@ const getArticlesByTag = async (tag, page) => {
     const response = await axios.get(
       `${config.apiBaseUrl}/articles/by-tag/${tag}/${page}`
     );
-    return response.data;
+    return response.data.map((data) => articleBuilder(data));
   } catch (error) {
     throw error.response.data;
   }
@@ -59,7 +61,7 @@ const updateArticle = async (id, updateData) => {
       `${config.apiBaseUrl}/articles/${id}`,
       updateData
     );
-    return response.data;
+    return articleBuilder(response.data);
   } catch (error) {
     throw error.response.data;
   }
@@ -77,7 +79,7 @@ const deleteArticle = async (id) => {
 const createUser = async (userData) => {
   try {
     const response = await axios.post(`${config.apiBaseUrl}/users`, userData);
-    return response.data;
+    return userBuilder(response.data);
   } catch (error) {
     throw error.response.data;
   }
@@ -86,7 +88,7 @@ const createUser = async (userData) => {
 const getUserById = async (id) => {
   try {
     const response = await axios.get(`${config.apiBaseUrl}/users/${id}`);
-    return response.data;
+    return userBuilder(response.data);
   } catch (error) {
     throw error.response.data;
   }
@@ -95,7 +97,7 @@ const getUserById = async (id) => {
 const getAllUsers = async () => {
   try {
     const response = await axios.get(`${config.apiBaseUrl}/users`);
-    return response.data;
+    return response.data.map((data) => userBuilder(data));
   } catch (error) {
     throw error.response.data;
   }
@@ -104,7 +106,7 @@ const getAllUsers = async () => {
 const getUsersPaginated = async (page) => {
   try {
     const response = await axios.get(`${config.apiBaseUrl}/users/list/${page}`);
-    return response.data;
+    return response.data.map((data) => userBuilder(data));
   } catch (error) {
     throw error.response.data;
   }
@@ -116,7 +118,7 @@ const updateUser = async (id, updateData) => {
       `${config.apiBaseUrl}/users/${id}`,
       updateData
     );
-    return response.data;
+    return userBuilder(response.data);
   } catch (error) {
     throw error.response.data;
   }
@@ -128,6 +130,22 @@ const deleteUser = async (id) => {
   } catch (error) {
     throw error.response.data;
   }
+};
+
+const articleBuilder = (data) => {
+  return new ArticleDTO(
+    data.id,
+    data.title,
+    data.content,
+    data.authorId,
+    data.createdAt,
+    data.updatedAt,
+    data.tags
+  );
+};
+
+const userBuilder = (data) => {
+  return new UserDTO(data.id, data.username, data.name, data.isAdmin);
 };
 
 export default {

@@ -3,7 +3,7 @@ export default class ArticleDTO {
     articleId,
     title,
     content,
-    author,
+    authorId,
     publishedDate,
     modifiedDate,
     tags,
@@ -13,7 +13,7 @@ export default class ArticleDTO {
     this.articleId = articleId;
     this.title = title;
     this.content = content;
-    this.author = author;
+    this.authorId = authorId;
     this.publishedDate = publishedDate;
     this.modifiedDate = modifiedDate;
     this.tags = tags;
