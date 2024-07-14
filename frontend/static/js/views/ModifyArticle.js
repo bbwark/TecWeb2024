@@ -1,11 +1,14 @@
+import ArticleDTO from "../models/articleDTO.js";
 import AbstractView from "./AbstractView.js";
 
 export default class ModifyArticle extends AbstractView {
-    constructor(params) {
+    constructor(article = new ArticleDTO(), isNew = true, params) {
         super(params);
-        this.setTitle(params.isNew ? "New Article" : "Edit Article");
-        this.article = params.article || { title: "", content: "", tags: "" };
-        this.isNew = params.isNew;
+        this.setTitle(isNew ? "New Article" : "Edit Article");
+        this.article = article
+        this.isNew = isNew;
+
+        console.log(this.article, this.isNew);
     }
 
     async getHtml() {
