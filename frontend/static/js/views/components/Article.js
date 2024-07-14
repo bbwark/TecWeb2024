@@ -1,6 +1,7 @@
 import AbstractView from "../AbstractView.js";
 import rest from "../../rest.js";
 import ModifyArticle from "../ModifyArticle.js";
+import { state } from "../../config.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -8,6 +9,8 @@ export default class extends AbstractView {
 
     if (!window.articleEditButton)
       window.articleEditButton = this.articleEditButton;
+    if (!window.articleDeleteButton)
+      window.articleDeleteButton = this.articleDeleteButton;
   }
 
   async getHtml() {
@@ -22,7 +25,7 @@ export default class extends AbstractView {
                       this.params.showEditDeleteButtons
                         ? `
                     <button id="edit-button" class="edit-button" onclick="window.articleEditButton(${this.params.articleId})">✏️</button>
-                    <button id="delete-button" class="delete-button">🗑️</button>`
+                    <button id="delete-button" class="delete-button" onclick="window.articleDeleteButton(${this.params.articleId})">🗑️</button>`
                         : ""
                     }
                 </div>
@@ -45,11 +48,13 @@ export default class extends AbstractView {
   }
 
   async articleEditButton(articleId) {
-    const article = await rest.getArticleById(articleId);
+    state.setArticleModifying(articleId);
     history.pushState(null, null, "/modify-article");
-    document.querySelector("#app").innerHTML = await new ModifyArticle(
-      article,
-      false
-    ).getHtml();
+    document.querySelector("#app").innerHTML = await new ModifyArticle().getHtml();
+  }
+
+  async articleDeleteButton(articleId) {
+    await rest.deleteArticle(articleId);
+    window.location.reload();
   }
 }
