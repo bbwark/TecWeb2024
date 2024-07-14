@@ -1,12 +1,14 @@
+
+
 export default class ArticleDTO {
   constructor(
-    articleId,
-    title,
-    content,
-    authorId,
-    publishedDate,
-    modifiedDate,
-    tags,
+    articleId = "",
+    title = "",
+    content = "",
+    authorId = 0,
+    publishedDate = "",
+    modifiedDate = "",
+    tags = "",
     preview,
     showEditDeleteButtons
   ) {
