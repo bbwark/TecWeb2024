@@ -4,6 +4,7 @@ import ModifyArticle from "./views/ModifyArticle.js";
 import Login from "./views/Login.js";
 import Settings from "./views/Settings.js";
 import rest from "./rest.js";
+import { state } from "./config.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -27,6 +28,7 @@ const navigateTo = (url) => {
 };
 
 const router = async () => {
+  state.loadState();
   const routes = [
     { path: "/", view: ArticleShowcase },
     { path: "/article-detail", view: ArticleDetail },
@@ -54,22 +56,22 @@ const router = async () => {
     };
   }
 
-  let view = new match.route.view(await matchHandler(match, routes));
+  state.setArticlesToShow(await rest.getRecentArticles(state.openedPage));
+
+  let view = new match.route.view();
 
   document.querySelector("#app").innerHTML = await view.getHtml();
 };
 
-const matchHandler = async (match, routes) => {
-  switch (match.route.path) {
-    case routes[0].path:
-      return await rest.getRecentArticles(1);
-
-    default:
-      break;
-  }
-};
-
 window.addEventListener("popstate", router);
+
+window.addEventListener("load", () => {
+  state.loadState();
+});
+
+window.addEventListener("beforeunload", () => {
+  state.saveState();
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   document.body.addEventListener("click", (e) => {
