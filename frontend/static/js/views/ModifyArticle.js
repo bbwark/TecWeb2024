@@ -3,6 +3,7 @@ import ArticleDTO from "../models/articleDTO.js";
 import rest from "../rest.js";
 import AbstractView from "./AbstractView.js";
 import ArticleShowcase from "./ArticleShowcase.js";
+import { escapeHtml } from "../utilities.js";
 
 export default class ModifyArticle extends AbstractView {
   constructor(params) {
@@ -59,6 +60,11 @@ export default class ModifyArticle extends AbstractView {
     const title = document.getElementById("title").value;
     const content = document.getElementById("content").value;
     const tags = document.getElementById("tags").value;
+
+    escapeHtml(title);
+    escapeHtml(content);
+    escapeHtml(tags);
+
     if (title && content && tags) {
       if (isNew) {
         const article = {
