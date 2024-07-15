@@ -7,10 +7,9 @@ export default class extends AbstractView {
   constructor(params) {
     super(params);
 
-    if (!window.articleEditButton)
-      window.articleEditButton = this.articleEditButton;
-    if (!window.articleDeleteButton)
-      window.articleDeleteButton = this.articleDeleteButton;
+    const app = document.querySelector("#app");
+    if (!app.articleEditButton) app.articleEditButton = this.articleEditButton;
+    if (!app.articleDeleteButton) app.articleDeleteButton = this.articleDeleteButton;
   }
 
   async getHtml() {
@@ -24,8 +23,8 @@ export default class extends AbstractView {
                     ${
                       this.params.showEditDeleteButtons
                         ? `
-                    <button id="edit-button" class="edit-button" onclick="window.articleEditButton(${this.params.articleId})">✏️</button>
-                    <button id="delete-button" class="delete-button" onclick="window.articleDeleteButton(${this.params.articleId})">🗑️</button>`
+                    <button id="edit-button" class="edit-button" onclick="app.articleEditButton(${this.params.articleId})">✏️</button>
+                    <button id="delete-button" class="delete-button" onclick="app.articleDeleteButton(${this.params.articleId})">🗑️</button>`
                         : ""
                     }
                 </div>
@@ -56,6 +55,6 @@ export default class extends AbstractView {
 
   async articleDeleteButton(articleId) {
     await rest.deleteArticle(articleId);
-    window.location.reload();
+    app.location.reload();
   }
 }

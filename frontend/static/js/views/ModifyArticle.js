@@ -12,8 +12,8 @@ export default class ModifyArticle extends AbstractView {
     this.isNew = state.articleModifying === 0 ? true : false;
     this.setTitle(this.isNew ? "New Article" : "Edit Article");
 
-    if (!window.articleSaveButton)
-      window.articleSaveButton = this.articleSaveButton;
+    const app = document.querySelector("#app");
+    if (!app.articleSaveButton) app.articleSaveButton = this.articleSaveButton;
   }
 
   async getHtml() {
@@ -47,7 +47,7 @@ export default class ModifyArticle extends AbstractView {
                 }" required>
                 
                 <button id="cancel-button">Cancel</button>
-                <button id="save-button" onclick="window.articleSaveButton(
+                <button id="save-button" onclick="app.articleSaveButton(
                 ${this.isNew}, 
                 ${this.articleId})">
                 ${this.isNew ? "Save" : "Update"}</button>

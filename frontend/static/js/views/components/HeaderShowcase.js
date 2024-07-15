@@ -8,10 +8,12 @@ export default class extends AbstractView {
   constructor(params) {
     super(params);
 
-    if (!window.showMyArticles) window.showMyArticles = this.showMyArticles;
-    if (!window.newArticle) window.newArticle = this.newArticle;
-    if (!window.goToSettings) window.goToSettings = this.goToSettings;
-    if (!window.goToLogin) window.goToLogin = this.goToLogin;
+    const app = document.querySelector("#app");
+
+    if (!app.showMyArticles) app.showMyArticles = this.showMyArticles;
+    if (!app.newArticle) app.newArticle = this.newArticle;
+    if (!app.goToSettings) app.goToSettings = this.goToSettings;
+    if (!app.goToLogin) app.goToLogin = this.goToLogin;
   }
 
   async getHtml() {
@@ -21,12 +23,12 @@ export default class extends AbstractView {
             ${
               isLogged
                 ? `
-                <button id="my-articles" onclick="window.showMyArticles()">My Articles</button>
-                <button id="new-article" onclick="window.newArticle()">New Article</button>
-                <button id="settings" onclick="window.goToSettings()">Settings</button>
+                <button id="my-articles" onclick="app.showMyArticles()">My Articles</button>
+                <button id="new-article" onclick="app.newArticle()">New Article</button>
+                <button id="settings" onclick="app.goToSettings()">Settings</button>
                 `
                 : `
-                <button id="login-button" onclick="window.goToLogin()">Login</button>
+                <button id="login-button" onclick="app.goToLogin()">Login</button>
                 `
             }
         </div>
