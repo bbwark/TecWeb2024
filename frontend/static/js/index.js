@@ -4,7 +4,7 @@ import ModifyArticle from "./views/ModifyArticle.js";
 import Login from "./views/Login.js";
 import Settings from "./views/Settings.js";
 import rest from "./rest.js";
-import { state } from "./config.js";
+import { articleShowCaseState, state } from "./config.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -55,7 +55,10 @@ const router = async () => {
       result: [location.pathname],
     };
   }
-
+  state.setAdminStatus(false);
+  state.setLoggedInStatus(true);
+  state.setUserId(1);
+  state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
   state.setArticlesToShow(await rest.getRecentArticles(state.openedPage));
 
   let view = new match.route.view();
