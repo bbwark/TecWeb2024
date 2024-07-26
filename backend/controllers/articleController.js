@@ -59,11 +59,9 @@ articleController.get("/by-tag/:tag/:page", async (req, res) => {
 });
 
 articleController.get("/by-user-id/:id/:page", async (req, res) => {
-  console.log("controller uid, page", req.params.id, req.params.page);
   try {
     const userId = req.params.id;
     const page = req.params.page;
-    console.log("nel controller chiamando service");
     const articles = await articleService.getRecentArticlesByUserId(
       userId,
       parseInt(page, 10)
