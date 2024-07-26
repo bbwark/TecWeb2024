@@ -3,7 +3,7 @@ import ArticleDTO from "../models/articleDTO.js";
 import rest from "../rest.js";
 import AbstractView from "./AbstractView.js";
 import ArticleShowcase from "./ArticleShowcase.js";
-import { escapeHtml } from "../utilities.js";
+import { escapeHtml, setArticlesToShowBasedOnState } from "../utilities.js";
 
 export default class ModifyArticle extends AbstractView {
   constructor(params) {
@@ -66,27 +66,20 @@ export default class ModifyArticle extends AbstractView {
     escapeHtml(tags);
 
     if (title && content && tags) {
+      const article = {
+        title: title,
+        content: content,
+        userId: state.userId,
+        tags: tags,
+      };
       if (isNew) {
-        const article = {
-          title: title,
-          content: content,
-          userId: state.userId,
-          tags: tags,
-        };
-        rest.createArticle(article);
+        await rest.createArticle(article);
       } else {
-        const article = {
-          title: title,
-          content: content,
-          userId: state.userId,
-          tags: tags,
-        };
-        rest.updateArticle(articleId, article);
+        await rest.updateArticle(articleId, article);
       }
     }
 
-    //TODO sulla base da quale stato di articleshowcase si arriva bisogna effettuare una rest
-    //che filla correttamente gli articleTOShow nello state
+    await state.setArticlesToShowBasedOnState();
     state.setArticleModifying(0);
     history.pushState(null, null, "/");
     document.querySelector("#app").innerHTML =
