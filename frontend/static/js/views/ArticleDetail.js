@@ -1,3 +1,5 @@
+import { state } from "../config.js";
+import rest from "../rest.js";
 import AbstractView from "./AbstractView.js";
 import HeaderDetail from "./components/HeaderDetail.js";
 
@@ -5,28 +7,30 @@ export default class extends AbstractView {
   constructor(params) {
     super(params);
     this.setTitle("Article Detail");
-    this.article = params.article;
   }
 
   async getHtml() {
+    const article = await rest.getArticleById(state.articleIdDetailOpened);
     const headerView = new HeaderDetail({
-      isLogged: this.params.isLogged,
-      isOwner: this.params.isOwner,
-      isAdmin: this.params.isAdmin,
+      isLogged: state.isLogged,
+      isOwner: article.authorId === state.userId,
+      isAdmin: state.isAdmin,
     });
     const headerHtml = await headerView.getHtml();
+    const data = await rest.getUserById(article.authorId);
+    const authorName = data.name;
 
     return `
         <div class="article-detail">
-            <h2>${this.article.title}</h2>
+            <h2>${article.title}</h2>
             ${headerHtml}
             <div class="article-detail-subtitle">
-                <p>Author: ${this.article.author}</p>
-                <p>Published on: ${this.article.publishedDate}</p>
-                <p>Last modified: ${this.article.modifiedDate}</p>
+                <p>Author: ${authorName}</p>
+                <p>Published on: ${article.publishedDate}</p>
+                <p>Last modified: ${article.modifiedDate}</p>
             </div>
-            <p>${this.article.content}</p>            
-            <p>Tags: ${this.article.tags.join(", ")}</p>
+            <p>${article.content}</p>            
+            <p>Tags: ${article.tags}</p>
         </div>
         `;
   }
