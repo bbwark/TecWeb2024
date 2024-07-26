@@ -1,4 +1,4 @@
-import { state } from "../../config.js";
+import { articleShowCaseState, state } from "../../config.js";
 import rest from "../../rest.js";
 import AbstractView from "../AbstractView.js";
 import ArticleShowcase from "../ArticleShowcase.js";
@@ -36,8 +36,9 @@ export default class extends AbstractView {
   }
 
   async showMyArticles() {
-    const articles = rest.getArticlesByUserId(state.userId, state.openedPage);
+    const articles = await rest.getArticlesByUserId(state.userId, state.openedPage);
     state.setArticlesToShow(articles);
+    state.setArticleShowcaseState(articleShowCaseState.USER_ARTICLES);
     history.pushState(null, null, "/");
     document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
   }
