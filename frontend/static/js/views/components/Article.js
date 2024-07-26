@@ -4,6 +4,7 @@ import ModifyArticle from "../ModifyArticle.js";
 import { state } from "../../config.js";
 import ArticleShowcase from "../ArticleShowcase.js";
 import { setArticlesToShowBasedOnState } from "../../utilities.js";
+import ArticleDetail from "../ArticleDetail.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -13,6 +14,7 @@ export default class extends AbstractView {
     if (!app.articleEditButton) app.articleEditButton = this.articleEditButton;
     if (!app.articleDeleteButton)
       app.articleDeleteButton = this.articleDeleteButton;
+    if (!app.showArticleDetail) app.showArticleDetail = this.showArticleDetail;
   }
 
   async getHtml() {
@@ -22,7 +24,9 @@ export default class extends AbstractView {
     return `
             <div class="article">
                 <div class="article-header">
-                    <h3>${this.params.title}</h3>
+                    <h3 onclick="app.showArticleDetail(${
+                      this.params.articleId
+                    })">${this.params.title}</h3>
                     ${
                       this.params.showEditDeleteButtons
                         ? `
@@ -61,5 +65,13 @@ export default class extends AbstractView {
     await setArticlesToShowBasedOnState();
     document.querySelector("#app").innerHTML =
       await new ArticleShowcase().getHtml();
+  }
+
+  async showArticleDetail(articleId) {
+    state.setArticleIdDetailOpened(articleId);
+    history.pushState(null, null, `/article-detail`);
+    document.querySelector("#app").innerHTML = await new ArticleDetail({
+      articleId: articleId,
+    }).getHtml();
   }
 }
