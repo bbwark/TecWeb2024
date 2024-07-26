@@ -1,3 +1,4 @@
+const APP_STATE_KEY = "appState";
 const config = {
   numberOfArticles: 10, // Number for pagination
   apiBaseUrl: "http://localhost:3000/api",
@@ -78,7 +79,7 @@ const state = {
 
   setArticlesToShow(params) {
     this.articlesToShow = params;
-    this.saveState;
+    this.saveState();
   },
 
   setArticleIdDetailOpened(articleId) {
@@ -87,14 +88,22 @@ const state = {
   },
 
   loadState() {
-    const savedState = localStorage.getItem("appState");
-    if (savedState) {
-      Object.assign(this, JSON.parse(savedState));
+    try {
+      const savedState = localStorage.getItem(APP_STATE_KEY);
+      if (savedState) {
+        Object.assign(this, JSON.parse(savedState));
+      }
+    } catch (error) {
+      console.error("Failed to load state:", error);
     }
   },
 
   saveState() {
-    localStorage.setItem("appState", JSON.stringify(this));
+    try {
+      localStorage.setItem(APP_STATE_KEY, JSON.stringify(this));
+    } catch (error) {
+      console.error("Failed to save state:", error);
+    }
   },
 };
 
