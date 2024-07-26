@@ -1,5 +1,5 @@
-import { articleShowCaseState, state } from "./config";
-import rest from "./rest";
+import { articleShowCaseState, state } from "./config.js";
+import rest from "./rest.js";
 
 function escapeHtml(unsafe) {
   return unsafe
