@@ -18,7 +18,7 @@ const state = {
   articlesToShow: null,
   articleShowCaseState: articleShowCaseState.ALL_ARTICLES,
   openedTag: null,
-  
+
   setLoggedInStatus(status) {
     this.isLogged = status;
     this.saveState();
@@ -78,24 +78,6 @@ const state = {
   setArticlesToShow(params) {
     this.articlesToShow = params;
     this.saveState;
-  },
-
-  async setArticlesToShowBasedOnState() {
-    switch (this.articleShowCaseState) {
-      case articleShowCaseState.ALL_ARTICLES:
-        this.setArticlesToShow(await rest.getRecentArticles(this.openedPage));
-        break;
-      case articleShowCaseState.TAG_ARTICLES:
-        this.setArticlesToShow(
-          await rest.getArticlesByTag(this.openedTag, this.openedPage)
-        );
-        break;
-      case articleShowCaseState.USER_ARTICLES:
-        this.setArticlesToShow(
-          await rest.getArticlesByUserId(state.userId, this.openedPage)
-        );
-        break;
-    }
   },
 
   loadState() {

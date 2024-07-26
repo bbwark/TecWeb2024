@@ -3,7 +3,7 @@ import ArticleDTO from "../models/articleDTO.js";
 import rest from "../rest.js";
 import AbstractView from "./AbstractView.js";
 import ArticleShowcase from "./ArticleShowcase.js";
-import { escapeHtml } from "../utilities.js";
+import { escapeHtml, setArticlesToShowBasedOnState } from "../utilities.js";
 
 export default class ModifyArticle extends AbstractView {
   constructor(params) {
@@ -79,7 +79,7 @@ export default class ModifyArticle extends AbstractView {
       }
     }
 
-    await state.setArticlesToShowBasedOnState();
+    await setArticlesToShowBasedOnState();
     state.setArticleModifying(0);
     history.pushState(null, null, "/");
     document.querySelector("#app").innerHTML =
