@@ -2,6 +2,8 @@ import AbstractView from "../AbstractView.js";
 import rest from "../../rest.js";
 import ModifyArticle from "../ModifyArticle.js";
 import { state } from "../../config.js";
+import ArticleShowcase from "../ArticleShowcase.js";
+import { setArticlesToShowBasedOnState } from "../../utilities.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -9,7 +11,8 @@ export default class extends AbstractView {
 
     const app = document.querySelector("#app");
     if (!app.articleEditButton) app.articleEditButton = this.articleEditButton;
-    if (!app.articleDeleteButton) app.articleDeleteButton = this.articleDeleteButton;
+    if (!app.articleDeleteButton)
+      app.articleDeleteButton = this.articleDeleteButton;
   }
 
   async getHtml() {
@@ -55,6 +58,8 @@ export default class extends AbstractView {
 
   async articleDeleteButton(articleId) {
     await rest.deleteArticle(articleId);
-    app.location.reload();
+    await setArticlesToShowBasedOnState();
+    document.querySelector("#app").innerHTML =
+      await new ArticleShowcase().getHtml();
   }
 }
