@@ -10,7 +10,7 @@ export default class extends AbstractView {
 
     const app = document.querySelector("#app");
 
-    if (!app.showMyArticles) app.showMyArticles = this.showMyArticles;
+    if (!app.showArticles) app.showArticles = this.showArticles;
     if (!app.newArticle) app.newArticle = this.newArticle;
     if (!app.goToSettings) app.goToSettings = this.goToSettings;
     if (!app.goToLogin) app.goToLogin = this.goToLogin;
@@ -18,12 +18,13 @@ export default class extends AbstractView {
 
   async getHtml() {
     const { isLogged } = this.params;
+    const showcaseState = state.articleShowCaseState;
     return `
         <div id="header">
             ${
               isLogged
                 ? `
-                <button id="my-articles" onclick="app.showMyArticles()">My Articles</button>
+                <button id="show-articles" onclick="app.showArticles()">${showcaseState === articleShowCaseState.ALL_ARTICLES ? "My Articles" : "Recent Articles"}</button>
                 <button id="new-article" onclick="app.newArticle()">New Article</button>
                 <button id="settings" onclick="app.goToSettings()">Settings</button>
                 `
@@ -35,10 +36,16 @@ export default class extends AbstractView {
     `;
   }
 
-  async showMyArticles() {
-    const articles = await rest.getArticlesByUserId(state.userId, state.openedPage);
+  async showArticles() {
+    let articles = null;
+    if (state.articleShowCaseState === articleShowCaseState.ALL_ARTICLES) {
+      articles = await rest.getArticlesByUserId(state.userId, state.openedPage);
+      state.setArticleShowcaseState(articleShowCaseState.USER_ARTICLES);
+    } else {
+      articles = await rest.getRecentArticles(state.openedPage);
+      state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
+    }
     state.setArticlesToShow(articles);
-    state.setArticleShowcaseState(articleShowCaseState.USER_ARTICLES);
     history.pushState(null, null, "/");
     document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
   }
