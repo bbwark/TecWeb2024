@@ -83,15 +83,15 @@ const state = {
   async setArticlesToShowBasedOnState() {
     switch (this.articleShowCaseState) {
       case articleShowCaseState.ALL_ARTICLES:
-        setArticlesToShow(await rest.getRecentArticles(this.openedPage));
+        this.setArticlesToShow(await rest.getRecentArticles(this.openedPage));
         break;
       case articleShowCaseState.TAG_ARTICLES:
-        setArticlesToShow(
+        this.setArticlesToShow(
           await rest.getArticlesByTag(this.openedTag, this.openedPage)
         );
         break;
       case articleShowCaseState.USER_ARTICLES:
-        setArticlesToShow(
+        this.setArticlesToShow(
           await rest.getArticlesByUserId(state.userId, this.openedPage)
         );
         break;
