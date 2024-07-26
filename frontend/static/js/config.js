@@ -18,19 +18,23 @@ const state = {
   articlesToShow: null,
   articleShowCaseState: articleShowCaseState.ALL_ARTICLES,
   openedTag: null,
+  
   setLoggedInStatus(status) {
     this.isLogged = status;
     this.saveState();
   },
+
   setAdminStatus(status) {
     this.isAdmin = status;
     if (status) this.isLogged = true;
     this.saveState();
   },
+
   setUserId(userId) {
     this.userId = userId;
     this.saveState();
   },
+
   clearState() {
     this.isLogged = false;
     this.isAdmin = false;
@@ -42,14 +46,17 @@ const state = {
     this.openedTag = null;
     this.saveState();
   },
+
   setOpenedPage(page) {
     this.openedPage = page;
     this.saveState();
   },
+
   setOpenedTag(tag) {
     this.openedTag = tag;
     this.saveState();
   },
+
   setArticleShowcaseState(state) {
     if (
       state === articleShowCaseState.ALL_ARTICLES ||
@@ -62,13 +69,33 @@ const state = {
     }
     this.saveState();
   },
+
   setArticleModifying(articleId) {
     this.articleModifying = articleId;
     this.saveState();
   },
+
   setArticlesToShow(params) {
     this.articlesToShow = params;
     this.saveState;
+  },
+
+  async setArticlesToShowBasedOnState() {
+    switch (this.articleShowCaseState) {
+      case articleShowCaseState.ALL_ARTICLES:
+        setArticlesToShow(await rest.getRecentArticles(this.openedPage));
+        break;
+      case articleShowCaseState.TAG_ARTICLES:
+        setArticlesToShow(
+          await rest.getArticlesByTag(this.openedTag, this.openedPage)
+        );
+        break;
+      case articleShowCaseState.USER_ARTICLES:
+        setArticlesToShow(
+          await rest.getArticlesByUserId(state.userId, this.openedPage)
+        );
+        break;
+    }
   },
 
   loadState() {
