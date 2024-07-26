@@ -3,6 +3,12 @@ const config = {
   apiBaseUrl: "http://localhost:3000/api",
 };
 
+const articleShowCaseState = {
+  USER_ARTICLES: "userArticles",
+  TAG_ARTICLES: "tagArticles",
+  ALL_ARTICLES: "allArticles",
+};
+
 const state = {
   isLogged: false,
   isAdmin: false,
@@ -10,6 +16,8 @@ const state = {
   openedPage: 1,
   articleModifying: 0,
   articlesToShow: null,
+  articleShowCaseState: articleShowCaseState.ALL_ARTICLES,
+  openedTag: null,
   setLoggedInStatus(status) {
     this.isLogged = status;
     this.saveState();
@@ -30,10 +38,28 @@ const state = {
     this.openedPage = 1;
     this.articleModifying = 0;
     this.articlesToShow = null;
+    this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;
+    this.openedTag = null;
     this.saveState();
   },
   setOpenedPage(page) {
     this.openedPage = page;
+    this.saveState();
+  },
+  setOpenedTag(tag) {
+    this.openedTag = tag;
+    this.saveState();
+  },
+  setArticleShowcaseState(state) {
+    if (
+      state === articleShowCaseState.ALL_ARTICLES ||
+      state === articleShowCaseState.TAG_ARTICLES ||
+      state === articleShowCaseState.USER_ARTICLES
+    ) {
+      this.articleShowCaseState = state;
+    } else {
+      this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;
+    }
     this.saveState();
   },
   setArticleModifying(articleId) {
@@ -57,4 +83,4 @@ const state = {
   },
 };
 
-export { config, state };
+export { config, state, articleShowCaseState };
