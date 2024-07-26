@@ -16,6 +16,7 @@ const state = {
   openedPage: 1,
   articleModifying: 0,
   articlesToShow: null,
+  articleIdDetailOpened: 0,
   articleShowCaseState: articleShowCaseState.ALL_ARTICLES,
   openedTag: null,
 
@@ -78,6 +79,11 @@ const state = {
   setArticlesToShow(params) {
     this.articlesToShow = params;
     this.saveState;
+  },
+
+  setArticleIdDetailOpened(articleId) {
+    this.articleIdDetailOpened = articleId;
+    this.saveState();
   },
 
   loadState() {
