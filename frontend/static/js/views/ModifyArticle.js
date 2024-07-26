@@ -3,7 +3,7 @@ import ArticleDTO from "../models/articleDTO.js";
 import rest from "../rest.js";
 import AbstractView from "./AbstractView.js";
 import ArticleShowcase from "./ArticleShowcase.js";
-import { escapeHtml, setArticlesToShowBasedOnState } from "../utilities.js";
+import { escapeHtml } from "../utilities.js";
 
 export default class ModifyArticle extends AbstractView {
   constructor(params) {
