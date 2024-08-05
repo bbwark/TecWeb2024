@@ -3,6 +3,7 @@ import rest from "../../rest.js";
 import AbstractView from "../AbstractView.js";
 import ArticleShowcase from "../ArticleShowcase.js";
 import ModifyArticle from "../ModifyArticle.js";
+import Settings from "../Settings.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -57,7 +58,10 @@ export default class extends AbstractView {
       await new ModifyArticle().getHtml();
   }
 
-  async goToSettings() {}
+  async goToSettings() {
+    history.pushState(null, null, "/settings");
+    document.querySelector("#app").innerHTML = await new Settings().getHtml();
+  }
 
   async goToLogin() {}
 }
