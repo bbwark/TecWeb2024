@@ -4,6 +4,7 @@ import rest from "../rest.js";
 import AbstractView from "./AbstractView.js";
 import ArticleShowcase from "./ArticleShowcase.js";
 import { escapeHtml, setArticlesToShowBasedOnState } from "../utilities.js";
+import Login from "./Login.js";
 
 export default class ModifyArticle extends AbstractView {
   constructor(params) {
@@ -19,12 +20,17 @@ export default class ModifyArticle extends AbstractView {
   }
 
   async getHtml() {
-    let article = new ArticleDTO();
-    if (this.articleId !== 0) {
-      article = await rest.getArticleById(this.articleId);
-    }
+    if (!state.isLogged) {
+      state.clearState();
+      history.pushState(null, null, "/login");
+      document.querySelector("#app").innerHTML = await new Login().getHtml();
+    } else {
+      let article = new ArticleDTO();
+      if (this.articleId !== 0) {
+        article = await rest.getArticleById(this.articleId);
+      }
 
-    return `
+      return `
             <h1>${this.isNew ? "Create New Article" : "Edit Article"}</h1>
             <div id="article-form">
                 <label for="title">Title:</label>
@@ -55,6 +61,7 @@ export default class ModifyArticle extends AbstractView {
                 ${this.isNew ? "Save" : "Update"}</button>
             </div>
         `;
+    }
   }
 
   async articleSaveButton(isNew, articleId = 0) {
