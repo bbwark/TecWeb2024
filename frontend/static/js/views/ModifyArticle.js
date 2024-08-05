@@ -15,6 +15,7 @@ export default class ModifyArticle extends AbstractView {
 
     const app = document.querySelector("#app");
     if (!app.articleSaveButton) app.articleSaveButton = this.articleSaveButton;
+    if (!app.articleCancelButton) app.articleCancelButton = this.articleCancelButton;
   }
 
   async getHtml() {
@@ -47,7 +48,7 @@ export default class ModifyArticle extends AbstractView {
                   article.tags
                 }" required>
                 
-                <button id="cancel-button">Cancel</button>
+                <button id="cancel-button" onclick="app.articleCancelButton()">Cancel</button>
                 <button id="save-button" onclick="app.articleSaveButton(
                 ${this.isNew}, 
                 ${this.articleId})">
@@ -82,6 +83,12 @@ export default class ModifyArticle extends AbstractView {
     await setArticlesToShowBasedOnState();
     state.setArticleModifying(0);
     history.pushState(null, null, "/");
+    document.querySelector("#app").innerHTML =
+      await new ArticleShowcase().getHtml();
+  }
+
+  async articleCancelButton() {
+    history.back();
     document.querySelector("#app").innerHTML =
       await new ArticleShowcase().getHtml();
   }
