@@ -28,4 +28,29 @@ async function setArticlesToShowBasedOnState() {
   }
 }
 
-export { escapeHtml, setArticlesToShowBasedOnState };
+
+function validatePassword(oldPassword, newPassword) {
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/.test(newPassword);
+  const hasLowerCase = /[a-z]/.test(newPassword);
+  const hasNumber = /[0-9]/.test(newPassword);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+
+  if (oldPassword === newPassword) {
+    return false;
+  }
+
+  if (
+    newPassword.length >= minLength &&
+    hasUpperCase &&
+    hasLowerCase &&
+    hasNumber &&
+    hasSpecialChar
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+export { escapeHtml, setArticlesToShowBasedOnState, validatePassword };
