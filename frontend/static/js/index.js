@@ -29,6 +29,7 @@ const navigateTo = (url) => {
 
 const router = async () => {
   state.loadState();
+  document.querySelector("#admintoggle").innerHTML = state.isAdmin ? "Admin Toggle: ON" : "Admin Toggle: OFF";
   const routes = [
     { path: "/", view: ArticleShowcase },
     { path: "/article-detail", view: ArticleDetail },
@@ -55,11 +56,6 @@ const router = async () => {
       result: [location.pathname],
     };
   }
-  state.setAdminStatus(false);
-  state.setLoggedInStatus(true);
-  state.setUserId(1);
-  state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
-  state.setArticlesToShow(await rest.getRecentArticles(state.openedPage));
 
   let view = new match.route.view();
 
@@ -84,5 +80,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  router();
+});
+
+document.getElementById("debugging").addEventListener("click", async () => {
+  state.loadState();
+  if (state.isLogged) {
+    state.clearState();
+    state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
+    state.setArticlesToShow(await rest.getRecentArticles(state.openedPage));
+  } else {
+    state.setLoggedInStatus(true);
+    state.setUserId(1);
+    state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
+    state.setArticlesToShow(await rest.getRecentArticles(state.openedPage));
+  }
+  router();
+});
+
+document.getElementById("admintoggle").addEventListener("click", async () => {
+  state.loadState();
+  if (state.isLogged) {
+    state.setAdminStatus(!state.isAdmin);
+  }
   router();
 });
