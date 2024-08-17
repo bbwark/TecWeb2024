@@ -1,15 +1,18 @@
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {
-    constructor(params) {
-        super(params);
-        this.setTitle("Create User");
-    }
+  constructor(params) {
+    super(params);
+    this.setTitle("Create User");
 
-    async getHtml() {
-        return `
+    const app = document.querySelector("#app");
+    if (!app.createUser) app.createUser = this.createUser;
+  }
+
+  async getHtml() {
+    return `
             <h1>Create User</h1>
-            <form id="create-user-form">
+            <div id="create-user">
                 <div>
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
@@ -26,27 +29,38 @@ export default class extends AbstractView {
                     <label for="is-admin">Is Admin:</label>
                     <input type="checkbox" id="is-admin" name="isAdmin">
                 </div>
-                <button type="submit">Create User</button>
-            </form>
+                <button onclick="app.createUser()" type="submit">Create User</button>
+            </div>
         `;
-    }
+  }
+  async createUser() {
+    let usernameInserted = document.getElementById("username");
+    let passwordInserted = document.getElementById("password");
+    let nameInserted = document.getElementById("name");
+    let isAdminInserted = document.getElementById("is-admin");
 
-    async afterRender() {
-        document.getElementById("create-user-form").addEventListener("submit", async (event) => {
-            event.preventDefault();
-            const username = event.target.username.value;
-            const password = event.target.password.value;
-            const name = event.target.name.value;
-            const isAdmin = event.target.isAdmin.checked;
+    if (
+      usernameInserted &&
+      passwordInserted &&
+      nameInserted &&
+      isAdminInserted
+    ) {
+      escapeHtml(usernameInserted.value);
+      escapeHtml(passwordInserted.value);
+      escapeHtml(nameInserted.value);
 
-            // Simulazione di una chiamata per creare un utente
-            try {
-                // Esegui la logica per creare un utente qui
-                alert("User created successfully!");
-            } catch (error) {
-                console.error("Failed to create user:", error);
-                alert("Failed to create user");
-            }
-        });
+      let user = {
+        username: usernameInserted.value,
+        password: passwordInserted.value,
+        name: nameInserted.value,
+        isAdmin: isAdminInserted.checked,
+      };
+
+      await rest.createUser(user);
+      usernameInserted.value = "";
+      passwordInserted.value = "";
+      nameInserted.value = "";
+      isAdminInserted.checked = false;
     }
+  }
 }

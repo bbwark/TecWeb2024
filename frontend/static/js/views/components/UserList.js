@@ -1,15 +1,19 @@
 // /src/views/UserList.js
 import AbstractView from "../AbstractView.js";
-import UserDTO from "../../models/userDTO.js";
 
 export default class extends AbstractView {
-    constructor(params) {
-        super(params);
-        this.setTitle("User List");
-    }
+  constructor(params) {
+    super(params);
+    this.setTitle("User List");
 
-    async getHtml() {
-        return `
+    const app = document.querySelector("#app");
+    if (!app.loadUsers) app.loadUsers = this.loadUsers;
+    if (!app.toggleAdmin) app.toggleAdmin = this.toggleAdmin;
+    if (!app.deleteUser) app.deleteUser = this.deleteUser;
+  }
+
+  async getHtml() {
+    return `
             <h1>User List</h1>
             <table id="user-list-table">
                 <thead>
@@ -17,68 +21,53 @@ export default class extends AbstractView {
                         <th>Username</th>
                         <th>Name</th>
                         <th>Is Admin</th>
-                        <th>Actions</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody id="user-list-tbody">
-                    <!-- Users will be loaded here -->
+                    
                 </tbody>
             </table>
         `;
-    }
+  }
 
-    async afterRender() {
-        this.loadUsers();
-    }
+  async loadUsers() {
+    let users = await rest.getAllUsers();
+    const userListTbody = document.getElementById("user-list-tbody");
+    userListTbody.innerHTML = "";
 
-    async loadUsers() {
-        // Simulazione di una chiamata per ottenere gli utenti
-        const users = [
-            new UserDTO(1, "john_doe", "John Doe", false),
-            new UserDTO(2, "admin_user", "Admin User", true)
-        ];
+    users.forEach((user) => {
+      let tr = document.createElement("tr");
 
-        const tbody = document.getElementById("user-list-tbody");
-        tbody.innerHTML = "";
-
-        users.forEach(user => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${user.username}</td>
-                <td>${user.name}</td>
-                <td>${user.isAdmin ? "Yes" : "No"}</td>
-                <td>
-                    <button class="delete-user" data-id="${user.id}">Delete</button>
-                    ${!user.isAdmin ? `<button class="make-admin" data-id="${user.id}">Make Admin</button>` : ''}
-                </td>
+      tr.innerHTML = `
+              <td>${user.username}</td>
+              <td>${user.name}</td>
+              <td>
+                <input onclick="app.deleteUser(${user.id})" type="checkbox" ${
+                  user.isAdmin ? "checked" : ""
+                } data-id="${user.id}" class="admin-checkbox">
+              </td>
+              <td>
+                <button onclick="app.deleteUser(${user.id})" data-id="${
+                  user.id
+                }" class="delete-user-btn">Delete</button>
+              </td>
             `;
-            tbody.appendChild(row);
-        });
 
-        document.querySelectorAll(".delete-user").forEach(button => {
-            button.addEventListener("click", (event) => {
-                const userId = event.target.dataset.id;
-                this.deleteUser(userId);
-            });
-        });
+      userListTbody.appendChild(tr);
+    });
+  }
 
-        document.querySelectorAll(".make-admin").forEach(button => {
-            button.addEventListener("click", (event) => {
-                const userId = event.target.dataset.id;
-                this.makeAdmin(userId);
-            });
-        });
+  async toggleAdmin(userId) {
+    let adminCheckbox = document.querySelector(`.admin-checkbox[data-id="${userId}"]`);
+    if (adminCheckbox) {
+      await rest.updateUser(userId, { isAdmin: adminCheckbox.checked });
     }
+  }
 
-    async deleteUser(userId) {
-        // Simulazione di una chiamata per eliminare l'utente
-        alert(`User with ID ${userId} deleted!`);
-        this.loadUsers();
-    }
-
-    async makeAdmin(userId) {
-        // Simulazione di una chiamata per rendere admin l'utente
-        alert(`User with ID ${userId} is now an admin!`);
-        this.loadUsers();
-    }
+  async deleteUser(userId) {
+    await rest.deleteUser(userId);
+    const app = document.querySelector("#app");
+    app.loadUsers();
+  }
 }

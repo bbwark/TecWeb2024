@@ -1,15 +1,18 @@
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {
-    constructor(params) {
-        super(params);
-        this.setTitle("Change Name");
-    }
+  constructor(params) {
+    super(params);
+    this.setTitle("Change Name");
 
-    async getHtml() {
-        return `
+    const app = document.querySelector("#app");
+    if (!app.changeName) app.changeName = this.changeName;
+  }
+
+  async getHtml() {
+    return `
             <h1>Change Name</h1>
-            <form id="change-name-form">
+            <div id="change-name">
                 <div>
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
@@ -18,25 +21,23 @@ export default class extends AbstractView {
                     <label for="new-name">New Name:</label>
                     <input type="text" id="new-name" name="newName" required>
                 </div>
-                <button type="submit">Change Name</button>
-            </form>
+                <button>Change Name</button>
+            </div>
         `;
-    }
+  }
 
-    async afterRender() {
-        document.getElementById("change-name-form").addEventListener("submit", async (event) => {
-            event.preventDefault();
-            const password = event.target.password.value;
-            const newName = event.target.newName.value;
+  async changeName() {
+    let passwordInserted = document.getElementById("password");
+    let newNameInserted = document.getElementById("new-name");
+    if (passwordInserted && newNameInserted) {
+      escapeHtml(passwordInserted.value);
+      escapeHtml(newNameInserted.value);
 
-            // Simulazione di una chiamata per cambiare il nome
-            try {
-                // Esegui la logica per cambiare il nome qui
-                alert("Name changed successfully!");
-            } catch (error) {
-                console.error("Failed to change name:", error);
-                alert("Failed to change name");
-            }
-        });
+      //TODO logica per validare se la old password è corretta
+
+      await rest.updateUser(state.userId, {name: newNameInserted.value});
+      passwordInserted.value = "";
+      newNameInserted.value = "";
     }
+  }
 }

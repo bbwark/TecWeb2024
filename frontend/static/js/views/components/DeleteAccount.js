@@ -4,34 +4,34 @@ export default class extends AbstractView {
     constructor(params) {
         super(params);
         this.setTitle("Delete Account");
+
+        const app = document.querySelector("#app");
+        if (!app.deleteAccount) app.deleteAccount = this.deleteAccount;
     }
 
     async getHtml() {
         return `
             <h1>Delete Account</h1>
-            <form id="delete-account-form">
+            <div id="delete-account-form">
                 <div>
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
                 </div>
                 <button type="submit">Delete Account</button>
-            </form>
+            </div>
         `;
     }
+    
+    async deleteAccount() {
+        let passwordInserted = document.getElementById("password");
+        if (passwordInserted) {
+            escapeHtml(passwordInserted.value);
 
-    async afterRender() {
-        document.getElementById("delete-account-form").addEventListener("submit", async (event) => {
-            event.preventDefault();
-            const password = event.target.password.value;
+            //TODO logica per validare se la password è corretta
 
-            // Simulazione di una chiamata per eliminare l'account
-            try {
-                // Esegui la logica per eliminare l'account qui
-                alert("Account deleted successfully!");
-            } catch (error) {
-                console.error("Failed to delete account:", error);
-                alert("Failed to delete account");
-            }
-        });
+            await rest.deleteUser(state.userId, passwordInserted.value);
+            state.clearState();
+            history.pushState(null, null, "/");
+        }
     }
 }
