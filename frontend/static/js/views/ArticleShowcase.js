@@ -6,7 +6,7 @@ import { state } from "../config.js";
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle("Article Showcase");
+    this.setTitle("PressPortal");
   }
 
   async getHtml() {

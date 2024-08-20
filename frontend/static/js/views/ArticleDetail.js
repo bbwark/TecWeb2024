@@ -6,7 +6,7 @@ import HeaderDetail from "./components/HeaderDetail.js";
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.setTitle("Article Detail");
+    this.setTitle("Article");
   }
 
   async getHtml() {
@@ -16,6 +16,7 @@ export default class extends AbstractView {
       isOwner: article.authorId === state.userId,
       isAdmin: state.isAdmin,
     });
+    this.setTitle(article.title);
     const headerHtml = await headerView.getHtml();
     const data = await rest.getUserById(article.authorId);
     const authorName = data.name;
