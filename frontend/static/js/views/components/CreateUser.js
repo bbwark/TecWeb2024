@@ -1,3 +1,5 @@
+import { escapeHtml } from "../../utilities.js";
+import rest from "../../rest.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {

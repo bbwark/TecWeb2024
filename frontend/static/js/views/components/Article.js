@@ -18,8 +18,13 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const data = await rest.getUserById(this.params.authorId);
-    const authorName = data.name;
+    let authorName = "";
+    try {
+      const data = await rest.getUserById(this.params.authorId);
+      authorName = data.name;
+    } catch (error) {
+      console.log("User not found for ID: ", this.params.authorId);
+    }
 
     return `
             <div class="article">
