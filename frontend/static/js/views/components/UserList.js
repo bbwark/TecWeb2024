@@ -1,5 +1,5 @@
-// /src/views/UserList.js
 import AbstractView from "../AbstractView.js";
+import rest from "../../rest.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -10,6 +10,7 @@ export default class extends AbstractView {
     if (!app.loadUsers) app.loadUsers = this.loadUsers;
     if (!app.toggleAdmin) app.toggleAdmin = this.toggleAdmin;
     if (!app.deleteUser) app.deleteUser = this.deleteUser;
+    this.loadUsers();
   }
 
   async getHtml() {
@@ -43,7 +44,7 @@ export default class extends AbstractView {
               <td>${user.username}</td>
               <td>${user.name}</td>
               <td>
-                <input onclick="app.deleteUser(${user.id})" type="checkbox" ${
+                <input onclick="app.toggleAdmin(${user.id})" type="checkbox" ${
                   user.isAdmin ? "checked" : ""
                 } data-id="${user.id}" class="admin-checkbox">
               </td>
