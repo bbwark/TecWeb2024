@@ -59,6 +59,7 @@ userController.put("/:id", async (req, res) => {
       req.body.password = hashedPassword;
     }
 
+    req.body.isAdmin = user.isAdmin;
     const userUpdated = await userService.updateUser(req.params.id, req.body);
     res.status(200).json(userUpdated);
   } catch (error) {
