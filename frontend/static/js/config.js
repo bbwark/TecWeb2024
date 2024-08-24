@@ -60,14 +60,14 @@ const state = {
   },
 
   setArticleShowcaseState(state) {
-    if (
-      state === articleShowCaseState.ALL_ARTICLES ||
-      state === articleShowCaseState.TAG_ARTICLES ||
-      state === articleShowCaseState.USER_ARTICLES
-    ) {
-      this.articleShowCaseState = state;
-    } else {
-      this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;
+    switch (state) {
+      case articleShowCaseState.USER_ARTICLES:
+      case articleShowCaseState.TAG_ARTICLES:
+      case articleShowCaseState.ALL_ARTICLES:
+        this.articleShowCaseState = state;
+        break;
+      default:
+        this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;
     }
     this.saveState();
   },
