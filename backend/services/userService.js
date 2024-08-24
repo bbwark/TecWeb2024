@@ -9,6 +9,10 @@ const getUserById = async (userId) => {
   return await userCrud.getUserById(userId);
 };
 
+const getUserByUsername = async (username) => {
+  return await userCrud.getUserByUsername(username);
+};
+
 const getAllUsers = async () => {
   return await userCrud.getAllUsers();
 };
@@ -30,6 +34,7 @@ const deleteUser = async (userId) => {
 module.exports = {
   createUser,
   getUserById,
+  getUserByUsername,
   getAllUsers,
   getUsersPaginated,
   updateUser,

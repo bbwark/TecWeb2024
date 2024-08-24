@@ -8,6 +8,10 @@ const getUserById = async (userId) => {
   return await User.findByPk(userId);
 };
 
+const getUserByUsername = async (username) => {
+  return await User.findOne({ where: { username: username } });
+};
+
 const getAllUsers = async () => {
   return await User.findAll();
 };
@@ -40,6 +44,7 @@ const deleteUser = async (userId) => {
 module.exports = {
   createUser,
   getUserById,
+  getUserByUsername,
   getAllUsers,
   getUsersPaginated,
   updateUser,
