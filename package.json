@@ -20,6 +20,7 @@
   "dependencies": {
     "@yaireo/tagify": "^4.27.0",
     "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
     "express": "^4.19.2",
     "marked": "^13.0.2",
     "pg": "^8.12.0",
