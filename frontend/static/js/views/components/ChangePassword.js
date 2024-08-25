@@ -36,9 +36,12 @@ export default class extends AbstractView {
       escapeHtml(oldPasswordInserted.value);
       escapeHtml(newPasswordInserted.value);
 
-      //TODO logica per validare se la old password è corretta
-
+      const isOldPasswordCorrect = await rest.checkPassword(
+        oldPasswordInserted.value
+      );
+      
       if (
+        isOldPasswordCorrect &&
         oldPasswordInserted !== newPasswordInserted &&
         validatePassword(newPasswordInserted.value)
       ) {
