@@ -34,6 +34,22 @@ const login = async (username, password) => {
   }
 };
 
+const checkPassword = async (password) => {
+  try {
+    console.log("state.userId:", state.userId);
+    const response = await axios.post(
+      `${config.apiBaseUrl}/auth/passwordcheck`,
+      {
+        id: state.userId,
+        password,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 // Article Endpoints
 const createArticle = async (articleData) => {
   try {
@@ -188,11 +204,18 @@ const articleBuilder = (data) => {
 };
 
 const userBuilder = (data) => {
-  return new UserDTO(data.id, data.username, data.password, data.name, data.isAdmin);
+  return new UserDTO(
+    data.id,
+    data.username,
+    data.password,
+    data.name,
+    data.isAdmin
+  );
 };
 
 export default {
   login,
+  checkPassword,
   createArticle,
   getArticleById,
   getAllArticles,
