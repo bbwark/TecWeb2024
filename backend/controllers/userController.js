@@ -17,11 +17,12 @@ userController.post("/", verifyAdmin, async (req, res) => {
   }
 });
 
-userController.get("/:id", verifyAdminOrSelf, async (req, res) => {
+userController.get("/:id", async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (user) {
       user.password = undefined;
+      user.username = undefined;
       res.status(200).json(user);
     } else {
       res.status(404).json({ error: "User not found" });
