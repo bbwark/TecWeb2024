@@ -1,12 +1,13 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
 const { tokenPrivateKey } = require("../config");
 
 const authenticationController = express.Router();
 
 authenticationController.post("/login", async (req, res) => {
-  const user = userService.getUserByUsername(req.body.username);
+  const user = await userService.getUserByUsername(req.body.username);
   if (user === null) {
     return res.status(404).json({ error: "User not found" });
   }
