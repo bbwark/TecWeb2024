@@ -36,7 +36,6 @@ const login = async (username, password) => {
 
 const checkPassword = async (password) => {
   try {
-    console.log("state.userId:", state.userId);
     const response = await axios.post(
       `${config.apiBaseUrl}/auth/passwordcheck`,
       {
