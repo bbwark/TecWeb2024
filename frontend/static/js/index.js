@@ -3,8 +3,7 @@ import ArticleDetail from "./views/ArticleDetail.js";
 import ModifyArticle from "./views/ModifyArticle.js";
 import Login from "./views/Login.js";
 import Settings from "./views/Settings.js";
-import rest from "./rest.js";
-import { articleShowCaseState, state } from "./config.js";
+import { state } from "./config.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -29,7 +28,6 @@ const navigateTo = (url) => {
 
 const router = async () => {
   state.loadState();
-  document.querySelector("#admintoggle").innerHTML = state.isAdmin ? "Admin Toggle: ON" : "Admin Toggle: OFF";
   const routes = [
     { path: "/", view: ArticleShowcase },
     { path: "/article-detail", view: ArticleDetail },
@@ -80,28 +78,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  router();
-});
-
-document.getElementById("debugging").addEventListener("click", async () => {
-  state.loadState();
-  if (state.isLogged) {
-    state.clearState();
-    state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
-    state.setArticlesToShow(await rest.getRecentArticles(state.openedPage));
-  } else {
-    state.setLoggedInStatus(true);
-    state.setUserId(1);
-    state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
-    state.setArticlesToShow(await rest.getRecentArticles(state.openedPage));
-  }
-  router();
-});
-
-document.getElementById("admintoggle").addEventListener("click", async () => {
-  state.loadState();
-  if (state.isLogged) {
-    state.setAdminStatus(!state.isAdmin);
-  }
   router();
 });
