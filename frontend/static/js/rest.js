@@ -188,7 +188,7 @@ const articleBuilder = (data) => {
 };
 
 const userBuilder = (data) => {
-  return new UserDTO(data.id, data.username, data.name, data.isAdmin);
+  return new UserDTO(data.id, data.username, data.password, data.name, data.isAdmin);
 };
 
 export default {
