@@ -17,7 +17,7 @@ authenticationController.post("/login", async (req, res) => {
         isAdmin: user.isAdmin,
       };
       const accessToken = jwt.sign(tokenPayload, tokenPrivateKey);
-      res.json({ accessToken });
+      res.json({ accessToken, id: user.id, isAdmin: user.isAdmin });
     } else {
       return res.status(401).send("Invalid password");
     }
