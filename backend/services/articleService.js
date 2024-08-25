@@ -1,4 +1,4 @@
-const config = require("../config.js");
+const { config } = require("../config.js");
 const articleCrud = require("../crud/articleCrud.js");
 
 const createArticle = async (articleData) => {

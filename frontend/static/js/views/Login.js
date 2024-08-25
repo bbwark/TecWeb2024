@@ -1,5 +1,6 @@
+import { state } from "../config.js";
 import rest from "../rest.js";
-import { escapeHtml } from "../utilities.js";
+import { escapeHtml, setArticlesToShowBasedOnState } from "../utilities.js";
 import AbstractView from "./AbstractView.js";
 import ArticleShowcase from "./ArticleShowcase.js";
 
