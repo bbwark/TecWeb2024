@@ -4,6 +4,7 @@ import ModifyArticle from "./views/ModifyArticle.js";
 import Login from "./views/Login.js";
 import Settings from "./views/Settings.js";
 import { state } from "./config.js";
+import rest from "./rest.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -28,6 +29,11 @@ const navigateTo = (url) => {
 
 const router = async () => {
   state.loadState();
+
+  if (!state.articlesToShow || state.articlesToShow.length === 0) {
+    state.setArticlesToShow(await rest.getRecentArticles(1));
+  }
+
   const routes = [
     { path: "/", view: ArticleShowcase },
     { path: "/article-detail", view: ArticleDetail },
