@@ -10,6 +10,7 @@ userController.post("/", verifyAdmin, async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     req.body.password = hashedPassword;
     const user = await userService.createUser(req.body);
+    user.password = undefined;
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -20,6 +21,7 @@ userController.get("/:id", verifyAdminOrSelf, async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (user) {
+      user.password = undefined;
       res.status(200).json(user);
     } else {
       res.status(404).json({ error: "User not found" });
@@ -32,6 +34,9 @@ userController.get("/:id", verifyAdminOrSelf, async (req, res) => {
 userController.get("/", verifyAdmin, async (req, res) => {
   try {
     const users = await userService.getAllUsers();
+    users.forEach((user) => {
+      user.password = undefined;
+    });
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -42,6 +47,9 @@ userController.get("/list/:page", verifyAdmin, async (req, res) => {
   try {
     const page = parseInt(req.params.page, 10) || 1;
     const users = await userService.getUsersPaginated(page);
+    users.forEach((user) => {
+      user.password = undefined;
+    });
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -62,6 +70,7 @@ userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
 
     req.body.isAdmin = user.isAdmin;
     const userUpdated = await userService.updateUser(req.params.id, req.body);
+    userUpdated.password = undefined;
     res.status(200).json(userUpdated);
   } catch (error) {
     res.status(400).json({ error: error.message });
