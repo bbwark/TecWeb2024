@@ -1,6 +1,23 @@
-import { config } from "./config.js";
+import { config, state } from "./config.js";
 import ArticleDTO from "./models/articleDTO.js";
 import UserDTO from "./models/userDTO.js";
+
+// Authentication Endpoints
+const login = async (username, password) => {
+  try {
+    const response = await axios.post(`${config.apiBaseUrl}/auth/login`, {
+      username,
+      password,
+    });
+    state.setUserId(response.data.id);
+    state.setAdminStatus(response.data.isAdmin);
+    state.setLoggedInStatus(true);
+    state.setAccessToken(response.data.accessToken);
+    return response.data.accessToken;
+  } catch (error) {
+    throw error.response.data;
+  }
+}
 
 // Article Endpoints
 const createArticle = async (articleData) => {
@@ -160,6 +177,7 @@ const userBuilder = (data) => {
 };
 
 export default {
+  login,
   createArticle,
   getArticleById,
   getAllArticles,
