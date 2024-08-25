@@ -1,5 +1,6 @@
 import AbstractView from "../AbstractView.js";
 import rest from "../../rest.js";
+import { state } from "../../config.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -10,7 +11,9 @@ export default class extends AbstractView {
     if (!app.loadUsers) app.loadUsers = this.loadUsers;
     if (!app.toggleAdmin) app.toggleAdmin = this.toggleAdmin;
     if (!app.deleteUser) app.deleteUser = this.deleteUser;
-    this.loadUsers();
+    if (state.isAdmin) {
+      this.loadUsers();
+    }
   }
 
   async getHtml() {
@@ -45,13 +48,13 @@ export default class extends AbstractView {
               <td>${user.name}</td>
               <td>
                 <input onclick="app.toggleAdmin(${user.id})" type="checkbox" ${
-                  user.isAdmin ? "checked" : ""
-                } data-id="${user.id}" class="admin-checkbox">
+        user.isAdmin ? "checked" : ""
+      } data-id="${user.id}" class="admin-checkbox">
               </td>
               <td>
                 <button onclick="app.deleteUser(${user.id})" data-id="${
-                  user.id
-                }" class="delete-user-btn">Delete</button>
+        user.id
+      }" class="delete-user-btn">Delete</button>
               </td>
             `;
 
@@ -60,7 +63,9 @@ export default class extends AbstractView {
   }
 
   async toggleAdmin(userId) {
-    let adminCheckbox = document.querySelector(`.admin-checkbox[data-id="${userId}"]`);
+    let adminCheckbox = document.querySelector(
+      `.admin-checkbox[data-id="${userId}"]`
+    );
     if (adminCheckbox) {
       await rest.updateUser(userId, { isAdmin: adminCheckbox.checked });
     }
