@@ -1,17 +1,19 @@
+import rest from "../rest.js";
 import { escapeHtml } from "../utilities.js";
 import AbstractView from "./AbstractView.js";
+import ArticleShowcase from "./ArticleShowcase.js";
 
 export default class extends AbstractView {
-    constructor(params) {
-        super(params);
-        this.setTitle("Login");
+  constructor(params) {
+    super(params);
+    this.setTitle("Login");
 
-        const app = document.querySelector("#app");
-        if (!app.submitLogin) app.submitLogin = this.submitLogin;
-    }
+    const app = document.querySelector("#app");
+    if (!app.submitLogin) app.submitLogin = this.submitLogin;
+  }
 
-    async getHtml() {
-        return `
+  async getHtml() {
+    return `
             <h1>Login</h1>
             <div id="login-form">
                 <label for="username">Username:</label>
@@ -21,25 +23,25 @@ export default class extends AbstractView {
                 <button onclick="app.submitLogin()" id="login-button">Login</button>
             </div>
         `;
+  }
+
+  async submitLogin() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    escapeHtml(username);
+    escapeHtml(password);
+
+    if (username && password) {
+      const loginResponse = await rest.login(username, password);
+      if (loginResponse) {
+        await setArticlesToShowBasedOnState();
+        state.setArticleModifying(0);
+        history.pushState(null, null, "/");
+        document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
+      } else {
+        //TODO - if unsuccessful, display error message
+      }
     }
-
-    async submitLogin() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-
-        escapeHtml(username);
-        escapeHtml(password);
-
-        if (username && password) {
-
-            //TODO - send login request
-            //TODO - if successful, redirect to home page
-            // state.isLogged = true;
-            // state.userId = XXXX;
-            // state.isAdmin = XXXX;
-            // history.pushState(null, null, "/");
-            // document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
-            //TODO - if unsuccessful, display error message
-        }
-    }
+  }
 }
