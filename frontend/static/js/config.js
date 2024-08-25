@@ -14,6 +14,7 @@ const state = {
   isLogged: false,
   isAdmin: false,
   userId: null,
+  accessToken: null,
   openedPage: 1,
   articleModifying: 0,
   articlesToShow: null,
@@ -37,15 +38,8 @@ const state = {
     this.saveState();
   },
 
-  clearState() {
-    this.isLogged = false;
-    this.isAdmin = false;
-    this.userId = null;
-    this.openedPage = 1;
-    this.articleModifying = 0;
-    this.articlesToShow = null;
-    this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;
-    this.openedTag = null;
+  setAccessToken(token) {
+    this.accessToken = token;
     this.saveState();
   },
 
@@ -54,8 +48,18 @@ const state = {
     this.saveState();
   },
 
-  setOpenedTag(tag) {
-    this.openedTag = tag;
+  setArticleModifying(articleId) {
+    this.articleModifying = articleId;
+    this.saveState();
+  },
+
+  setArticlesToShow(params) {
+    this.articlesToShow = params;
+    this.saveState();
+  },
+
+  setArticleIdDetailOpened(articleId) {
+    this.articleIdDetailOpened = articleId;
     this.saveState();
   },
 
@@ -72,18 +76,21 @@ const state = {
     this.saveState();
   },
 
-  setArticleModifying(articleId) {
-    this.articleModifying = articleId;
+  setOpenedTag(tag) {
+    this.openedTag = tag;
     this.saveState();
   },
 
-  setArticlesToShow(params) {
-    this.articlesToShow = params;
-    this.saveState();
-  },
-
-  setArticleIdDetailOpened(articleId) {
-    this.articleIdDetailOpened = articleId;
+  clearState() {
+    this.isLogged = false;
+    this.isAdmin = false;
+    this.userId = null;
+    this.accessToken = null;
+    this.openedPage = 1;
+    this.articleModifying = 0;
+    this.articlesToShow = null;
+    this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;
+    this.openedTag = null;
     this.saveState();
   },
 
