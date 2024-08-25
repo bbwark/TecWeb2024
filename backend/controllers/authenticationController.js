@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userService = require("../services/userService");
 const { tokenPrivateKey } = require("../config");
+const { verifySelf } = require("../jwtMiddleware");
 
 const authenticationController = express.Router();
 
@@ -27,7 +28,7 @@ authenticationController.post("/login", async (req, res) => {
   }
 });
 
-authenticationController.post("/passwordcheck", async (req, res) => {
+authenticationController.post("/passwordcheck", verifySelf, async (req, res) => {
   const user = await userService.getUserById(req.body.id);
   if (user === null) {
     return res.status(404).json({ error: "User not found" });
