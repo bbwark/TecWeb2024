@@ -2,6 +2,21 @@ import { config, state } from "./config.js";
 import ArticleDTO from "./models/articleDTO.js";
 import UserDTO from "./models/userDTO.js";
 
+// token interceptor
+axios.interceptors.request.use(
+  (config) => {
+    const token = state.accessToken;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Authentication Endpoints
 const login = async (username, password) => {
   try {
@@ -17,7 +32,7 @@ const login = async (username, password) => {
   } catch (error) {
     throw error.response.data;
   }
-}
+};
 
 // Article Endpoints
 const createArticle = async (articleData) => {
