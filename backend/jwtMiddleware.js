@@ -68,6 +68,27 @@ function verifyAdminOrSelf(req, res, next) {
   });
 }
 
+function verifySelf(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized: No Token Provided" });
+  }
+
+  jwt.verify(token, tokenPrivateKey, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: "Forbidden: Invalid Token" });
+    }
+
+    if (user.id === parseInt(req.body.id, 10)) {
+      return next();
+    }
+
+    return res.status(403).json({ error: "Forbidden: Invalid User" });
+  });
+}
+
 async function verifyAdminOrOwner(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -102,5 +123,6 @@ module.exports = {
   verifyAdmin,
   verifyUser,
   verifyAdminOrSelf,
+  verifySelf,
   verifyAdminOrOwner,
 };
