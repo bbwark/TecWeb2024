@@ -1,10 +1,11 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const userService = require("../services/userService");
+const { verifyAdmin, verifyAdminOrSelf } = require("../jwtMiddleware");
 
 const userController = express.Router();
 
-userController.post("/", async (req, res) => {
+userController.post("/", verifyAdmin, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     req.body.password = hashedPassword;
@@ -15,7 +16,7 @@ userController.post("/", async (req, res) => {
   }
 });
 
-userController.get("/:id", async (req, res) => {
+userController.get("/:id", verifyAdminOrSelf, async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (user) {
@@ -28,7 +29,7 @@ userController.get("/:id", async (req, res) => {
   }
 });
 
-userController.get("/", async (req, res) => {
+userController.get("/", verifyAdmin, async (req, res) => {
   try {
     const users = await userService.getAllUsers();
     res.status(200).json(users);
@@ -37,7 +38,7 @@ userController.get("/", async (req, res) => {
   }
 });
 
-userController.get("/list/:page", async (req, res) => {
+userController.get("/list/:page", verifyAdmin, async (req, res) => {
   try {
     const page = parseInt(req.params.page, 10) || 1;
     const users = await userService.getUsersPaginated(page);
@@ -47,7 +48,7 @@ userController.get("/list/:page", async (req, res) => {
   }
 });
 
-userController.put("/:id", async (req, res) => {
+userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (user === null) {
@@ -67,7 +68,7 @@ userController.put("/:id", async (req, res) => {
   }
 });
 
-userController.delete("/:id", async (req, res) => {
+userController.delete("/:id", verifyAdminOrSelf, async (req, res) => {
   try {
     const success = await userService.deleteUser(req.params.id);
     if (success) {

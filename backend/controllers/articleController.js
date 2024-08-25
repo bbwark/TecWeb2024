@@ -1,9 +1,10 @@
 const express = require("express");
 const articleService = require("../services/articleService");
+const { verifyUser, verifyAdminOrSelf, verifyAdminOrOwner } = require("../jwtMiddleware");
 
 const articleController = express.Router();
 
-articleController.post("/", async (req, res) => {
+articleController.post("/", verifyUser, async (req, res) => {
   try {
     const article = await articleService.createArticle(req.body);
     res.status(201).json(article);
@@ -72,7 +73,7 @@ articleController.get("/by-user-id/:id/:page", async (req, res) => {
   }
 });
 
-articleController.put("/:id", async (req, res) => {
+articleController.put("/:id", verifyAdminOrOwner, async (req, res) => {
   try {
     const article = await articleService.updateArticle(req.params.id, req.body);
     if (article) {
@@ -85,7 +86,7 @@ articleController.put("/:id", async (req, res) => {
   }
 });
 
-articleController.delete("/:id", async (req, res) => {
+articleController.delete("/:id", verifyAdminOrOwner, async (req, res) => {
   try {
     const success = await articleService.deleteArticle(req.params.id);
     if (success) {
