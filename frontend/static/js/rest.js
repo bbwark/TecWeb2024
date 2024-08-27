@@ -113,6 +113,37 @@ const getArticlesByUserId = async (userId, page) => {
   }
 };
 
+const getNumberOfArticles = async () => {
+  try {
+    const response = await axios.get(`${config.apiBaseUrl}/articles/count`);
+    return response.data.count;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+const getNumberOfArticlesByTag = async (tag) => {
+  try {
+    const response = await axios.get(
+      `${config.apiBaseUrl}/articles/count/tag/${tag}`
+    );
+    return response.data.count;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+const getNumberOfArticlesByUserId = async (userId) => {
+  try {
+    const response = await axios.get(
+      `${config.apiBaseUrl}/articles/count/owner/${userId}`
+    );
+    return response.data.count;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 const updateArticle = async (id, updateData) => {
   try {
     const response = await axios.put(
@@ -170,6 +201,15 @@ const getUsersPaginated = async (page) => {
   }
 };
 
+const getNumberOfUsers = async () => {
+  try {
+    const response = await axios.get(`${config.apiBaseUrl}/users/count`);
+    return response.data.count;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 const updateUser = async (id, updateData) => {
   try {
     const response = await axios.put(
@@ -190,6 +230,7 @@ const deleteUser = async (id) => {
   }
 };
 
+// DTO Builders
 const articleBuilder = (data) => {
   return new ArticleDTO(
     data.id,
@@ -221,12 +262,16 @@ export default {
   getRecentArticles,
   getArticlesByTag,
   getArticlesByUserId,
+  getNumberOfArticles,
+  getNumberOfArticlesByTag,
+  getNumberOfArticlesByUserId,
   updateArticle,
   deleteArticle,
   createUser,
   getUserById,
   getAllUsers,
   getUsersPaginated,
+  getNumberOfUsers,
   updateUser,
   deleteUser,
 };
