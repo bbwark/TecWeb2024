@@ -86,6 +86,33 @@ articleController.put("/:id", verifyAdminOrOwner, async (req, res) => {
   }
 });
 
+articleController.get("/count", async (req, res) => {
+  try {
+    const count = await articleService.getNumberOfArticles();
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+articleController.get("/count/tag/:tag", async (req, res) => {
+  try {
+    const count = await articleService.getNumberOfArticlesByTag(req.params.tag);
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+articleController.get("/count/owner/:id", async (req, res) => {
+  try {
+    const count = await articleService.getNumberOfArticlesByUserId(req.params.id);
+    res.status(200).json({ count });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 articleController.delete("/:id", verifyAdminOrOwner, async (req, res) => {
   try {
     const success = await articleService.deleteArticle(req.params.id);

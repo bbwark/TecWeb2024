@@ -78,6 +78,15 @@ userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
   }
 });
 
+userController.get("/count", verifyAdmin, async (req, res) => {
+  try {
+    const count = await userService.getNumberOfUsers();
+    res.status(200).json({ count: count });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 userController.delete("/:id", verifyAdminOrSelf, async (req, res) => {
   try {
     const success = await userService.deleteUser(req.params.id);
