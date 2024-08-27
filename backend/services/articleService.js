@@ -31,6 +31,18 @@ const getRecentArticlesByUserId = async (userId, page) => {
   return await articleCrud.getRecentArticlesByUserId(userId, limit, offset);
 };
 
+const getNumberOfArticles = async (ownerId = null, tag = null) => {
+  return await articleCrud.getNumberOfArticles();
+};
+
+const getNumberOfArticlesByTag = async (tag) => {
+  return await articleCrud.getNumberOfArticlesByTag(tag);
+};
+
+const getNumberOfArticlesByUserId = async (userId) => {
+  return await articleCrud.getNumberOfArticlesByUserId(userId);
+};
+
 const updateArticle = async (articleId, updateData) => {
   return await articleCrud.updateArticle(articleId, updateData);
 };
@@ -46,6 +58,9 @@ module.exports = {
   getRecentArticles,
   getRecentArticlesByTag,
   getRecentArticlesByUserId,
+  getNumberOfArticles,
+  getNumberOfArticlesByTag,
+  getNumberOfArticlesByUserId,
   updateArticle,
   deleteArticle,
 };

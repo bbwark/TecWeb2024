@@ -23,6 +23,10 @@ const getUsersPaginated = async (page) => {
   return await userCrud.getUsersPaginated(limit, offset);
 };
 
+const getNumberOfUsers = async () => {
+  return await userCrud.getNumberOfUsers();
+};
+
 const updateUser = async (userId, updateData) => {
   return await userCrud.updateUser(userId, updateData);
 };
@@ -37,6 +41,7 @@ module.exports = {
   getUserByUsername,
   getAllUsers,
   getUsersPaginated,
+  getNumberOfUsers,
   updateUser,
   deleteUser,
 };
