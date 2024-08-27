@@ -77,10 +77,10 @@ export default class ModifyArticle extends AbstractView {
       const article = {
         title: title,
         content: content,
-        userId: state.userId,
         tags: tags,
       };
       if (isNew) {
+        article.userId = state.userId;
         await rest.createArticle(article);
       } else {
         await rest.updateArticle(articleId, article);
