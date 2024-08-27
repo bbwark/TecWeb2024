@@ -24,6 +24,10 @@ const getUsersPaginated = async (limit, offset) => {
   });
 };
 
+const getNumberOfUsers = async () => {
+  return await User.count();
+};
+
 const updateUser = async (userId, updateData) => {
   const user = await User.findByPk(userId);
   if (user) {
@@ -47,6 +51,7 @@ module.exports = {
   getUserByUsername,
   getAllUsers,
   getUsersPaginated,
+  getNumberOfUsers,
   updateUser,
   deleteUser,
 };

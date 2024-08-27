@@ -1,4 +1,3 @@
-const { where } = require("sequelize");
 const { Article } = require("../databaseconn");
 
 const createArticle = async (articleData) => {
@@ -43,6 +42,26 @@ const getRecentArticlesByUserId = async (userId, limit, offset) => {
   });
 };
 
+const getNumberOfArticles = async () => {
+  return await Article.count();
+};
+
+const getNumberOfArticlesByTag = async (tag) => {
+  return await Article.count({
+    where: {
+      tags: tag,
+    },
+  });
+};
+
+const getNumberOfArticlesByUserId = async (userId) => {
+  return await Article.count({
+    where: {
+      userId: userId,
+    },
+  });
+};
+
 const updateArticle = async (articleId, updateData) => {
   const article = await Article.findByPk(articleId);
   if (article) {
@@ -67,6 +86,9 @@ module.exports = {
   getRecentArticles,
   getRecentArticlesByTag,
   getRecentArticlesByUserId,
+  getNumberOfArticles,
+  getNumberOfArticlesByTag,
+  getNumberOfArticlesByUserId,
   updateArticle,
   deleteArticle,
 };
