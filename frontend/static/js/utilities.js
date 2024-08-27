@@ -49,4 +49,12 @@ function validatePassword(password) {
   return false;
 }
 
-export { escapeHtml, setArticlesToShowBasedOnState, validatePassword };
+function encodeTags(tags) {
+  return `#${tags.join('#')}#`;
+}
+
+function decodeTags(tags) {
+  return tags.split('#').filter(tag => tag.trim() !== "");
+}
+
+export { escapeHtml, setArticlesToShowBasedOnState, validatePassword, encodeTags, decodeTags };

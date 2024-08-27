@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { Article } = require("../databaseconn");
 
 const createArticle = async (articleData) => {
@@ -23,7 +24,9 @@ const getRecentArticles = async (limit, offset) => {
 const getRecentArticlesByTag = async (tag, limit, offset) => {
   return await Article.findAll({
     where: {
-      tags: tag,
+      tags: {
+        [Op.like]: `%#${tag}#%`
+      }
     },
     limit: limit,
     offset: offset,
