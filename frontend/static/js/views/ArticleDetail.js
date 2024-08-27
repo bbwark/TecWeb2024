@@ -11,11 +11,7 @@ export default class extends AbstractView {
 
   async getHtml() {
     const article = await rest.getArticleById(state.articleIdDetailOpened);
-    const headerView = new HeaderDetail({
-      isLogged: state.isLogged,
-      isOwner: article.authorId === state.userId,
-      isAdmin: state.isAdmin,
-    });
+    const headerView = new HeaderDetail({isOwner: article.authorId === state.userId});
     this.setTitle(article.title);
     const headerHtml = await headerView.getHtml();
     const data = await rest.getUserById(article.authorId);
