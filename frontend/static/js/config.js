@@ -23,6 +23,7 @@ const state = {
   openedTag: null,
   userIdArticlesToShow: null,
   usersToShow: null,
+  usersOpenedPage: 1,
 
   setLoggedInStatus(status) {
     this.isLogged = status;
@@ -93,6 +94,11 @@ const state = {
     this.saveState();
   },
 
+  setUsersOpenedPage(page) {
+    this.usersOpenedPage = page;
+    this.saveState();
+  },
+
   clearState() {
     this.isLogged = false;
     this.isAdmin = false;
@@ -105,6 +111,7 @@ const state = {
     this.openedTag = null;
     this.userIdArticlesToShow = null;
     this.usersToShow = null;
+    this.usersOpenedPage = 1;
     this.saveState();
   },
 
