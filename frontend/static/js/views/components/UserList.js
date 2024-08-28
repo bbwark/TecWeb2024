@@ -82,7 +82,7 @@ export default class extends AbstractView {
       `.admin-checkbox[data-id="${userId}"]`
     );
     if (adminCheckbox) {
-      await rest.updateUser(userId, { isAdmin: adminCheckbox.checked });
+      await rest.updateUserAdmin(userId, { isAdmin: adminCheckbox.checked });
     }
   }
 
