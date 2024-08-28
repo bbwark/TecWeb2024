@@ -1,6 +1,6 @@
 const APP_STATE_KEY = "appState";
 const config = {
-  numberOfArticles: 10, // Number for pagination
+  numberOfArticlesPerPage: 10, // Number for pagination
   apiBaseUrl: "http://localhost:3000/api",
 };
 
