@@ -1,6 +1,6 @@
 import AbstractView from "../AbstractView.js";
 import rest from "../../rest.js";
-import { state } from "../../config.js";
+import { config, state } from "../../config.js";
 import Pagination from "./Pagination.js";
 
 export default class extends AbstractView {
@@ -16,7 +16,7 @@ export default class extends AbstractView {
 
   async getHtml() {
     const totalUsers = await rest.getNumberOfUsers();
-    const numberOfPages = Math.ceil(totalUsers / 10);
+    const numberOfPages = Math.ceil(totalUsers / config.numberOfUsersPerPage);
     const paginationView = new Pagination({
       currentPage: state.usersOpenedPage,
       totalPages: numberOfPages,
@@ -51,7 +51,6 @@ export default class extends AbstractView {
 
   async loadUsers() {
     let users = await rest.getUsersPaginated(state.usersOpenedPage);
-    users = users.filter(user => user.id !== state.userId);
     const userListTbody = document.getElementById("user-list-tbody");
     userListTbody.innerHTML = "";
 

@@ -194,7 +194,7 @@ const getAllUsers = async () => {
 
 const getUsersPaginated = async (page) => {
   try {
-    const response = await axios.get(`${config.apiBaseUrl}/users/list/${page}`);
+    const response = await axios.get(`${config.apiBaseUrl}/users/list/${page}/${state.userId}`);
     return response.data.map((data) => userBuilder(data));
   } catch (error) {
     throw error.response.data;
