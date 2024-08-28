@@ -36,7 +36,7 @@ export default class extends AbstractView {
   }
 
   async loadUsers() {
-    let users = await rest.getAllUsers();
+    let users = await rest.getUsersPaginated(state.usersOpenedPage);
     const userListTbody = document.getElementById("user-list-tbody");
     userListTbody.innerHTML = "";
 
