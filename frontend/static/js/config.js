@@ -22,6 +22,7 @@ const state = {
   articleShowCaseState: articleShowCaseState.ALL_ARTICLES,
   openedTag: null,
   userIdArticlesToShow: null,
+  usersToShow: null,
 
   setLoggedInStatus(status) {
     this.isLogged = status;
@@ -87,6 +88,11 @@ const state = {
     this.saveState();
   },
 
+  setUsersToShow(users) {
+    this.usersToShow = users;
+    this.saveState();
+  },
+
   clearState() {
     this.isLogged = false;
     this.isAdmin = false;
@@ -98,6 +104,7 @@ const state = {
     this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;
     this.openedTag = null;
     this.userIdArticlesToShow = null;
+    this.usersToShow = null;
     this.saveState();
   },
 
