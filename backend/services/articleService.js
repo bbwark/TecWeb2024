@@ -14,19 +14,19 @@ const getAllArticles = async () => {
 };
 
 const getRecentArticles = async (page) => {
-  const limit = config.pagingNumber;
+  const limit = config.numberOfArticlesPerPage;
   const offset = (page - 1) * limit;
   return await articleCrud.getRecentArticles(limit, offset);
 };
 
 const getRecentArticlesByTag = async (tag, page) => {
-  const limit = config.pagingNumber;
+  const limit = config.numberOfArticlesPerPage;
   const offset = (page - 1) * limit;
   return await articleCrud.getRecentArticlesByTag(tag, limit, offset);
 };
 
 const getRecentArticlesByUserId = async (userId, page) => {
-  const limit = config.pagingNumber;
+  const limit = config.numberOfArticlesPerPage;
   const offset = (page - 1) * limit;
   return await articleCrud.getRecentArticlesByUserId(userId, limit, offset);
 };

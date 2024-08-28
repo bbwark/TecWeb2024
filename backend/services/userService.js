@@ -1,4 +1,4 @@
-const config = require('../config.js');
+const { config } = require('../config.js');
 const userCrud = require("../crud/userCrud");
 
 const createUser = async (userData) => {
@@ -18,7 +18,7 @@ const getAllUsers = async () => {
 };
 
 const getUsersPaginated = async (page) => {
-  const limit = config.pagingNumber;
+  const limit = config.numberOfUsersPerPage;
   const offset = (page - 1) * limit;
   return await userCrud.getUsersPaginated(limit, offset);
 };
