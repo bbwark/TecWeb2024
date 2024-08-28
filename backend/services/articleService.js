@@ -31,7 +31,7 @@ const getRecentArticlesByUserId = async (userId, page) => {
   return await articleCrud.getRecentArticlesByUserId(userId, limit, offset);
 };
 
-const getNumberOfArticles = async (ownerId = null, tag = null) => {
+const getNumberOfArticles = async () => {
   return await articleCrud.getNumberOfArticles();
 };
 

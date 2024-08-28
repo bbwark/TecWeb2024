@@ -17,8 +17,31 @@ userController.post("/", verifyAdmin, async (req, res) => {
   }
 });
 
+userController.get("/count", verifyAdmin, async (req, res) => {
+  try {
+    const count = await userService.getNumberOfUsers();
+    res.status(200).json({ count: count });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+userController.get("/list/:page", verifyAdmin, async (req, res) => {
+  try {
+    const page = parseInt(req.params.page, 10) || 1;
+    const users = await userService.getUsersPaginated(page);
+    users.forEach((user) => {
+      user.password = undefined;
+    });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 userController.get("/:id", async (req, res) => {
   try {
+    console.log("Getting user by id");
     const user = await userService.getUserById(req.params.id);
     if (user) {
       user.password = undefined;
@@ -44,19 +67,6 @@ userController.get("/", verifyAdmin, async (req, res) => {
   }
 });
 
-userController.get("/list/:page", verifyAdmin, async (req, res) => {
-  try {
-    const page = parseInt(req.params.page, 10) || 1;
-    const users = await userService.getUsersPaginated(page);
-    users.forEach((user) => {
-      user.password = undefined;
-    });
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
 userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
@@ -73,15 +83,6 @@ userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
     const userUpdated = await userService.updateUser(req.params.id, req.body);
     userUpdated.password = undefined;
     res.status(200).json(userUpdated);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-userController.get("/count", verifyAdmin, async (req, res) => {
-  try {
-    const count = await userService.getNumberOfUsers();
-    res.status(200).json({ count: count });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
