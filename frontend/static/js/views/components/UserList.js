@@ -12,9 +12,6 @@ export default class extends AbstractView {
     if (!app.loadUsers) app.loadUsers = this.loadUsers;
     if (!app.toggleAdmin) app.toggleAdmin = this.toggleAdmin;
     if (!app.deleteUser) app.deleteUser = this.deleteUser;
-    if (state.isAdmin) {
-      this.loadUsers();
-    }
   }
 
   async getHtml() {
@@ -26,6 +23,12 @@ export default class extends AbstractView {
       isFromUserList: true,
     });
     const paginationHtml = await paginationView.getHtml();
+
+    if (state.isAdmin) {
+      setTimeout(() => {
+        this.loadUsers();
+      }, 0);
+    } //allow to load users after injecting the html
 
     return `
             <h1>User List</h1>
@@ -48,6 +51,7 @@ export default class extends AbstractView {
 
   async loadUsers() {
     let users = await rest.getUsersPaginated(state.usersOpenedPage);
+    users = users.filter(user => user.id !== state.userId);
     const userListTbody = document.getElementById("user-list-tbody");
     userListTbody.innerHTML = "";
 
