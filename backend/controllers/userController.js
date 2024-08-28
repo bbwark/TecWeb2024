@@ -41,7 +41,6 @@ userController.get("/list/:page", verifyAdmin, async (req, res) => {
 
 userController.get("/:id", async (req, res) => {
   try {
-    console.log("Getting user by id");
     const user = await userService.getUserById(req.params.id);
     if (user) {
       user.password = undefined;
