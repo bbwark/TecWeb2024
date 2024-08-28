@@ -41,10 +41,10 @@ export default class extends AbstractView {
   async showArticles() {
     let articles = null;
     if (state.articleShowCaseState === articleShowCaseState.ALL_ARTICLES) {
-      articles = await rest.getArticlesByUserId(state.userId, state.openedPage);
+      articles = await rest.getArticlesByUserId(state.userId, state.articlesOpenedPage);
       state.setArticleShowcaseState(articleShowCaseState.USER_ARTICLES);
     } else {
-      articles = await rest.getRecentArticles(state.openedPage);
+      articles = await rest.getRecentArticles(state.articlesOpenedPage);
       state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
     }
     state.setArticlesToShow(articles);

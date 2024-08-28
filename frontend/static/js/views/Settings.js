@@ -58,7 +58,7 @@ export default class extends AbstractView {
         state.clearState();
         history.pushState(null, null, "/");
         state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
-        state.setArticlesToShow(await rest.getRecentArticles(state.openedPage));
+        state.setArticlesToShow(await rest.getRecentArticles(state.articlesOpenedPage));
         document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
     }
 }

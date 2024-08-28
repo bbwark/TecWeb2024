@@ -26,7 +26,7 @@ export default class extends AbstractView {
     }
 
     const numberOfPages = await this.numberOfPages();
-    const paginationView = new Pagination({ currentPage: state.openedPage, totalPages: numberOfPages });
+    const paginationView = new Pagination({ currentPage: state.articlesOpenedPage, totalPages: numberOfPages });
     const paginationHtml = await paginationView.getHtml();
 
     const headerView = new HeaderShowcase({ isLogged: state.isLogged });

@@ -15,7 +15,7 @@ const state = {
   isAdmin: false,
   userId: null,
   accessToken: null,
-  openedPage: 1,
+  articlesOpenedPage: 1,
   articleModifying: 0,
   articlesToShow: null,
   articleIdDetailOpened: 0,
@@ -45,8 +45,8 @@ const state = {
     this.saveState();
   },
 
-  setOpenedPage(page) {
-    this.openedPage = page;
+  setArticlesOpenedPage(page) {
+    this.articlesOpenedPage = page;
     this.saveState();
   },
 
@@ -98,7 +98,7 @@ const state = {
     this.isAdmin = false;
     this.userId = null;
     this.accessToken = null;
-    this.openedPage = 1;
+    this.articlesOpenedPage = 1;
     this.articleModifying = 0;
     this.articlesToShow = null;
     this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;

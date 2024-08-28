@@ -13,16 +13,16 @@ function escapeHtml(unsafe) {
 async function setArticlesToShowBasedOnState() {
   switch (state.articleShowCaseState) {
     case articleShowCaseState.ALL_ARTICLES:
-      state.setArticlesToShow(await rest.getRecentArticles(state.openedPage));
+      state.setArticlesToShow(await rest.getRecentArticles(state.articlesOpenedPage));
       break;
     case articleShowCaseState.TAG_ARTICLES:
       state.setArticlesToShow(
-        await rest.getArticlesByTag(state.openedTag, state.openedPage)
+        await rest.getArticlesByTag(state.openedTag, state.articlesOpenedPage)
       );
       break;
     case articleShowCaseState.USER_ARTICLES:
       state.setArticlesToShow(
-        await rest.getArticlesByUserId(state.userId, state.openedPage)
+        await rest.getArticlesByUserId(state.userId, state.articlesOpenedPage)
       );
       break;
   }
