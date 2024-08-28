@@ -73,12 +73,11 @@ userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    if (!(await bcrypt.compare(req.body.password, user.password))) {
+    if (req.body.password && !(await bcrypt.compare(req.body.password, user.password))) {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       req.body.password = hashedPassword;
     }
 
-    req.body.isAdmin = user.isAdmin;
     const userUpdated = await userService.updateUser(req.params.id, req.body);
     userUpdated.password = undefined;
     res.status(200).json(userUpdated);
