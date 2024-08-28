@@ -1,6 +1,7 @@
 import AbstractView from "../AbstractView.js";
 import rest from "../../rest.js";
 import { state } from "../../config.js";
+import Pagination from "./Pagination.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -17,6 +18,15 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
+    const totalUsers = await rest.getNumberOfUsers();
+    const numberOfPages = Math.ceil(totalUsers / 10);
+    const paginationView = new Pagination({
+      currentPage: state.usersOpenedPage,
+      totalPages: numberOfPages,
+      isFromUserList: true,
+    });
+    const paginationHtml = await paginationView.getHtml();
+
     return `
             <h1>User List</h1>
             <table id="user-list-table">
@@ -32,6 +42,7 @@ export default class extends AbstractView {
                     
                 </tbody>
             </table>
+            ${paginationHtml}
         `;
   }
 
