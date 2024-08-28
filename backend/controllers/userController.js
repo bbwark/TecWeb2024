@@ -39,6 +39,27 @@ userController.get("/list/:page", verifyAdmin, async (req, res) => {
   }
 });
 
+userController.put("/admin/:id", verifyAdmin, async (req, res) => {
+  try {
+    const user = await userService.getUserById(req.params.id);
+    if (user === null) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (req.body.password && !(await bcrypt.compare(req.body.password, user.password))) {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      req.body.password = hashedPassword;
+    }
+
+    const userUpdated = await userService.updateUser(req.params.id, req.body);
+    userUpdated.password = undefined;
+    res.status(200).json(userUpdated);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+
 userController.get("/:id", async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
@@ -78,6 +99,7 @@ userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
       req.body.password = hashedPassword;
     }
 
+    req.body.isAdmin = user.isAdmin;
     const userUpdated = await userService.updateUser(req.params.id, req.body);
     userUpdated.password = undefined;
     res.status(200).json(userUpdated);

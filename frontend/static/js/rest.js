@@ -222,6 +222,18 @@ const updateUser = async (id, updateData) => {
   }
 };
 
+const updateUserAdmin = async (id, updateData) => {
+  try {
+    const response = await axios.put(
+      `${config.apiBaseUrl}/users/admin/${id}`,
+      updateData
+    );
+    return userBuilder(response.data);
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 const deleteUser = async (id) => {
   try {
     await axios.delete(`${config.apiBaseUrl}/users/${id}`);
@@ -273,5 +285,6 @@ export default {
   getUsersPaginated,
   getNumberOfUsers,
   updateUser,
+  updateUserAdmin,
   deleteUser,
 };
