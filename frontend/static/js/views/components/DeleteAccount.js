@@ -17,7 +17,7 @@ export default class extends AbstractView {
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <button type="submit">Delete Account</button>
+                <button onclick="app.deleteAccount()" type="submit">Delete Account</button>
             </div>
         `;
   }
