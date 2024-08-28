@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { User } = require("../databaseconn");
 
 const createUser = async (userData) => {
@@ -16,8 +17,13 @@ const getAllUsers = async () => {
   return await User.findAll();
 };
 
-const getUsersPaginated = async (limit, offset) => {
+const getUsersPaginated = async (limit, offset, id) => {
   return await User.findAll({
+    where: {
+      id: {
+        [Op.ne]: id,
+      },
+    },
     limit: limit,
     offset: offset,
     order: [["updatedAt", "DESC"]],

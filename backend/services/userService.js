@@ -17,10 +17,10 @@ const getAllUsers = async () => {
   return await userCrud.getAllUsers();
 };
 
-const getUsersPaginated = async (page) => {
+const getUsersPaginated = async (page, id) => {
   const limit = config.numberOfUsersPerPage;
   const offset = (page - 1) * limit;
-  return await userCrud.getUsersPaginated(limit, offset);
+  return await userCrud.getUsersPaginated(limit, offset, id);
 };
 
 const getNumberOfUsers = async () => {
