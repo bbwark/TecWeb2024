@@ -1,7 +1,8 @@
 const { randomBytes } = require('crypto');
 
 const config = {
-    pagingNumber: 10
+    numberOfArticlesPerPage: 10,
+    numberOfUsersPerPage: 10,
 }
 
 const tokenPrivateKey = randomBytes(64).toString('hex');
