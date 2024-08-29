@@ -22,7 +22,7 @@ async function setArticlesToShowBasedOnState() {
       break;
     case articleShowCaseState.USER_ARTICLES:
       state.setArticlesToShow(
-        await rest.getArticlesByUserId(state.userId, state.articlesOpenedPage)
+        await rest.getArticlesByUserId(state.userIdArticlesToShow, state.articlesOpenedPage)
       );
       break;
   }
