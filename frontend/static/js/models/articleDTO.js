@@ -8,7 +8,7 @@ export default class ArticleDTO {
     authorId = 0,
     publishedDate = "",
     modifiedDate = "",
-    tags = "",
+    tags = [],
     preview,
     showEditDeleteButtons
   ) {

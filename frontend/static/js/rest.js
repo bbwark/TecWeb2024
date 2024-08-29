@@ -1,6 +1,7 @@
 import { config, state } from "./config.js";
 import ArticleDTO from "./models/articleDTO.js";
 import UserDTO from "./models/userDTO.js";
+import { decodeTags, encodeTags } from "./utilities.js";
 
 // token interceptor
 axios.interceptors.request.use(
@@ -52,6 +53,7 @@ const checkPassword = async (password) => {
 // Article Endpoints
 const createArticle = async (articleData) => {
   try {
+    articleData.tags = encodeTags(articleData.tags);
     const response = await axios.post(
       `${config.apiBaseUrl}/articles`,
       articleData
@@ -65,6 +67,7 @@ const createArticle = async (articleData) => {
 const getArticleById = async (id) => {
   try {
     const response = await axios.get(`${config.apiBaseUrl}/articles/${id}`);
+    response.data.tags = decodeTags(response.data.tags);
     return articleBuilder(response.data);
   } catch (error) {
     throw error.response.data;
@@ -74,7 +77,10 @@ const getArticleById = async (id) => {
 const getAllArticles = async () => {
   try {
     const response = await axios.get(`${config.apiBaseUrl}/articles`);
-    return response.data.map((data) => articleBuilder(data));
+    return response.data.map((data) => {
+      data.tags = decodeTags(data.tags);
+      return articleBuilder(data);
+    });
   } catch (error) {
     throw error.response.data;
   }
@@ -85,7 +91,10 @@ const getRecentArticles = async (page) => {
     const response = await axios.get(
       `${config.apiBaseUrl}/articles/recent/${page}`
     );
-    return response.data.map((data) => articleBuilder(data));
+    return response.data.map((data) => {
+      data.tags = decodeTags(data.tags);
+      return articleBuilder(data);
+    });
   } catch (error) {
     throw error.response.data;
   }
@@ -96,7 +105,10 @@ const getArticlesByTag = async (tag, page) => {
     const response = await axios.get(
       `${config.apiBaseUrl}/articles/by-tag/${tag}/${page}`
     );
-    return response.data.map((data) => articleBuilder(data));
+    return response.data.map((data) => {
+      data.tags = decodeTags(data.tags);
+      return articleBuilder(data);
+    });
   } catch (error) {
     throw error.response.data;
   }
@@ -107,7 +119,10 @@ const getArticlesByUserId = async (userId, page) => {
     const response = await axios.get(
       `${config.apiBaseUrl}/articles/by-user-id/${userId}/${page}`
     );
-    return response.data.map((data) => articleBuilder(data));
+    return response.data.map((data) => {
+      data.tags = decodeTags(data.tags);
+      return articleBuilder(data);
+    });
   } catch (error) {
     throw error.response.data;
   }
@@ -146,10 +161,12 @@ const getNumberOfArticlesByUserId = async (userId) => {
 
 const updateArticle = async (id, updateData) => {
   try {
+    updateData.tags = encodeTags(updateData.tags);
     const response = await axios.put(
       `${config.apiBaseUrl}/articles/${id}`,
       updateData
     );
+    response.data.tags = decodeTags(response.data.tags);
     return articleBuilder(response.data);
   } catch (error) {
     throw error.response.data;
@@ -194,7 +211,9 @@ const getAllUsers = async () => {
 
 const getUsersPaginated = async (page) => {
   try {
-    const response = await axios.get(`${config.apiBaseUrl}/users/list/${page}/${state.userId}`);
+    const response = await axios.get(
+      `${config.apiBaseUrl}/users/list/${page}/${state.userId}`
+    );
     return response.data.map((data) => userBuilder(data));
   } catch (error) {
     throw error.response.data;
