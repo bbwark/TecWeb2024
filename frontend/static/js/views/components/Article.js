@@ -42,9 +42,9 @@ export default class extends AbstractView {
                 </div>
                 <div class="article-details">
                   <p>Author: ${!authorName ? "Account Deleted" : authorName}</p>
-                  <p>Published on: ${this.params.publishedDate}</p>
-                  <p>Last modified: ${this.params.modifiedDate}</p>
-                  <p>Tags: ${this.params.tags}</p>
+                  <p>Published on: ${new Date(this.params.publishedDate).toLocaleDateString(undefined, {year: "numeric", month: "long", day: "numeric"})}</p>
+                  <p>Last modified: ${new Date(this.params.modifiedDate).toLocaleDateString(undefined, {year: "numeric", month: "long", day: "numeric"})}</p>
+                  <p>Tags: ${this.params.tags.map(tag => `#${tag}`).join(', ')}</p>
                   ${
                     this.params.preview
                       ? `<p class="preview">${this.params.content.substring(

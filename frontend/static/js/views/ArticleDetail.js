@@ -23,11 +23,11 @@ export default class extends AbstractView {
             ${headerHtml}
             <div class="article-detail-subtitle">
                 <p>Author: ${authorName}</p>
-                <p>Published on: ${article.publishedDate}</p>
-                <p>Last modified: ${article.modifiedDate}</p>
+                <p>Published on: ${new Date(article.publishedDate).toLocaleDateString(undefined, {year: "numeric", month: "long", day: "numeric"})}</p>
+                <p>Last modified: ${new Date(article.modifiedDate).toLocaleDateString(undefined, {year: "numeric", month: "long", day: "numeric"})}</p>
             </div>
             <p>${article.content}</p>            
-            <p>Tags: ${article.tags}</p>
+            <p>Tags: ${article.tags.map(tag => `#${tag}`).join(', ')}</p>
         </div>
         `;
   }
