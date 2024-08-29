@@ -3,8 +3,9 @@ import ArticleDetail from "./views/ArticleDetail.js";
 import ModifyArticle from "./views/ModifyArticle.js";
 import Login from "./views/Login.js";
 import Settings from "./views/Settings.js";
-import { state } from "./config.js";
+import { articleShowCaseState, state } from "./config.js";
 import rest from "./rest.js";
+import { setArticlesToShowBasedOnState } from "./utilities.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -31,8 +32,10 @@ const router = async () => {
   state.loadState();
 
   if (!state.articlesToShow || state.articlesToShow.length === 0) {
-    state.setArticlesToShow(await rest.getRecentArticles(1));
+    state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
+    state.setArticlesOpenedPage(1);
   }
+  await setArticlesToShowBasedOnState();
 
   const routes = [
     { path: "/", view: ArticleShowcase },
