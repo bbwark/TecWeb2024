@@ -22,16 +22,34 @@ export default class extends AbstractView {
 
   async getHtml() {
     let paginationButtons = [];
-    let startingPage = 1;
-    let endingPage = this.totalPages;
-    // TODO logic to render only 5 pages at a time
+    const maxVisibleButtons = 5;
+    let startingPage, endingPage;
 
+    if (this.totalPages <= maxVisibleButtons) {
+      startingPage = 1;
+      endingPage = this.totalPages;
+    } else {
+      const halfRange = Math.floor(maxVisibleButtons / 2);
+
+      if (this.currentPage <= halfRange) {
+        startingPage = 1;
+        endingPage = maxVisibleButtons;
+      } else if (this.currentPage + halfRange >= this.totalPages) {
+        startingPage = this.totalPages - maxVisibleButtons + 1;
+        endingPage = this.totalPages;
+      } else {
+        startingPage = this.currentPage - halfRange;
+        endingPage = this.currentPage + halfRange;
+      }
+    }
 
     for (let i = startingPage; i <= endingPage; i++) {
       paginationButtons.push(`
-        <button onclick="app.changePage(${i}, ${this.isFromUserList})" class="pagination-button ${
-          i === this.currentPage ? "active" : ""
-        }" data-page="${i}">
+        <button onclick="app.changePage(${i}, ${
+        this.isFromUserList
+      })" class="pagination-button ${
+        i === this.currentPage ? "active" : ""
+      }" data-page="${i}">
           ${i}
         </button>
       `);
@@ -39,32 +57,52 @@ export default class extends AbstractView {
 
     return `
       <div class="pagination-container">
-        <button onclick="app.changePage(${this.currentPage - 1}, ${this.isFromUserList})" class="pagination-button previous" ${
-          this.currentPage === 1 ? "disabled" : ""
-        } data-page="${this.currentPage - 1}">
+
+        ${
+          this.currentPage >= 4
+            ? `<button onclick="app.changePage(1, ${this.isFromUserList})" class="pagination-button" data-page="1">1</button>`
+            : ``
+        }
+
+        <button onclick="app.changePage(${this.currentPage - 1}, ${
+      this.isFromUserList
+    })" class="pagination-button previous" ${
+      this.currentPage === 1 ? "disabled" : ""
+    } data-page="${this.currentPage - 1}">
           &lt;
         </button>
         
         ${paginationButtons.join("")}
 
-        <button onclick="app.changePage(${this.currentPage + 1}, ${this.isFromUserList})" class="pagination-button next" ${
-          this.currentPage === this.totalPages ? "disabled" : ""
-        } data-page="${this.currentPage + 1}">
+        <button onclick="app.changePage(${this.currentPage + 1}, ${
+      this.isFromUserList
+    })" class="pagination-button next" ${
+      this.currentPage === this.totalPages ? "disabled" : ""
+    } data-page="${this.currentPage + 1}">
           &gt;
         </button>
+
+        ${
+          this.currentPage <= this.totalPages - 3
+            ? `<button onclick="app.changePage(${this.totalPages}, ${this.isFromUserList})" class="pagination-button" data-page="${this.totalPages}">${this.totalPages}</button>`
+            : ``
+        }
+
+        <p>Page selected = ${this.currentPage}</p>
       </div>
     `;
   }
 
   async changePage(pageDestination, isFromUserList) {
-    
     if (isFromUserList) {
       state.setUsersOpenedPage(pageDestination);
-      document.querySelector("#settings-content").innerHTML = await new UserList().getHtml();
+      document.querySelector("#settings-content").innerHTML =
+        await new UserList().getHtml();
     } else {
       state.setArticlesOpenedPage(pageDestination);
       await setArticlesToShowBasedOnState();
-      document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
+      document.querySelector("#app").innerHTML =
+        await new ArticleShowcase().getHtml();
     }
   }
 }
