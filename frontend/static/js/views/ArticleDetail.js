@@ -17,6 +17,8 @@ export default class extends AbstractView {
     const app = document.querySelector("#app");
     if (!app.goToArticleShowcaseTag)
       app.goToArticleShowcaseTag = this.goToArticleShowcaseTag;
+    if (!app.goToArticleShowcaseUser)
+      app.goToArticleShowcaseUser = this.goToArticleShowcaseUser;
   }
 
   async getHtml() {
@@ -34,7 +36,9 @@ export default class extends AbstractView {
             <h2>${article.title}</h2>
             ${headerHtml}
             <div class="article-detail-subtitle">
-                <p>Author: ${authorName}</p>
+                <a class="tag-link" onclick="app.goToArticleShowcaseUser('${
+                  article.authorId
+                }')">${authorName}</a>
                 <p>Published on: ${new Date(
                   article.publishedDate
                 ).toLocaleDateString(undefined, {
@@ -65,6 +69,11 @@ export default class extends AbstractView {
     state.setOpenedTag(tag);
     state.setArticlesOpenedPage(1);
     state.setArticleShowcaseState(articleShowCaseState.TAG_ARTICLES);
+    await setArticlesToShowBasedOnState();
+  async goToArticleShowcaseUser(userId) {
+    state.setUserIdArticlesToShow(userId);
+    state.setArticlesOpenedPage(1);
+    state.setArticleShowcaseState(articleShowCaseState.USER_ARTICLES);
     await setArticlesToShowBasedOnState();
     history.pushState(null, null, "/");
     document.querySelector("#app").innerHTML =
