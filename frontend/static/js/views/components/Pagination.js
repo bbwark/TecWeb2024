@@ -87,8 +87,6 @@ export default class extends AbstractView {
             ? `<button onclick="app.changePage(${this.totalPages}, ${this.isFromUserList})" class="pagination-button" data-page="${this.totalPages}">${this.totalPages}</button>`
             : ``
         }
-
-        <p>Page selected = ${this.currentPage}</p>
       </div>
     `;
   }
