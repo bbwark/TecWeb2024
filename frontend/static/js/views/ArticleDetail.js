@@ -70,6 +70,11 @@ export default class extends AbstractView {
     state.setArticlesOpenedPage(1);
     state.setArticleShowcaseState(articleShowCaseState.TAG_ARTICLES);
     await setArticlesToShowBasedOnState();
+    history.pushState(null, null, "/");
+    document.querySelector("#app").innerHTML =
+      await new ArticleShowcase().getHtml();
+  }
+
   async goToArticleShowcaseUser(userId) {
     state.setUserIdArticlesToShow(userId);
     state.setArticlesOpenedPage(1);
