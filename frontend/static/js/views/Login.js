@@ -14,6 +14,9 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
+    setTimeout(() => {
+      this.afterRender();
+    }, 0);
     return `
             <h1>Login</h1>
             <div id="login-form">
@@ -44,5 +47,15 @@ export default class extends AbstractView {
         //TODO - if unsuccessful, display error message
       }
     }
+  }
+
+  afterRender() {
+    const form = document.getElementById("login-form");
+    form.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        const app = document.querySelector("#app");
+        app.submitLogin();
+      }
+    });
   }
 }
