@@ -8,7 +8,7 @@ export default class extends AbstractView {
   constructor(params) {
     super(params);
     this.setTitle("Login");
-
+    state.clearState();
     const app = document.querySelector("#app");
     if (!app.submitLogin) app.submitLogin = this.submitLogin;
   }
