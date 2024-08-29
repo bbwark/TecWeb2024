@@ -1,4 +1,8 @@
+import { state } from "../../config.js";
+import rest from "../../rest.js";
+import { escapeHtml, setArticlesToShowBasedOnState } from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
+import ArticleShowcase from "../ArticleShowcase.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -33,7 +37,9 @@ export default class extends AbstractView {
       if (isPasswordCorrect) {
         await rest.deleteUser(state.userId, passwordInserted.value);
         state.clearState();
+        await setArticlesToShowBasedOnState();
         history.pushState(null, null, "/");
+        document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
       } else {
         passwordInserted.value = "";
       }

@@ -1,5 +1,6 @@
 import { articleShowCaseState, state } from "../../config.js";
 import rest from "../../rest.js";
+import { setArticlesToShowBasedOnState } from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
 import ArticleShowcase from "../ArticleShowcase.js";
 import Login from "../Login.js";
@@ -39,15 +40,10 @@ export default class extends AbstractView {
   }
 
   async showArticles() {
-    let articles = null;
-    if (state.articleShowCaseState === articleShowCaseState.ALL_ARTICLES) {
-      articles = await rest.getArticlesByUserId(state.userId, state.articlesOpenedPage);
-      state.setArticleShowcaseState(articleShowCaseState.USER_ARTICLES);
-    } else {
-      articles = await rest.getRecentArticles(state.articlesOpenedPage);
-      state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
-    }
-    state.setArticlesToShow(articles);
+    state.setArticleShowcaseState(state.articleShowCaseState === articleShowCaseState.ALL_ARTICLES ? articleShowCaseState.USER_ARTICLES : articleShowCaseState.ALL_ARTICLES);
+    state.setUserIdArticlesToShow(state.userId);
+    state.setArticlesOpenedPage(1);
+    await setArticlesToShowBasedOnState();
     history.pushState(null, null, "/");
     document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
   }

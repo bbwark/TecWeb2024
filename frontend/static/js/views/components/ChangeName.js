@@ -1,3 +1,6 @@
+import { state } from "../../config.js";
+import rest from "../../rest.js";
+import { escapeHtml } from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {
@@ -21,7 +24,7 @@ export default class extends AbstractView {
                     <label for="new-name">New Name:</label>
                     <input type="text" id="new-name" name="newName" required>
                 </div>
-                <button>Change Name</button>
+                <button onclick="app.changeName()">Change Name</button>
             </div>
         `;
   }
