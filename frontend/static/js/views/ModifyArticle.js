@@ -16,7 +16,8 @@ export default class ModifyArticle extends AbstractView {
 
     const app = document.querySelector("#app");
     if (!app.articleSaveButton) app.articleSaveButton = this.articleSaveButton;
-    if (!app.articleCancelButton) app.articleCancelButton = this.articleCancelButton;
+    if (!app.articleCancelButton)
+      app.articleCancelButton = this.articleCancelButton;
   }
 
   async getHtml() {
@@ -51,7 +52,7 @@ export default class ModifyArticle extends AbstractView {
                 
                 <label for="tags">Tags:</label>
                 <input type="text" id="tags" name="tags" value="${
-                  article.tags
+                  article.tags.map(tag => `#${tag}`).join(', ')
                 }" required>
                 
                 <button id="cancel-button" onclick="app.articleCancelButton()">Cancel</button>
@@ -74,10 +75,15 @@ export default class ModifyArticle extends AbstractView {
     escapeHtml(tags);
 
     if (title && content && tags) {
+      
+      const tagRegex = /#?[a-zA-Z0-9]+/g;
+      const matches = tags.match(tagRegex);
+      const transformedTags = matches.map(tag => tag.startsWith('#') ? tag.slice(1) : tag).filter((tag, index, self) => self.indexOf(tag) === index);
+      
       const article = {
         title: title,
         content: content,
-        tags: tags,
+        tags: transformedTags,
       };
       if (isNew) {
         article.userId = state.userId;
