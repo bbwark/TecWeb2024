@@ -23,7 +23,7 @@ export default class extends AbstractView {
         if(!state.isLogged) {
             state.clearState();
             history.pushState(null, null, "/login");
-            document.querySelector("#app").innerHTML = await new Login().getHtml();
+            return await new Login().getHtml();
         } else {
             return `
                 <div class="settings-container">
