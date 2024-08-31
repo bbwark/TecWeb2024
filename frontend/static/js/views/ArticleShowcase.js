@@ -36,14 +36,20 @@ export default class extends AbstractView {
     const headerHtml = await headerView.getHtml();
 
     return `
-            <div class="p-4">
-              ${headerHtml}
-              <div id="article-list" class="mt-4">
-                ${articleHtml.join("")}
+            ${headerHtml}
+            <div class="w-full px-4 sm:px-6 md:px-8">
+              <div class="max-w-6xl mx-auto">
+                <div class="w-full lg:w-2/3 xl:w-1/2 mx-auto">
+                  <div class="p-4">
+                    <div id="article-list" class="mt-4">
+                      ${articleHtml.join("")}
+                    </div>
+                    ${paginationHtml}
+                  </div>
+                </div>
               </div>
-              ${paginationHtml}
             </div>
-        `;
+            `;
   }
 
   async numberOfPages() {
