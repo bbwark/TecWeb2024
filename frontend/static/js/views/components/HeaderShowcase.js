@@ -23,29 +23,40 @@ export default class extends AbstractView {
     const { isLogged } = this.params;
     const showcaseState = state.articleShowCaseState;
     return `
-        <div id="header">
+        <div id="header" class="p-4 bg-gray-100 flex justify-end space-x-2">
             ${
               isLogged
                 ? `
-                <button id="show-articles" onclick="app.showArticles()">${showcaseState === articleShowCaseState.ALL_ARTICLES ? "My Articles" : "Recent Articles"}</button>
-                <button id="new-article" onclick="app.newArticle()">New Article</button>
-                <button id="settings" onclick="app.goToSettings()">Settings</button>
-                `
+                <button id="show-articles" onclick="app.showArticles()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    ${
+                      showcaseState === articleShowCaseState.ALL_ARTICLES
+                        ? "My Articles"
+                        : "Recent Articles"
+                    }
+                </button>
+                <button id="new-article" onclick="app.newArticle()" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">New Article</button>
+                <button id="settings" onclick="app.goToSettings()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Settings</button>
+            `
                 : `
-                <button id="login-button" onclick="app.goToLogin()">Login</button>
-                `
+                <button id="login-button" onclick="app.goToLogin()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Login</button>
+            `
             }
         </div>
     `;
   }
 
   async showArticles() {
-    state.setArticleShowcaseState(state.articleShowCaseState === articleShowCaseState.ALL_ARTICLES ? articleShowCaseState.USER_ARTICLES : articleShowCaseState.ALL_ARTICLES);
+    state.setArticleShowcaseState(
+      state.articleShowCaseState === articleShowCaseState.ALL_ARTICLES
+        ? articleShowCaseState.USER_ARTICLES
+        : articleShowCaseState.ALL_ARTICLES
+    );
     state.setUserIdArticlesToShow(state.userId);
     state.setArticlesOpenedPage(1);
     await setArticlesToShowBasedOnState();
     history.pushState(null, null, "/");
-    document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
+    document.querySelector("#app").innerHTML =
+      await new ArticleShowcase().getHtml();
   }
 
   async newArticle() {

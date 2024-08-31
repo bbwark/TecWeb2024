@@ -32,34 +32,49 @@ export default class ModifyArticle extends AbstractView {
       }
 
       return `
-            <h1>${this.isNew ? "Create New Article" : "Edit Article"}</h1>
-            <div id="article-form">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" value="${
-                  article.title
-                }" required>
-                
-                <label for="content">Content:</label>
-                <textarea id="content" name="content" required>${
-                  article.content
-                }</textarea>
-                
-                <div>
-                    <input type="checkbox" id="preview-checkbox">
-                    <label for="preview-checkbox">Show Preview</label>
+            <h1 class="text-2xl font-bold mb-4">${
+              this.isNew ? "Create New Article" : "Edit Article"
+            }</h1>
+            <div id="article-form" class="p-4 bg-white rounded shadow">
+                <div class="mb-4">
+                    <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
+                    <input type="text" id="title" name="title" value="${
+                      article.title
+                    }" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <div id="preview" style="display:none;"></div>
                 
-                <label for="tags">Tags:</label>
-                <input type="text" id="tags" name="tags" value="${
-                  article.tags.map(tag => `#${tag}`).join(', ')
-                }" required>
+                <div class="mb-4">
+                    <label for="content" class="block text-sm font-medium text-gray-700">Content:</label>
+                    <textarea id="content" name="content" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>${
+                      article.content
+                    }</textarea>
+                </div>
                 
-                <button id="cancel-button" onclick="app.articleCancelButton()">Cancel</button>
-                <button id="save-button" onclick="app.articleSaveButton(
-                ${this.isNew}, 
-                ${this.articleId})">
-                ${this.isNew ? "Save" : "Update"}</button>
+                <div class="mb-4 flex items-center">
+                    <input type="checkbox" id="preview-checkbox" class="mr-2">
+                    <label for="preview-checkbox" class="text-sm font-medium text-gray-700">Show Preview</label>
+                </div>
+                <div id="preview" class="p-4 bg-gray-100 rounded" style="display:none;"></div>
+                
+                <div class="mb-4">
+                    <label for="tags" class="block text-sm font-medium text-gray-700">Tags:</label>
+                    <input type="text" id="tags" name="tags" value="${article.tags
+                      .map((tag) => `#${tag}`)
+                      .join(
+                        ", "
+                      )}" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button id="cancel-button" onclick="app.articleCancelButton()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
+                    <button id="save-button" onclick="app.articleSaveButton(${
+                      this.isNew
+                    }, ${
+        this.articleId
+      })" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        ${this.isNew ? "Save" : "Update"}
+                    </button>
+                </div>
             </div>
         `;
     }
@@ -75,11 +90,12 @@ export default class ModifyArticle extends AbstractView {
     escapeHtml(tags);
 
     if (title && content && tags) {
-      
       const tagRegex = /#?[a-zA-Z0-9]+/g;
       const matches = tags.match(tagRegex);
-      const transformedTags = matches.map(tag => tag.startsWith('#') ? tag.slice(1) : tag).filter((tag, index, self) => self.indexOf(tag) === index);
-      
+      const transformedTags = matches
+        .map((tag) => (tag.startsWith("#") ? tag.slice(1) : tag))
+        .filter((tag, index, self) => self.indexOf(tag) === index);
+
       const article = {
         title: title,
         content: content,

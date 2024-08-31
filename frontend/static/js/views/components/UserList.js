@@ -28,25 +28,25 @@ export default class extends AbstractView {
       setTimeout(() => {
         this.loadUsers();
       }, 0);
-    } //allow to load users after injecting the html
+    } // Allow to load users after injecting the HTML
 
     return `
-            <h1>User List</h1>
-            <table id="user-list-table">
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Name</th>
-                        <th>Is Admin</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody id="user-list-tbody">
-                    
-                </tbody>
-            </table>
-            ${paginationHtml}
-        `;
+        <h1 class="text-2xl font-bold mb-4">User List</h1>
+        <table id="user-list-table" class="w-full bg-white shadow rounded">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="p-2 border-b">Username</th>
+                    <th class="p-2 border-b">Name</th>
+                    <th class="p-2 border-b">Is Admin</th>
+                    <th class="p-2 border-b">Delete</th>
+                </tr>
+            </thead>
+            <tbody id="user-list-tbody" class="text-center">
+                <!-- User rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+        ${paginationHtml}
+    `;
   }
 
   async loadUsers() {

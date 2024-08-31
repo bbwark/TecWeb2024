@@ -22,22 +22,23 @@ export default class extends AbstractView {
   async getHtml() {
     const isOwner = this.params.isOwner;
     return `
-        <div id="header">
+        <div id="header" class="p-4 bg-gray-100 flex justify-end space-x-2">
             ${
               state.isLogged
                 ? `
                 ${
                   isOwner || state.isAdmin
                     ? `
-                <button onclick="app.articleDeleteButton(${state.articleIdDetailOpened})" id="delete">Delete</button>
-                <button onclick="app.articleEditButton(${state.articleIdDetailOpened})" id="modify">Modify</button>`
+                    <button onclick="app.articleDeleteButton(${state.articleIdDetailOpened})" id="delete" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+                    <button onclick="app.articleEditButton(${state.articleIdDetailOpened})" id="modify" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Modify</button>
+                `
                     : ""
                 }
-                <button onclick="app.goToSettings()" id="settings">Settings</button>
-                `
+                <button onclick="app.goToSettings()" id="settings" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Settings</button>
+            `
                 : `
-                <button onclick="app.goToLogin()" id="login-button">Login</button>
-                `
+                <button onclick="app.goToLogin()" id="login-button" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Login</button>
+            `
             }
         </div>
     `;

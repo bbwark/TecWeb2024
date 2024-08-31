@@ -45,49 +45,58 @@ export default class extends AbstractView {
 
     for (let i = startingPage; i <= endingPage; i++) {
       paginationButtons.push(`
-        <button onclick="app.changePage(${i}, ${
+            <button onclick="app.changePage(${i}, ${
         this.isFromUserList
       })" class="pagination-button ${
         i === this.currentPage ? "active" : ""
-      }" data-page="${i}">
-          ${i}
-        </button>
-      `);
+      } px-3 py-1 mx-1 bg-white border rounded hover:bg-gray-200" data-page="${i}">
+                ${i}
+            </button>
+        `);
     }
 
     return `
-      <div class="pagination-container">
-
-        ${
-          this.currentPage >= 4
-            ? `<button onclick="app.changePage(1, ${this.isFromUserList})" class="pagination-button" data-page="1">1</button>`
-            : ``
-        }
-
-        <button onclick="app.changePage(${this.currentPage - 1}, ${
+        <div class="pagination-container flex items-center justify-center mt-4 space-x-2">
+            ${
+              this.currentPage >= 4
+                ? `
+                <button onclick="app.changePage(1, ${this.isFromUserList})" class="pagination-button px-3 py-1 mx-1 bg-white border rounded hover:bg-gray-200" data-page="1">1</button>
+            `
+                : ""
+            }
+            
+            <button onclick="app.changePage(${this.currentPage - 1}, ${
       this.isFromUserList
-    })" class="pagination-button previous" ${
+    })" class="pagination-button previous px-3 py-1 mx-1 bg-white border rounded hover:bg-gray-200 ${
+      this.currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+    }" data-page="${this.currentPage - 1}" ${
       this.currentPage === 1 ? "disabled" : ""
-    } data-page="${this.currentPage - 1}">
-          &lt;
-        </button>
-        
-        ${paginationButtons.join("")}
+    }>
+                &lt;
+            </button>
+            
+            ${paginationButtons.join("")}
 
-        <button onclick="app.changePage(${this.currentPage + 1}, ${
+            <button onclick="app.changePage(${this.currentPage + 1}, ${
       this.isFromUserList
-    })" class="pagination-button next" ${
+    })" class="pagination-button next px-3 py-1 mx-1 bg-white border rounded hover:bg-gray-200 ${
+      this.currentPage === this.totalPages
+        ? "opacity-50 cursor-not-allowed"
+        : ""
+    }" data-page="${this.currentPage + 1}" ${
       this.currentPage === this.totalPages ? "disabled" : ""
-    } data-page="${this.currentPage + 1}">
-          &gt;
-        </button>
+    }>
+                &gt;
+            </button>
 
-        ${
-          this.currentPage <= this.totalPages - 3
-            ? `<button onclick="app.changePage(${this.totalPages}, ${this.isFromUserList})" class="pagination-button" data-page="${this.totalPages}">${this.totalPages}</button>`
-            : ``
-        }
-      </div>
+            ${
+              this.currentPage <= this.totalPages - 3
+                ? `
+                <button onclick="app.changePage(${this.totalPages}, ${this.isFromUserList})" class="pagination-button px-3 py-1 mx-1 bg-white border rounded hover:bg-gray-200" data-page="${this.totalPages}">${this.totalPages}</button>
+            `
+                : ""
+            }
+        </div>
     `;
   }
 

@@ -13,25 +13,25 @@ export default class extends AbstractView {
 
   async getHtml() {
     return `
-            <h1>Create User</h1>
-            <div id="create-user">
-                <div>
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
+            <h1 class="text-2xl font-bold mb-4">Create User</h1>
+            <div id="create-user" class="p-4 bg-white rounded shadow">
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username:</label>
+                    <input type="text" id="username" name="username" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+                    <input type="password" id="password" name="password" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <div>
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
+                    <input type="text" id="name" name="name" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <div>
-                    <label for="is-admin">Is Admin:</label>
-                    <input type="checkbox" id="is-admin" name="isAdmin">
+                <div class="mb-4 flex items-center">
+                    <input type="checkbox" id="is-admin" name="isAdmin" class="mr-2">
+                    <label for="is-admin" class="text-sm font-medium text-gray-700">Is Admin:</label>
                 </div>
-                <button onclick="app.createUser()" type="submit">Create User</button>
+                <button onclick="app.createUser()" type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Create User</button>
             </div>
         `;
   }

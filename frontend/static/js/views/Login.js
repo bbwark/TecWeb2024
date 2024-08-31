@@ -18,13 +18,17 @@ export default class extends AbstractView {
       this.afterRender();
     }, 0);
     return `
-            <h1>Login</h1>
-            <div id="login-form">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <button onclick="app.submitLogin()" id="login-button">Login</button>
+            <h1 class="text-2xl font-bold mb-4">Login</h1>
+            <div id="login-form" class="p-4 bg-white rounded shadow">
+              <div class="mb-4">
+                  <label for="username" class="block text-sm font-medium text-gray-700">Username:</label>
+                  <input type="text" id="username" name="username" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
+              </div>
+              <div class="mb-4">
+                  <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+                  <input type="password" id="password" name="password" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
+              </div>
+              <button onclick="app.submitLogin()" id="login-button" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Login</button>
             </div>
         `;
   }
@@ -42,7 +46,8 @@ export default class extends AbstractView {
         await setArticlesToShowBasedOnState();
         state.setArticleModifying(0);
         history.pushState(null, null, "/");
-        document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
+        document.querySelector("#app").innerHTML =
+          await new ArticleShowcase().getHtml();
       } else {
         //TODO - if unsuccessful, display error message
       }

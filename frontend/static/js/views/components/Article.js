@@ -27,27 +27,45 @@ export default class extends AbstractView {
     }
 
     return `
-            <div class="article">
-                <div class="article-header">
-                    <h3 onclick="app.showArticleDetail(${
+            <div class="article p-4 bg-white rounded shadow mb-4">
+                <div class="article-header flex justify-between items-center">
+                    <h3 class="text-xl font-bold cursor-pointer text-blue-600 hover:underline" onclick="app.showArticleDetail(${
                       this.params.articleId
                     })">${this.params.title}</h3>
                     ${
                       this.params.showEditDeleteButtons
                         ? `
-                    <button id="edit-button" class="edit-button" onclick="app.articleEditButton(${this.params.articleId})">✏️</button>
-                    <button id="delete-button" class="delete-button" onclick="app.articleDeleteButton(${this.params.articleId})">🗑️</button>`
+                    <div class="flex space-x-2">
+                      <button id="edit-button" class="edit-button text-blue-500 hover:text-blue-700" onclick="app.articleEditButton(${this.params.articleId})">✏️</button>
+                      <button id="delete-button" class="delete-button text-red-500 hover:text-red-700" onclick="app.articleDeleteButton(${this.params.articleId})">🗑️</button>
+                    </div>`
                         : ""
                     }
                 </div>
-                <div class="article-details">
-                  <p>Author: ${!authorName ? "Account Deleted" : authorName}</p>
-                  <p>Published on: ${new Date(this.params.publishedDate).toLocaleDateString(undefined, {year: "numeric", month: "long", day: "numeric"})}</p>
-                  <p>Last modified: ${new Date(this.params.modifiedDate).toLocaleDateString(undefined, {year: "numeric", month: "long", day: "numeric"})}</p>
-                  <p>Tags: ${this.params.tags.map(tag => `#${tag}`).join(', ')}</p>
+                <div class="article-details mt-2 text-gray-700">
+                  <p class="text-sm">Author: ${
+                    !authorName ? "Account Deleted" : authorName
+                  }</p>
+                  <p class="text-sm">Published on: ${new Date(
+                    this.params.publishedDate
+                  ).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}</p>
+                  <p class="text-sm">Last modified: ${new Date(
+                    this.params.modifiedDate
+                  ).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}</p>
+                  <p class="text-sm">Tags: ${this.params.tags
+                    .map((tag) => `<span class="text-blue-500">#${tag}</span>`)
+                    .join(", ")}</p>
                   ${
                     this.params.preview
-                      ? `<p class="preview">${this.params.content.substring(
+                      ? `<p class="preview mt-2">${this.params.content.substring(
                           0,
                           50
                         )}...</p>`

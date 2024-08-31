@@ -15,13 +15,13 @@ export default class extends AbstractView {
 
   async getHtml() {
     return `
-            <h1>Delete Account</h1>
-            <div id="delete-account-form">
-                <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+            <h1 class="text-2xl font-bold mb-4">Delete Account</h1>
+            <div id="delete-account-form" class="p-4 bg-white rounded shadow">
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+                    <input type="password" id="password" name="password" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <button onclick="app.deleteAccount()" type="submit">Delete Account</button>
+                <button onclick="app.deleteAccount()" type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete Account</button>
             </div>
         `;
   }

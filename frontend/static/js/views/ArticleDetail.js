@@ -32,11 +32,11 @@ export default class extends AbstractView {
     const authorName = data.name;
 
     return `
-        <div class="article-detail">
-            <h2>${article.title}</h2>
+        <div class="article-detail p-4 bg-white rounded shadow">
+            <h2 class="text-2xl font-bold">${article.title}</h2>
             ${headerHtml}
-            <div class="article-detail-subtitle">
-                <a class="tag-link" onclick="app.goToArticleShowcaseUser('${
+            <div class="article-detail-subtitle mt-2 text-gray-600">
+                <a class="tag-link text-blue-500 hover:underline" onclick="app.goToArticleShowcaseUser('${
                   article.authorId
                 }')">${authorName}</a>
                 <p>Published on: ${new Date(
@@ -54,11 +54,11 @@ export default class extends AbstractView {
                   day: "numeric",
                 })}</p>
             </div>
-            <p>${article.content}</p>            
-            <p>Tags: ${article.tags
+            <p class="mt-4">${article.content}</p>            
+            <p class="mt-2">Tags: ${article.tags
               .map(
                 (tag) =>
-                  `<a class="tag-link" onclick="app.goToArticleShowcaseTag('${tag}')">#${tag}</a>`
+                  `<a class="tag-link text-blue-500 hover:underline" onclick="app.goToArticleShowcaseTag('${tag}')">#${tag}</a>`
               )
               .join(", ")}</p>
         </div>

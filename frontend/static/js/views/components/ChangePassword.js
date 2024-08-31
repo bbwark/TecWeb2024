@@ -14,17 +14,17 @@ export default class extends AbstractView {
 
   async getHtml() {
     return `
-            <h1>Change Password</h1>
-            <div id="change-password">
-                <div>
-                    <label for="old-password">Old Password:</label>
-                    <input type="password" id="old-password" name="oldPassword" required>
+            <h1 class="text-2xl font-bold mb-4">Change Password</h1>
+            <div id="change-password" class="p-4 bg-white rounded shadow">
+                <div class="mb-4">
+                    <label for="old-password" class="block text-sm font-medium text-gray-700">Old Password:</label>
+                    <input type="password" id="old-password" name="oldPassword" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <div>
-                    <label for="new-password">New Password:</label>
-                    <input type="password" id="new-password" name="newPassword" required>
+                <div class="mb-4">
+                    <label for="new-password" class="block text-sm font-medium text-gray-700">New Password:</label>
+                    <input type="password" id="new-password" name="newPassword" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <button onclick="app.changePassword()">Change Password</button>
+                <button onclick="app.changePassword()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Change Password</button>
             </div>
         `;
   }

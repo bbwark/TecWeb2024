@@ -14,17 +14,17 @@ export default class extends AbstractView {
 
   async getHtml() {
     return `
-            <h1>Change Name</h1>
-            <div id="change-name">
-                <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
+            <h1 class="text-2xl font-bold mb-4">Change Name</h1>
+            <div id="change-name" class="p-4 bg-white rounded shadow">
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+                    <input type="password" id="password" name="password" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <div>
-                    <label for="new-name">New Name:</label>
-                    <input type="text" id="new-name" name="newName" required>
+                <div class="mb-4">
+                    <label for="new-name" class="block text-sm font-medium text-gray-700">New Name:</label>
+                    <input type="text" id="new-name" name="newName" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <button onclick="app.changeName()">Change Name</button>
+                <button onclick="app.changeName()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Change Name</button>
             </div>
         `;
   }
