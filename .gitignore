@@ -400,3 +400,4 @@ FodyWeavers.xsd
 # Node Modules
 node_modules/
 ideas.txt
+frontend/static/css/output.css

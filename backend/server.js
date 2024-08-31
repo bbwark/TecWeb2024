@@ -4,6 +4,7 @@ const { sequelize } = require("./databaseconn");
 const userController = require("./controllers/userController");
 const articleController = require("./controllers/articleController");
 const authenticationController = require("./controllers/authenticationController");
+const { exec } = require('child_process');
 
 const app = express();
 
@@ -20,6 +21,12 @@ app.use("/api/auth", authenticationController);
 
 app.get("/*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "..", "frontend", "index.html"));
+});
+
+const tailwindProcess = exec('npm run build-css');
+
+tailwindProcess.stdout.on('data', (data) => {
+  console.log(`Tailwind: ${data}`);
 });
 
 const PORT = process.env.PORT || 3000;
