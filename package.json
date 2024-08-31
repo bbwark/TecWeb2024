@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/bbwark/TecWeb2024#readme",
   "dependencies": {
-    "@yaireo/tagify": "^4.27.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "express": "^4.19.2",
