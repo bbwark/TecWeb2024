@@ -36,8 +36,8 @@ export default class extends AbstractView {
     const headerHtml = await headerView.getHtml();
 
     return `
-            ${headerHtml}
-            <div class="w-full px-4 sm:px-6 md:px-8">
+            <div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+              ${headerHtml}
               <div class="max-w-6xl mx-auto">
                 <div class="w-full lg:w-2/3 xl:w-1/2 mx-auto">
                   <div class="p-4">
