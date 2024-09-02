@@ -24,6 +24,7 @@ const state = {
   openedTag: null,
   userIdArticlesToShow: null,
   usersOpenedPage: 1,
+  lastSettingsOpened: "changePassword",
 
   setLoggedInStatus(status) {
     this.isLogged = status;
@@ -94,6 +95,11 @@ const state = {
     this.saveState();
   },
 
+  setLastSettingsOpened(componentName) {
+    this.lastSettingsOpened = componentName;
+    this.saveState();
+  },
+
   clearState() {
     this.isLogged = false;
     this.isAdmin = false;
@@ -106,6 +112,7 @@ const state = {
     this.openedTag = null;
     this.userIdArticlesToShow = null;
     this.usersOpenedPage = 1;
+    this.lastSettingsOpened = "changePassword";
     this.saveState();
   },
 
