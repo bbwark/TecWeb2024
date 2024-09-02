@@ -14,6 +14,8 @@ export default class extends AbstractView {
 
   async getHtml() {
     return `
+        <div class="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+          <div class="max-w-md w-full space-y-8">
             <h1 class="text-2xl font-bold mb-4">Change Password</h1>
             <div id="change-password" class="p-4 bg-white rounded shadow">
                 <div class="mb-4">
@@ -26,6 +28,8 @@ export default class extends AbstractView {
                 </div>
                 <button onclick="app.changePassword()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Change Password</button>
             </div>
+          </div>
+        </div>
         `;
   }
 

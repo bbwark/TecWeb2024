@@ -13,6 +13,8 @@ export default class extends AbstractView {
 
   async getHtml() {
     return `
+        <div class="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+          <div class="max-w-md w-full space-y-8">
             <h1 class="text-2xl font-bold mb-4">Create User</h1>
             <div id="create-user" class="p-4 bg-white rounded shadow">
                 <div class="mb-4">
@@ -28,11 +30,13 @@ export default class extends AbstractView {
                     <input type="text" id="name" name="name" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
                 <div class="mb-4 flex items-center">
-                    <input type="checkbox" id="is-admin" name="isAdmin" class="mr-2">
-                    <label for="is-admin" class="text-sm font-medium text-gray-700">Is Admin:</label>
+                    <label for="is-admin" class="text-sm font-medium text-gray-700">Admin </label>
+                    <input type="checkbox" id="is-admin" name="isAdmin" class="ml-2 mt-1">
                 </div>
                 <button onclick="app.createUser()" type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Create User</button>
             </div>
+          </div>
+        </div>
         `;
   }
   async createUser() {
