@@ -1,4 +1,5 @@
 import { state } from "../../config.js";
+import { navigateTo } from "../../index.js";
 import rest from "../../rest.js";
 import {
   escapeHtml,
@@ -50,9 +51,7 @@ export default class extends AbstractView {
         }
         state.clearState();
         await setArticlesToShowBasedOnState();
-        history.pushState(null, null, "/");
-        document.querySelector("#app").innerHTML =
-          await new ArticleShowcase().getHtml();
+        await navigateTo("/");
         showAlert("Account deleted successfully", "green", "header");
       } else {
         passwordInserted.value = "";

@@ -8,6 +8,7 @@ import UserList from "./components/UserList.js";
 import ArticleShowcase from "./ArticleShowcase.js";
 import rest from "../rest.js";
 import Login from "./Login.js";
+import { navigateTo } from "../index.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -90,12 +91,10 @@ export default class extends AbstractView {
 
   async logout() {
     state.clearState();
-    history.pushState(null, null, "/");
     state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
     state.setArticlesToShow(
       await rest.getRecentArticles(state.articlesOpenedPage)
     );
-    document.querySelector("#app").innerHTML =
-      await new ArticleShowcase().getHtml();
+    await navigateTo("/");
   }
 }

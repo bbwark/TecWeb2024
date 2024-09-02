@@ -1,4 +1,5 @@
 import { state } from "../config.js";
+import { navigateTo } from "../index.js";
 import rest from "../rest.js";
 import {
   escapeHtml,
@@ -61,9 +62,7 @@ export default class extends AbstractView {
         if (loginResponse) {
           await setArticlesToShowBasedOnState();
           state.setArticleModifying(0);
-          history.pushState(null, null, "/");
-          document.querySelector("#app").innerHTML =
-            await new ArticleShowcase().getHtml();
+          await navigateTo("/");
           showAlert("Login successful", "green", "header");
           removeAlert("header", 3000);
         }

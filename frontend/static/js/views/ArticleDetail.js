@@ -1,4 +1,5 @@
 import { articleShowCaseState, state } from "../config.js";
+import { navigateTo } from "../index.js";
 import rest from "../rest.js";
 import { setArticlesToShowBasedOnState } from "../utilities.js";
 import AbstractView from "./AbstractView.js";
@@ -76,9 +77,7 @@ export default class extends AbstractView {
     state.setArticlesOpenedPage(1);
     state.setArticleShowcaseState(articleShowCaseState.TAG_ARTICLES);
     await setArticlesToShowBasedOnState();
-    history.pushState(null, null, "/");
-    document.querySelector("#app").innerHTML =
-      await new ArticleShowcase().getHtml();
+    await navigateTo("/");
   }
 
   async goToArticleShowcaseUser(userId) {
@@ -86,8 +85,6 @@ export default class extends AbstractView {
     state.setArticlesOpenedPage(1);
     state.setArticleShowcaseState(articleShowCaseState.USER_ARTICLES);
     await setArticlesToShowBasedOnState();
-    history.pushState(null, null, "/");
-    document.querySelector("#app").innerHTML =
-      await new ArticleShowcase().getHtml();
+    await navigateTo("/");
   }
 }

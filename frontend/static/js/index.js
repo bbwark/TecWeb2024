@@ -4,7 +4,6 @@ import ModifyArticle from "./views/ModifyArticle.js";
 import Login from "./views/Login.js";
 import Settings from "./views/Settings.js";
 import { articleShowCaseState, state } from "./config.js";
-import rest from "./rest.js";
 import { setArticlesToShowBasedOnState } from "./utilities.js";
 
 const pathToRegex = (path) =>
@@ -23,9 +22,9 @@ const getParams = (match) => {
   );
 };
 
-const navigateTo = (url) => {
+const navigateTo = async (url) => {
   history.pushState(null, null, url);
-  router();
+  await router();
 };
 
 const router = async () => {
@@ -35,7 +34,6 @@ const router = async () => {
     state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
     state.setArticlesOpenedPage(1);
   }
-  await setArticlesToShowBasedOnState();
 
   const routes = [
     { path: "/", view: ArticleShowcase },
@@ -64,6 +62,9 @@ const router = async () => {
     };
   }
 
+  if (match.route.path === "/") {
+    await setArticlesToShowBasedOnState();
+  }
   let view = new match.route.view();
 
   document.querySelector("#app").innerHTML = await view.getHtml();
@@ -89,3 +90,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   router();
 });
+
+export { navigateTo };

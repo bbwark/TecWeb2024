@@ -5,6 +5,7 @@ import { state } from "../../config.js";
 import ArticleShowcase from "../ArticleShowcase.js";
 import { setArticlesToShowBasedOnState } from "../../utilities.js";
 import ArticleDetail from "../ArticleDetail.js";
+import { navigateTo } from "../../index.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -110,16 +111,12 @@ export default class extends AbstractView {
 
   async articleEditButton(articleId) {
     state.setArticleModifying(articleId);
-    history.pushState(null, null, "/modify-article");
-    document.querySelector("#app").innerHTML =
-      await new ModifyArticle().getHtml();
+    await navigateTo("/modify-article");
   }
 
   async articleDeleteButton(articleId) {
     await rest.deleteArticle(articleId);
-    await setArticlesToShowBasedOnState();
-    document.querySelector("#app").innerHTML =
-      await new ArticleShowcase().getHtml();
+    await navigateTo("/");
   }
 
   async showArticleDetail(articleId) {

@@ -10,6 +10,7 @@ import {
   showAlert,
 } from "../utilities.js";
 import Login from "./Login.js";
+import { navigateTo } from "../index.js";
 
 export default class ModifyArticle extends AbstractView {
   constructor(params) {
@@ -136,9 +137,7 @@ export default class ModifyArticle extends AbstractView {
 
     await setArticlesToShowBasedOnState();
     state.setArticleModifying(0);
-    history.pushState(null, null, "/");
-    document.querySelector("#app").innerHTML =
-      await new ArticleShowcase().getHtml();
+    await navigateTo("/");
     showAlert("Article published successfully", "green", "header");
     removeAlert("header", 3000);
   }
