@@ -1,4 +1,4 @@
-import { escapeHtml } from "../../utilities.js";
+import { escapeHtml, showAlert, validatePassword } from "../../utilities.js";
 import rest from "../../rest.js";
 import AbstractView from "../AbstractView.js";
 
@@ -62,11 +62,25 @@ export default class extends AbstractView {
         isAdmin: isAdminInserted.checked,
       };
 
-      await rest.createUser(user);
-      usernameInserted.value = "";
-      passwordInserted.value = "";
-      nameInserted.value = "";
-      isAdminInserted.checked = false;
+      if (validatePassword(passwordInserted.value)) {
+        try {
+          await rest.createUser(user);
+        } catch (error) {
+          showAlert(error.message, "red", "create-user");
+        }
+        usernameInserted.value = "";
+        passwordInserted.value = "";
+        nameInserted.value = "";
+        isAdminInserted.checked = false;
+      } else {
+        showAlert("Invalid Password", "red", "create-user", [
+          "Password must be at least 8 characters long",
+          "Password must contain at least one uppercase letter",
+          "Password must contain at least one lowercase letter",
+          "Password must contain at least one number",
+          "Password must contain at least one special character",
+        ]);
+      }
     }
   }
 }
