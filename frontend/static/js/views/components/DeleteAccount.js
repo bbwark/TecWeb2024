@@ -1,6 +1,10 @@
 import { state } from "../../config.js";
 import rest from "../../rest.js";
-import { escapeHtml, setArticlesToShowBasedOnState } from "../../utilities.js";
+import {
+  escapeHtml,
+  setArticlesToShowBasedOnState,
+  showAlert,
+} from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
 import ArticleShowcase from "../ArticleShowcase.js";
 
@@ -39,13 +43,20 @@ export default class extends AbstractView {
         passwordInserted.value
       );
       if (isPasswordCorrect) {
-        await rest.deleteUser(state.userId, passwordInserted.value);
+        try {
+          await rest.deleteUser(state.userId, passwordInserted.value);
+        } catch (error) {
+          showAlert(error.message, "red", "delete-account-form");
+        }
         state.clearState();
         await setArticlesToShowBasedOnState();
         history.pushState(null, null, "/");
-        document.querySelector("#app").innerHTML = await new ArticleShowcase().getHtml();
+        document.querySelector("#app").innerHTML =
+          await new ArticleShowcase().getHtml();
+        showAlert("Account deleted successfully", "green", "header");
       } else {
         passwordInserted.value = "";
+        showAlert("Invalid Password", "red", "delete-account-form");
       }
     }
   }
