@@ -32,48 +32,60 @@ export default class ModifyArticle extends AbstractView {
       }
 
       return `
-            <h1 class="text-2xl font-bold mb-4">${
-              this.isNew ? "Create New Article" : "Edit Article"
-            }</h1>
-            <div id="article-form" class="p-4 bg-white rounded shadow">
-                <div class="mb-4">
-                    <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
-                    <input type="text" id="title" name="title" value="${
-                      article.title
-                    }" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
-                </div>
-                
-                <div class="mb-4">
-                    <label for="content" class="block text-sm font-medium text-gray-700">Content:</label>
-                    <textarea id="content" name="content" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>${
-                      article.content
-                    }</textarea>
-                </div>
-                
-                <div class="mb-4 flex items-center">
-                    <input type="checkbox" id="preview-checkbox" class="mr-2">
-                    <label for="preview-checkbox" class="text-sm font-medium text-gray-700">Show Preview</label>
-                </div>
-                <div id="preview" class="p-4 bg-gray-100 rounded" style="display:none;"></div>
-                
-                <div class="mb-4">
-                    <label for="tags" class="block text-sm font-medium text-gray-700">Tags:</label>
-                    <input type="text" id="tags" name="tags" value="${article.tags
-                      .map((tag) => `#${tag}`)
-                      .join(
-                        ", "
-                      )}" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
-                </div>
-                
-                <div class="flex justify-between">
-                    <button id="cancel-button" onclick="app.articleCancelButton()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
-                    <button id="save-button" onclick="app.articleSaveButton(${
-                      this.isNew
-                    }, ${
-        this.articleId
-      })" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                        ${this.isNew ? "Save" : "Update"}
-                    </button>
+            <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-2xl w-full space-y-8">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-center text-gray-900">
+                            ${
+                              this.isNew ? "Create New Article" : "Edit Article"
+                            }
+                        </h1>
+                    </div>
+                    <div id="article-form" class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-md">
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
+                            <input type="text" id="title" name="title" value="${
+                              article.title
+                            }" 
+                                   class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                                   required>
+                        </div>
+                        
+                        <div>
+                            <label for="content" class="block text-sm font-medium text-gray-700">Content:</label>
+                            <textarea id="content" name="content" rows="10" 
+                                      class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                                      required>${article.content}</textarea>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input type="checkbox" id="preview-checkbox" class="mr-2">
+                            <label for="preview-checkbox" class="text-sm font-medium text-gray-700">Show Preview</label>
+                        </div>
+                        <div id="preview" class="p-4 bg-gray-100 rounded border border-gray-300 mb-4" style="display:none;"></div>
+                        
+                        <div>
+                            <label for="tags" class="block text-sm font-medium text-gray-700">Tags:</label>
+                            <input type="text" id="tags" name="tags" value="${article.tags
+                              .map((tag) => `#${tag}`)
+                              .join(", ")}" 
+                                   class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                                   required>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button id="cancel-button" onclick="app.articleCancelButton()" 
+                                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md shadow-sm hover:bg-gray-300">
+                                Cancel
+                            </button>
+                            <button id="save-button" onclick="app.articleSaveButton(${
+                              this.isNew
+                            }, ${this.articleId})" 
+                                    class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700">
+                                ${this.isNew ? "Save" : "Update"}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
