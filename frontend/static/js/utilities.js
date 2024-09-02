@@ -105,7 +105,6 @@ function removeAlert(attachToId, afterDelay = 0) {
     } else {
       setTimeout(() => {
         if (alertBox) {
-          console.log("Alert removed");
           alertBox.remove();
         }
       }, afterDelay);
