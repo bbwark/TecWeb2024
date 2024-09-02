@@ -13,7 +13,7 @@ userController.post("/", verifyAdmin, async (req, res) => {
     user.password = undefined;
     res.status(201).json(user);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -22,7 +22,7 @@ userController.get("/count", verifyAdmin, async (req, res) => {
     const count = await userService.getNumberOfUsers()-1;
     res.status(200).json({ count: count });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -35,7 +35,7 @@ userController.get("/list/:page/:id", verifyAdmin, async (req, res) => {
     });
     res.status(200).json(users);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -43,7 +43,7 @@ userController.put("/admin/:id", verifyAdmin, async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (user === null) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (req.body.password && !(await bcrypt.compare(req.body.password, user.password))) {
@@ -55,7 +55,7 @@ userController.put("/admin/:id", verifyAdmin, async (req, res) => {
     userUpdated.password = undefined;
     res.status(200).json(userUpdated);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -68,10 +68,10 @@ userController.get("/:id", async (req, res) => {
       user.username = undefined;
       res.status(200).json(user);
     } else {
-      res.status(404).json({ error: "User not found" });
+      res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -83,7 +83,7 @@ userController.get("/", verifyAdmin, async (req, res) => {
     });
     res.status(200).json(users);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -91,7 +91,7 @@ userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (user === null) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (req.body.password && !(await bcrypt.compare(req.body.password, user.password))) {
@@ -104,7 +104,7 @@ userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
     userUpdated.password = undefined;
     res.status(200).json(userUpdated);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -114,10 +114,10 @@ userController.delete("/:id", verifyAdminOrSelf, async (req, res) => {
     if (success) {
       res.status(204).end();
     } else {
-      res.status(404).json({ error: "User not found" });
+      res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
