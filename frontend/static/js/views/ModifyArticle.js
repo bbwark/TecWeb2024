@@ -3,7 +3,12 @@ import ArticleDTO from "../models/articleDTO.js";
 import rest from "../rest.js";
 import AbstractView from "./AbstractView.js";
 import ArticleShowcase from "./ArticleShowcase.js";
-import { escapeHtml, setArticlesToShowBasedOnState } from "../utilities.js";
+import {
+  escapeHtml,
+  removeAlert,
+  setArticlesToShowBasedOnState,
+  showAlert,
+} from "../utilities.js";
 import Login from "./Login.js";
 
 export default class ModifyArticle extends AbstractView {
@@ -28,7 +33,12 @@ export default class ModifyArticle extends AbstractView {
     } else {
       let article = new ArticleDTO();
       if (this.articleId !== 0) {
-        article = await rest.getArticleById(this.articleId);
+        try {
+          article = await rest.getArticleById(this.articleId);
+        } catch (error) {
+          showAlert("Failed to retrieve article", "red", "article-form");
+          removeAlert("article-form", 5000);
+        }
       }
 
       return `
@@ -119,6 +129,9 @@ export default class ModifyArticle extends AbstractView {
       } else {
         await rest.updateArticle(articleId, article);
       }
+    } else {
+      showAlert("Please fill in all fields", "red", "article-form");
+      removeAlert("article-form", 5000);
     }
 
     await setArticlesToShowBasedOnState();
@@ -126,6 +139,8 @@ export default class ModifyArticle extends AbstractView {
     history.pushState(null, null, "/");
     document.querySelector("#app").innerHTML =
       await new ArticleShowcase().getHtml();
+    showAlert("Article published successfully", "green", "header");
+    removeAlert("header", 3000);
   }
 
   async articleCancelButton() {
