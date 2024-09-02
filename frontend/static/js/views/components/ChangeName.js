@@ -45,10 +45,17 @@ export default class extends AbstractView {
       );
 
       if (isPasswordCorrect) {
-        await rest.updateUser(state.userId, { name: newNameInserted.value });
+        try {
+          await rest.updateUser(state.userId, { name: newNameInserted.value });
+        } catch (error) {
+          showAlert(error.message, "red", "change-name");
+        }
+        passwordInserted.value = "";
+        newNameInserted.value = "";
+      } else {
+        passwordInserted.value = "";
+        showAlert("Invalid Password", "red", "change-name");
       }
-      passwordInserted.value = "";
-      newNameInserted.value = "";
     }
   }
 }
