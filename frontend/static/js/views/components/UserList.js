@@ -2,6 +2,7 @@ import AbstractView from "../AbstractView.js";
 import rest from "../../rest.js";
 import { config, state } from "../../config.js";
 import Pagination from "./Pagination.js";
+import { showAlert } from "../../utilities.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -51,47 +52,59 @@ export default class extends AbstractView {
         </div>
         ${paginationHtml}
     `;
-}
+  }
 
-async loadUsers() {
+  async loadUsers() {
     let users = await rest.getUsersPaginated(state.usersOpenedPage);
     const userListTbody = document.getElementById("user-list-tbody");
     userListTbody.innerHTML = "";
 
     users.forEach((user) => {
-        let tr = document.createElement("tr");
-        tr.classList.add("hover:bg-gray-50", "w-full");
+      let tr = document.createElement("tr");
+      tr.classList.add("hover:bg-gray-50", "w-full");
 
-        tr.innerHTML = `
+      tr.innerHTML = `
             <td class="p-4">${user.username}</td>
             <td class="p-4">${user.name}</td>
             <td class="p-4">
                 <input onclick="app.toggleAdmin(${user.id})" type="checkbox" ${
-            user.isAdmin ? "checked" : ""
-        }
-                data-id="${user.id}" class="admin-checkbox h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+        user.isAdmin ? "checked" : ""
+      }
+                data-id="${
+                  user.id
+                }" class="admin-checkbox h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
             </td>
             <td class="p-4">
-                <button onclick="app.deleteUser(${user.id})" data-id="${user.id}" class="delete-user-btn text-red-500 hover:text-red-700">Delete</button>
+                <button onclick="app.deleteUser(${user.id})" data-id="${
+        user.id
+      }" class="delete-user-btn text-red-500 hover:text-red-700">Delete</button>
             </td>
         `;
 
-        userListTbody.appendChild(tr);
+      userListTbody.appendChild(tr);
     });
-}
-
+  }
 
   async toggleAdmin(userId) {
     let adminCheckbox = document.querySelector(
       `.admin-checkbox[data-id="${userId}"]`
     );
     if (adminCheckbox) {
-      await rest.updateUserAdmin(userId, { isAdmin: adminCheckbox.checked });
+      try {
+        await rest.updateUserAdmin(userId, { isAdmin: adminCheckbox.checked });
+      } catch (error) {
+        adminCheckbox.checked = !adminCheckbox.checked;
+        showAlert(error.message, "red", "user-list-table");
+      }
     }
   }
 
   async deleteUser(userId) {
-    await rest.deleteUser(userId);
+    try {
+      await rest.deleteUser(userId);
+    } catch (error) {
+      showAlert(error.message, "red", "user-list-table");
+    }
     const app = document.querySelector("#app");
     app.loadUsers();
   }
