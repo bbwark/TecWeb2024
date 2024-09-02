@@ -110,5 +110,9 @@ export default class extends AbstractView {
       document.querySelector("#app").innerHTML =
         await new ArticleShowcase().getHtml();
     }
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
   }
 }
