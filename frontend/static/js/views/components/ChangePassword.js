@@ -1,6 +1,6 @@
 import { state } from "../../config.js";
 import rest from "../../rest.js";
-import { escapeHtml, validatePassword } from "../../utilities.js";
+import { escapeHtml, removeAlert, showAlert, validatePassword } from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {
@@ -43,17 +43,35 @@ export default class extends AbstractView {
       const isOldPasswordCorrect = await rest.checkPassword(
         oldPasswordInserted.value
       );
-      
-      if (
-        isOldPasswordCorrect &&
-        oldPasswordInserted !== newPasswordInserted &&
-        validatePassword(newPasswordInserted.value)
-      ) {
-        await rest.updateUser(state.userId, {
-          password: newPasswordInserted.value,
-        });
-        oldPasswordInserted.value = "";
-        newPasswordInserted.value = "";
+
+      if (isOldPasswordCorrect) {
+        if (oldPasswordInserted.value !== newPasswordInserted.value) {
+          if (validatePassword(newPasswordInserted.value)) {
+            await rest.updateUser(state.userId, {
+              password: newPasswordInserted.value,
+            });
+            oldPasswordInserted.value = "";
+            newPasswordInserted.value = "";
+            showAlert("Password changed successfully", "green", "change-password");
+            removeAlert("change-password", 2000);
+          } else {
+            showAlert("Invalid Password", "red", "change-password", [
+              "Password must be at least 8 characters long",
+              "Password must contain at least one uppercase letter",
+              "Password must contain at least one lowercase letter",
+              "Password must contain at least one number",
+              "Password must contain at least one special character",
+            ]);
+          }
+        } else {
+          showAlert(
+            "Old password and new password are the same",
+            "red",
+            "change-password"
+          );
+        }
+      } else {
+        showAlert("Old password is incorrect", "red", "change-password");
       }
     }
   }
