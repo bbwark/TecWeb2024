@@ -13,13 +13,34 @@ userController.post("/", verifyAdmin, async (req, res) => {
     user.password = undefined;
     res.status(201).json(user);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    if (error.name === "SequelizeUniqueConstraintError") {
+      res
+        .status(409)
+        .json({
+          message:
+            "Username già in uso. Per favore, scegli un altro nome utente.",
+        });
+    } else if (error.name === "SequelizeValidationError") {
+      res
+        .status(400)
+        .json({
+          message:
+            "Dati non validi. Per favore, controlla i dati inseriti e riprova.",
+        });
+    } else {
+      res
+        .status(500)
+        .json({
+          message:
+            "Si è verificato un errore interno. Per favore riprova più tardi.",
+        });
+    }
   }
 });
 
 userController.get("/count", verifyAdmin, async (req, res) => {
   try {
-    const count = await userService.getNumberOfUsers()-1;
+    const count = (await userService.getNumberOfUsers()) - 1;
     res.status(200).json({ count: count });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -46,7 +67,10 @@ userController.put("/admin/:id", verifyAdmin, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (req.body.password && !(await bcrypt.compare(req.body.password, user.password))) {
+    if (
+      req.body.password &&
+      !(await bcrypt.compare(req.body.password, user.password))
+    ) {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       req.body.password = hashedPassword;
     }
@@ -58,7 +82,6 @@ userController.put("/admin/:id", verifyAdmin, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
 
 userController.get("/:id", async (req, res) => {
   try {
@@ -94,7 +117,10 @@ userController.put("/:id", verifyAdminOrSelf, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (req.body.password && !(await bcrypt.compare(req.body.password, user.password))) {
+    if (
+      req.body.password &&
+      !(await bcrypt.compare(req.body.password, user.password))
+    ) {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       req.body.password = hashedPassword;
     }
