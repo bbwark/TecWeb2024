@@ -1,6 +1,11 @@
 import { state } from "../config.js";
 import rest from "../rest.js";
-import { escapeHtml, setArticlesToShowBasedOnState } from "../utilities.js";
+import {
+  escapeHtml,
+  removeAlert,
+  setArticlesToShowBasedOnState,
+  showAlert,
+} from "../utilities.js";
 import AbstractView from "./AbstractView.js";
 import ArticleShowcase from "./ArticleShowcase.js";
 
@@ -51,15 +56,20 @@ export default class extends AbstractView {
     escapeHtml(password);
 
     if (username && password) {
-      const loginResponse = await rest.login(username, password);
-      if (loginResponse) {
-        await setArticlesToShowBasedOnState();
-        state.setArticleModifying(0);
-        history.pushState(null, null, "/");
-        document.querySelector("#app").innerHTML =
-          await new ArticleShowcase().getHtml();
-      } else {
-        //TODO - if unsuccessful, display error message
+      try {
+        const loginResponse = await rest.login(username, password);
+        if (loginResponse) {
+          await setArticlesToShowBasedOnState();
+          state.setArticleModifying(0);
+          history.pushState(null, null, "/");
+          document.querySelector("#app").innerHTML =
+            await new ArticleShowcase().getHtml();
+          showAlert("Login successful", "green", "header");
+          removeAlert("header", 3000);
+        }
+      } catch (error) {
+        console.error(error);
+        showAlert(error.message, "red", "login-form");
       }
     }
   }
