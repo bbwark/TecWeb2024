@@ -1,6 +1,6 @@
 import { state } from "../../config.js";
 import rest from "../../rest.js";
-import { escapeHtml } from "../../utilities.js";
+import { escapeHtml, showAlert } from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {
