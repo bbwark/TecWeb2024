@@ -66,8 +66,8 @@ export default class extends AbstractView {
                         </ul>
                     </nav>
                 </div>
-                <div class="w-3/4 p-6 bg-white rounded-r-lg shadow-lg ml-4">
-                    <div id="settings-content" class="bg-gray-50 p-6 rounded-md shadow-inner min-h-full"></div>
+                <div class="w-3/4 p-6 bg-white rounded-r-lg shadow-lg ml-4 overflow-hidden">
+                    <div id="settings-content" class="bg-gray-50 p-6 rounded-md shadow-inner min-h-full max-w-full"></div>
                 </div>
             </div>
         `;

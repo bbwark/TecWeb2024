@@ -32,49 +32,54 @@ export default class extends AbstractView {
 
     return `
         <h1 class="text-2xl font-bold mb-4">User List</h1>
-        <table id="user-list-table" class="w-full bg-white shadow rounded">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th class="p-2 border-b">Username</th>
-                    <th class="p-2 border-b">Name</th>
-                    <th class="p-2 border-b">Is Admin</th>
-                    <th class="p-2 border-b">Delete</th>
-                </tr>
-            </thead>
-            <tbody id="user-list-tbody" class="text-center">
-                <!-- User rows will be dynamically inserted here -->
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <table id="user-list-table" class="min-w-full max-w-full bg-white shadow-md rounded-lg table-fixed">
+                <thead class="bg-gray-100 w-full">
+                    <tr class="w-full">
+                        <th class="p-4 border-b w-1/4">Username</th>
+                        <th class="p-4 border-b w-1/4">Name</th>
+                        <th class="p-4 border-b w-1/4">Admin</th>
+                        <th class="p-4 border-b w-1/4"></th>
+                    </tr>
+                </thead>
+                <tbody id="user-list-tbody" class="text-center divide-y divide-gray-200 w-full">
+                    <tr class="w-full">
+                        <td colspan="4" class="p-4">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         ${paginationHtml}
     `;
-  }
+}
 
-  async loadUsers() {
+async loadUsers() {
     let users = await rest.getUsersPaginated(state.usersOpenedPage);
     const userListTbody = document.getElementById("user-list-tbody");
     userListTbody.innerHTML = "";
 
     users.forEach((user) => {
-      let tr = document.createElement("tr");
+        let tr = document.createElement("tr");
+        tr.classList.add("hover:bg-gray-50", "w-full");
 
-      tr.innerHTML = `
-              <td>${user.username}</td>
-              <td>${user.name}</td>
-              <td>
+        tr.innerHTML = `
+            <td class="p-4">${user.username}</td>
+            <td class="p-4">${user.name}</td>
+            <td class="p-4">
                 <input onclick="app.toggleAdmin(${user.id})" type="checkbox" ${
-        user.isAdmin ? "checked" : ""
-      } data-id="${user.id}" class="admin-checkbox">
-              </td>
-              <td>
-                <button onclick="app.deleteUser(${user.id})" data-id="${
-        user.id
-      }" class="delete-user-btn">Delete</button>
-              </td>
-            `;
+            user.isAdmin ? "checked" : ""
+        }
+                data-id="${user.id}" class="admin-checkbox h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+            </td>
+            <td class="p-4">
+                <button onclick="app.deleteUser(${user.id})" data-id="${user.id}" class="delete-user-btn text-red-500 hover:text-red-700">Delete</button>
+            </td>
+        `;
 
-      userListTbody.appendChild(tr);
+        userListTbody.appendChild(tr);
     });
-  }
+}
+
 
   async toggleAdmin(userId) {
     let adminCheckbox = document.querySelector(
