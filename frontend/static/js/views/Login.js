@@ -8,7 +8,6 @@ import {
   showAlert,
 } from "../utilities.js";
 import AbstractView from "./AbstractView.js";
-import ArticleShowcase from "./ArticleShowcase.js";
 
 export default class extends AbstractView {
   constructor(params) {

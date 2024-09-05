@@ -5,7 +5,6 @@ import ChangeName from "./components/ChangeName.js";
 import CreateUser from "./components/CreateUser.js";
 import DeleteAccount from "./components/DeleteAccount.js";
 import UserList from "./components/UserList.js";
-import ArticleShowcase from "./ArticleShowcase.js";
 import rest from "../rest.js";
 import Login from "./Login.js";
 import { navigateTo } from "../index.js";

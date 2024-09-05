@@ -1,9 +1,6 @@
 import AbstractView from "../AbstractView.js";
 import rest from "../../rest.js";
-import ModifyArticle from "../ModifyArticle.js";
 import { state } from "../../config.js";
-import ArticleShowcase from "../ArticleShowcase.js";
-import { setArticlesToShowBasedOnState } from "../../utilities.js";
 import ArticleDetail from "../ArticleDetail.js";
 import { navigateTo } from "../../index.js";
 

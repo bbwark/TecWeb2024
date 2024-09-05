@@ -3,7 +3,6 @@ import { navigateTo } from "../index.js";
 import rest from "../rest.js";
 import { setArticlesToShowBasedOnState } from "../utilities.js";
 import AbstractView from "./AbstractView.js";
-import ArticleShowcase from "./ArticleShowcase.js";
 import HeaderDetail from "./components/HeaderDetail.js";
 
 export default class extends AbstractView {
