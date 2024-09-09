@@ -65,6 +65,7 @@ export default class extends AbstractView {
       if (validatePassword(passwordInserted.value)) {
         try {
           await rest.createUser(user);
+          showAlert("User created successfully", "green", "create-user");
         } catch (error) {
           showAlert(error.message, "red", "create-user");
         }
