@@ -52,7 +52,9 @@ const getNumberOfArticles = async () => {
 const getNumberOfArticlesByTag = async (tag) => {
   return await Article.count({
     where: {
-      tags: tag,
+      tags: {
+        [Op.like]: `%#${tag}#%`
+      }
     },
   });
 };
