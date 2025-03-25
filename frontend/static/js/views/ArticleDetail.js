@@ -36,23 +36,29 @@ export default class extends AbstractView {
         ${headerHtml}
         <div class="max-w-3xl mx-auto">
           <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-            <div class="p-6 sm:p-8 relative">
-              <div class="text-right text-sm text-gray-600 absolute top-4 right-4 sm:top-8 sm:right-6">
-                <p>Published on: ${new Date(article.publishedDate).toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}</p>
-                <p class="text-xs mt-1">Last modified: ${new Date(article.modifiedDate).toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}</p>
+            <div class="p-6 sm:p-8">
+              <!-- Layout flessibile per titolo e date -->
+              <div class="flex flex-wrap mb-4">
+                <div class="w-full lg:w-[70%] pr-4">
+                  <h2 class="text-3xl font-bold text-gray-900 break-words">${article.title}</h2>
+                  <p class="text-sm text-gray-600 mt-2">
+                    By <a class="text-blue-600 hover:underline" onclick="app.goToArticleShowcaseUser('${article.authorId}')">${authorName}</a>
+                  </p>
+                </div>
+                <div class="w-full lg:w-[30%] text-right text-sm text-gray-600 mt-3 lg:mt-0">
+                  <p>Published on: ${new Date(article.publishedDate).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}</p>
+                  <p class="text-xs mt-1">Last modified: ${new Date(article.modifiedDate).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}</p>
+                </div>
               </div>
-              <h2 class="text-3xl font-bold text-gray-900 mb-2">${article.title}</h2>
-              <p class="text-sm text-gray-600 mb-4">
-                By <a class="text-blue-600 hover:underline" onclick="app.goToArticleShowcaseUser('${article.authorId}')">${authorName}</a>
-              </p>
+              
               <div class="mt-6 prose prose-lg">${article.content}</div>            
               <div class="mt-6">
                 <div class="mt-2 flex flex-wrap gap-2">
