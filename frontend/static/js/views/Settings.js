@@ -45,21 +45,21 @@ export default class extends AbstractView {
                         <ul class="space-y-4">
                             <li id="nav-change-password" onclick="app.setSettingsContent('${
                               this.components[0]
-                            }')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Cambia Password</li>
+                            }')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Change Password</li>
                             <li id="nav-change-name" onclick="app.setSettingsContent('${
                               this.components[1]
-                            }')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Cambia Nome</li>
+                            }')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Change Name</li>
                             ${
                               state.isAdmin
-                                ? `<li id="nav-create-user" onclick="app.setSettingsContent('${this.components[2]}')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Crea Utente</li>`
+                                ? `<li id="nav-create-user" onclick="app.setSettingsContent('${this.components[2]}')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Create User</li>`
                                 : ""
                             }
                             <li id="nav-delete-account" onclick="app.setSettingsContent('${
                               this.components[3]
-                            }')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Elimina Account</li>
+                            }')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Delete Account</li>
                             ${
                               state.isAdmin
-                                ? `<li id="nav-user-list" onclick="app.setSettingsContent('${this.components[4]}')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Visualizza Utenti</li>`
+                                ? `<li id="nav-user-list" onclick="app.setSettingsContent('${this.components[4]}')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">View Users</li>`
                                 : ""
                             }
                             <li id="nav-logout" onclick="app.logout()" class="cursor-pointer text-lg text-red-500 hover:text-red-700 focus:text-red-700 focus:outline-none">Logout</li>

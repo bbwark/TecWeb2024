@@ -18,21 +18,21 @@ userController.post("/", verifyAdmin, async (req, res) => {
         .status(409)
         .json({
           message:
-            "Username già in uso. Per favore, scegli un altro nome utente.",
+            "Username must be unique.",
         });
     } else if (error.name === "SequelizeValidationError") {
       res
         .status(400)
         .json({
           message:
-            "Dati non validi. Per favore, controlla i dati inseriti e riprova.",
+            "Invalid data. Please check the data entered and try again.",
         });
     } else {
       res
         .status(500)
         .json({
           message:
-            "Si è verificato un errore interno. Per favore riprova più tardi.",
+            "Internal error. Please try again later.",
         });
     }
   }
