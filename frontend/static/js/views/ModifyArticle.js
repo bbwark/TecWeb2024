@@ -19,11 +19,12 @@ export default class ModifyArticle extends AbstractView {
     this.articleId = state.articleModifying;
     this.isNew = state.articleModifying === 0 ? true : false;
     this.setTitle(this.isNew ? "New Article" : "Edit Article");
-
+  
     const app = document.querySelector("#app");
     if (!app.articleSaveButton) app.articleSaveButton = this.articleSaveButton;
-    if (!app.articleCancelButton)
-      app.articleCancelButton = this.articleCancelButton;
+    if (!app.articleCancelButton) app.articleCancelButton = this.articleCancelButton;
+    if (!app.toggleMarkdownPreview) app.toggleMarkdownPreview = this.toggleMarkdownPreview;
+    if (!app.updateMarkdownPreview) app.updateMarkdownPreview = this.updateMarkdownPreview;
   }
 
   async getHtml() {
@@ -47,17 +48,15 @@ export default class ModifyArticle extends AbstractView {
                 <div class="max-w-2xl w-full space-y-8">
                     <div>
                         <h1 class="text-3xl font-extrabold text-center text-gray-900">
-                            ${
-                              this.isNew ? "Create New Article" : "Edit Article"
-                            }
+                            ${this.isNew ? "Create New Article" : "Edit Article"
+        }
                         </h1>
                     </div>
                     <div id="article-form" class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-md">
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
-                            <input type="text" id="title" name="title" value="${
-                              article.title
-                            }" 
+                            <input type="text" id="title" name="title" value="${article.title
+        }" 
                                    class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
                                    required>
                         </div>
@@ -70,16 +69,16 @@ export default class ModifyArticle extends AbstractView {
                         </div>
                         
                         <div class="flex items-center">
-                            <input type="checkbox" id="preview-checkbox" class="mr-2">
-                            <label for="preview-checkbox" class="text-sm font-medium text-gray-700">Show Preview</label>
+                            <input type="checkbox" id="preview-checkbox" onchange="app.toggleMarkdownPreview()" class="mr-2">
+                            <label for="preview-checkbox" class="text-sm font-medium text-gray-700">Show Markdown Preview</label>
                         </div>
-                        <div id="preview" class="p-4 bg-gray-100 rounded border border-gray-300 mb-4" style="display:none;"></div>
+                        <div id="preview" class="p-4 bg-gray-100 rounded border border-gray-300 mb-4 overflow-auto max-h-96" style="display:none;"></div>
                         
                         <div>
                             <label for="tags" class="block text-sm font-medium text-gray-700">Tags:</label>
                             <input type="text" id="tags" name="tags" value="${article.tags
-                              .map((tag) => `#${tag}`)
-                              .join(", ")}" 
+          .map((tag) => `#${tag}`)
+          .join(", ")}" 
                                    class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
                                    required>
                         </div>
@@ -89,9 +88,8 @@ export default class ModifyArticle extends AbstractView {
                                     class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md shadow-sm hover:bg-gray-300">
                                 Cancel
                             </button>
-                            <button id="save-button" onclick="app.articleSaveButton(${
-                              this.isNew
-                            }, ${this.articleId})" 
+                            <button id="save-button" onclick="app.articleSaveButton(${this.isNew
+        }, ${this.articleId})" 
                                     class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700">
                                 ${this.isNew ? "Save" : "Update"}
                             </button>
@@ -146,5 +144,43 @@ export default class ModifyArticle extends AbstractView {
     history.back();
     document.querySelector("#app").innerHTML =
       await new ArticleShowcase().getHtml();
+  }
+
+  async toggleMarkdownPreview() {
+    const previewCheckbox = document.getElementById('preview-checkbox');
+    const previewDiv = document.getElementById('preview');
+    const contentTextarea = document.getElementById('content');
+  
+    if (previewCheckbox.checked) {
+      const markdownContent = contentTextarea.value;
+      const htmlContent = marked.parse(markdownContent);
+      previewDiv.innerHTML = `
+            <div class="relative">
+              <span class="absolute top-0 right-0 text-xs text-gray-500 italic">Preview</span>
+              <div id="markdown-content" class="prose prose-sm max-w-none pt-6">${htmlContent}</div>
+            </div>
+        `;
+      previewDiv.style.display = 'block';
+      
+      contentTextarea.addEventListener('input', this.updateMarkdownPreview);
+    } else {
+      previewDiv.style.display = 'none';
+      contentTextarea.removeEventListener('input', this.updateMarkdownPreview);
+    }
+  }
+  
+  updateMarkdownPreview() {
+    const contentTextarea = document.getElementById('content');
+    const previewDiv = document.getElementById('preview');
+    
+    if (previewDiv.style.display !== 'none') {
+      const markdownContent = contentTextarea.value;
+      const htmlContent = marked.parse(markdownContent);
+      
+      const contentContainer = document.getElementById('markdown-content');
+      if (contentContainer) {
+        contentContainer.innerHTML = htmlContent;
+      }
+    }
   }
 }
