@@ -37,7 +37,6 @@ export default class extends AbstractView {
         <div class="max-w-3xl mx-auto">
           <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="p-6 sm:p-8">
-              <!-- Layout flessibile per titolo e date -->
               <div class="flex flex-wrap mb-4">
                 <div class="w-full lg:w-[70%] pr-4">
                   <h2 class="text-3xl font-bold text-gray-900 break-words">${article.title}</h2>
