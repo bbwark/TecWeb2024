@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/bbwark/TecWeb2024#readme",
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "express": "^4.19.2",
