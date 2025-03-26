@@ -1,23 +1,58 @@
 import { state } from "../../config.js";
+import { navigateTo } from "../../index.js";
 import { setArticlesToShowBasedOnState } from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
-import ArticleShowcase from "../ArticleShowcase.js";
 import UserList from "./UserList.js";
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-
+    
     this.currentPage = params.currentPage;
     this.totalPages = params.totalPages;
-    if (params.isFromUserList) {
-      this.isFromUserList = params.isFromUserList;
+    this.isFromUserList = params.isFromUserList || false;
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+  }
+  
+  onMount() {
+    const paginationContainer = document.querySelector('.pagination-container');
+    if (paginationContainer) {
+      paginationContainer.addEventListener('click', this.boundHandlers.click);
+      console.log("Pagination mounted directly on pagination container");
     } else {
-      this.isFromUserList = false;
+      const app = document.querySelector("#app");
+      app.addEventListener('click', this.boundHandlers.click);
+      console.log("Pagination mounted on app container");
     }
-
+    console.log("Pagination mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const paginationContainer = document.querySelector('.pagination-container');
+    if (paginationContainer) {
+      paginationContainer.removeEventListener('click', this.boundHandlers.click);
+    }
+    
     const app = document.querySelector("#app");
-    if (!app.changePage) app.changePage = this.changePage;
+    app.removeEventListener('click', this.boundHandlers.click);
+    
+    console.log("Pagination unmounted: event listeners removed");
+  }
+  
+  handleClick(e) {
+    const target = e.target.closest('[data-action="change-page"]');
+    if (!target) return;
+    
+    console.log("Pagination click detected on:", target);
+    
+    const page = parseInt(target.dataset.page);
+    if (isNaN(page)) return;
+    
+    this.changePage(page, this.isFromUserList);
+    e.preventDefault();
   }
 
   async getHtml() {
@@ -45,12 +80,12 @@ export default class extends AbstractView {
   
     for (let i = startingPage; i <= endingPage; i++) {
       paginationButtons.push(`
-        <button onclick="app.changePage(${i}, ${this.isFromUserList})" 
+        <button data-action="change-page" 
+                data-page="${i}"
                 class="pagination-button ${i === this.currentPage 
                   ? 'bg-blue-500 text-white' 
                   : 'bg-white text-gray-700 hover:bg-gray-100'} 
-                px-3 py-1 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out" 
-                data-page="${i}">
+                px-3 py-1 rounded-md text-sm font-medium transition-colors duration-150 ease-in-out">
           ${i}
         </button>
       `);
@@ -58,7 +93,8 @@ export default class extends AbstractView {
   
     return `
       <div class="pagination-container flex items-center justify-center mt-6 space-x-1">
-        <button onclick="app.changePage(1, ${this.isFromUserList})" 
+        <button data-action="change-page" 
+                data-page="1"
                 class="pagination-button ${this.currentPage === 1 
                   ? 'opacity-50 cursor-not-allowed' 
                   : 'hover:bg-gray-100'} 
@@ -67,7 +103,8 @@ export default class extends AbstractView {
           &laquo;
         </button>
         
-        <button onclick="app.changePage(${this.currentPage - 1}, ${this.isFromUserList})" 
+        <button data-action="change-page" 
+                data-page="${Math.max(1, this.currentPage - 1)}"
                 class="pagination-button previous ${this.currentPage === 1 
                   ? 'opacity-50 cursor-not-allowed' 
                   : 'hover:bg-gray-100'} 
@@ -78,7 +115,8 @@ export default class extends AbstractView {
         
         ${paginationButtons.join('')}
   
-        <button onclick="app.changePage(${this.currentPage + 1}, ${this.isFromUserList})" 
+        <button data-action="change-page" 
+                data-page="${Math.min(this.totalPages, this.currentPage + 1)}"
                 class="pagination-button next ${this.currentPage === this.totalPages 
                   ? 'opacity-50 cursor-not-allowed' 
                   : 'hover:bg-gray-100'} 
@@ -87,7 +125,8 @@ export default class extends AbstractView {
           &rsaquo;
         </button>
   
-        <button onclick="app.changePage(${this.totalPages}, ${this.isFromUserList})" 
+        <button data-action="change-page" 
+                data-page="${this.totalPages}"
                 class="pagination-button ${this.currentPage === this.totalPages 
                   ? 'opacity-50 cursor-not-allowed' 
                   : 'hover:bg-gray-100'} 
@@ -100,18 +139,33 @@ export default class extends AbstractView {
   }
 
   async changePage(pageDestination, isFromUserList) {
+    if (pageDestination === this.currentPage) return;
+    
     if (isFromUserList) {
       state.setUsersOpenedPage(pageDestination);
-      document.querySelector("#settings-content").innerHTML =
-        await new UserList().getHtml();
+      
+      const settingsView = document.getElementById('settings-view');
+      if (settingsView) {
+        const settings = window._appCurrentView;
+        if (settings && typeof settings.setSettingsContent === 'function') {
+          await settings.setSettingsContent('userList');
+        } else {
+          const contentContainer = document.querySelector("#settings-content");
+          if (contentContainer) {
+            const userList = new UserList();
+            contentContainer.innerHTML = await userList.getHtml();
+            userList.onMount();
+          }
+        }
+      }
     } else {
       state.setArticlesOpenedPage(pageDestination);
       await setArticlesToShowBasedOnState();
-      document.querySelector("#app").innerHTML =
-        await new ArticleShowcase().getHtml();
+      await navigateTo("/");
     }
+    
     window.scrollTo({
-      top: document.body.scrollHeight,
+      top: 0,
       behavior: "smooth",
     });
   }
