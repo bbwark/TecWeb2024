@@ -9,9 +9,72 @@ export default class extends AbstractView {
   constructor(params) {
     super(params);
     this.setTitle("PressPortal");
+    
+    this.articleComponents = [];
+    this.headerComponent = null;
+    this.paginationComponent = null;
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+  }
+  
+  onMount() {
+    const app = document.querySelector("#app");
+    app.addEventListener('click', this.boundHandlers.click);
+    
+    if (this.headerComponent) {
+      this.headerComponent.onMount();
+    }
+    
+    for (const articleComponent of this.articleComponents) {
+      articleComponent.onMount();
+    }
+    
+    if (this.paginationComponent) {
+      this.paginationComponent.onMount();
+    }
+    
+    console.log("ArticleShowcase mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    
+    if (this.headerComponent) {
+      this.headerComponent.onUnmount();
+    }
+    
+    for (const articleComponent of this.articleComponents) {
+      articleComponent.onUnmount();
+    }
+    
+    if (this.paginationComponent) {
+      this.paginationComponent.onUnmount();
+    }
+    
+    console.log("ArticleShowcase unmounted: event listeners removed");
+  }
+
+  handleClick(e) {
+    if (!document.getElementById('article-list')) return;
+    
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    switch(action) {
+      //Handle ArticleShowcase specific actions here
+    }
   }
 
   async getHtml() {
+    this.articleComponents = [];
+    this.headerComponent = null;
+    this.paginationComponent = null;
+    
     const articleHtml = [];
     let firstArticle = true;
     for (const article of state.articlesToShow) {
@@ -22,21 +85,22 @@ export default class extends AbstractView {
       }
 
       const articleView = new Article(article);
+      this.articleComponents.push(articleView);
       articleHtml.push(await articleView.getHtml());
     }
 
     const numberOfPages = await this.numberOfPages();
-    const paginationView = new Pagination({
+    this.paginationComponent = new Pagination({
       currentPage: state.articlesOpenedPage,
       totalPages: numberOfPages,
     });
-    const paginationHtml = await paginationView.getHtml();
+    const paginationHtml = await this.paginationComponent.getHtml();
 
-    const headerView = new HeaderShowcase({ isLogged: state.isLogged });
-    const headerHtml = await headerView.getHtml();
+    this.headerComponent = new HeaderShowcase({ isLogged: state.isLogged });
+    const headerHtml = await this.headerComponent.getHtml();
 
     return `
-        <div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+        <div id="article-showcase" class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
           ${headerHtml}
           <div class="max-w-6xl mx-auto">
             <div class="w-full lg:w-4/5 xl:w-3/4 mx-auto">
