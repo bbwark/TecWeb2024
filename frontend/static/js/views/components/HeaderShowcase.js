@@ -1,17 +1,51 @@
 import { articleShowCaseState, state } from "../../config.js";
 import { navigateTo } from "../../index.js";
+import { setArticlesToShowBasedOnState } from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+  }
+  
+  onMount() {
     const app = document.querySelector("#app");
-
-    if (!app.showArticles) app.showArticles = this.showArticles;
-    if (!app.newArticle) app.newArticle = this.newArticle;
-    if (!app.goToSettings) app.goToSettings = this.goToSettings;
-    if (!app.goToLogin) app.goToLogin = this.goToLogin;
+    app.addEventListener('click', this.boundHandlers.click);
+    console.log("HeaderShowcase mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    console.log("HeaderShowcase unmounted: event listeners removed");
+  }
+  
+  handleClick(e) {
+    if (!document.getElementById('header')) return;
+    
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    switch(action) {
+      case 'show-articles':
+        this.showArticles();
+        break;
+      case 'new-article':
+        this.newArticle();
+        break;
+      case 'go-to-settings':
+        this.goToSettings();
+        break;
+      case 'go-to-login':
+        this.goToLogin();
+        break;
+    }
   }
 
   async getHtml() {
@@ -22,18 +56,32 @@ export default class extends AbstractView {
             ${
               isLogged
                 ? `
-                <button id="show-articles" onclick="app.showArticles()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                <button id="show-articles" 
+                        data-action="show-articles" 
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                     ${
                       showcaseState === articleShowCaseState.ALL_ARTICLES
                         ? "My Articles"
                         : "Recent Articles"
                     }
                 </button>
-                <button id="new-article" onclick="app.newArticle()" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">New Article</button>
-                <button id="settings" onclick="app.goToSettings()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Settings</button>
+                <button id="new-article" 
+                        data-action="new-article" 
+                        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                  New Article
+                </button>
+                <button id="settings" 
+                        data-action="go-to-settings" 
+                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                  Settings
+                </button>
             `
                 : `
-                <button id="login-button" onclick="app.goToLogin()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Login</button>
+                <button id="login-button" 
+                        data-action="go-to-login" 
+                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                  Login
+                </button>
             `
             }
         </div>
@@ -48,6 +96,7 @@ export default class extends AbstractView {
     );
     state.setUserIdArticlesToShow(state.userId);
     state.setArticlesOpenedPage(1);
+    await setArticlesToShowBasedOnState();
     await navigateTo("/");
   }
 
