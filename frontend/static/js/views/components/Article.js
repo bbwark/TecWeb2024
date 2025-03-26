@@ -23,6 +23,7 @@ export default class extends AbstractView {
     } catch (error) {
       console.log("User not found for ID: ", this.params.authorId);
     }
+    const content = this.stripMarkdown(this.params.content);
 
     return `
     <div class="article p-6 bg-white rounded-lg shadow-md mb-6 min-h-[200px] flex flex-col">
@@ -89,9 +90,9 @@ export default class extends AbstractView {
         this.params.preview
           ? `<p class="preview text-gray-700 flex-grow">
             ${
-              this.params.content.length > 50
-                ? this.params.content.substring(0, 50) + "..."
-                : this.params.content
+              content.length > 50
+                ? content.substring(0, 50).trim() + "..."
+                : content
             }
           </p>`
           : ""
@@ -126,5 +127,13 @@ export default class extends AbstractView {
       top: 0,
       behavior: "smooth",
     });
+  }
+
+  stripMarkdown(markdown) {
+    const html = marked.parse(markdown);
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    const textContent = tempDiv.textContent || tempDiv.innerText || '';
+    return  textContent;
   }
 }
