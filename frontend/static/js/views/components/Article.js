@@ -26,7 +26,7 @@ export default class extends AbstractView {
     const content = this.stripMarkdown(this.params.content);
 
     return `
-    <div class="article p-6 bg-white rounded-lg shadow-md mb-6 min-h-[200px] flex flex-col">
+    <div class="article p-6 bg-white rounded-lg shadow-md mb-6 min-h-[250px] flex flex-col w-full mx-auto">
       <div class="flex justify-between items-start mb-4">
         <div class="flex-1 pr-4">
           <h2 class="text-2xl font-bold cursor-pointer text-blue-600 hover:underline mb-2"
@@ -90,12 +90,15 @@ export default class extends AbstractView {
       ${
         this.params.preview
           ? `<p class="preview text-gray-700 flex-grow">
-            ${
-              content.length > 50
-                ? content.substring(0, 50).trim() + "..."
-                : content
-            }
-          </p>`
+        ${
+          (() => {
+            const words = content.split(/\s+/);
+            return words.length > 50 
+              ? words.slice(0, 50).join(' ') + "..."
+              : content;
+          })()
+        }
+      </p>`
           : ""
       }
       <div class="mt-4 text-right">
