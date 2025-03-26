@@ -113,6 +113,10 @@ function sanitizeHtml(input) {
     .replace(/'/g, '&#039;');
 }
 
+export const navigateToArticle = (articleId) => {
+  navigateTo(`/article-detail/${articleId}`);
+};
+
 export {
   setArticlesToShowBasedOnState,
   validatePassword,

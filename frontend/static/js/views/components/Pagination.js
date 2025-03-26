@@ -161,7 +161,7 @@ export default class extends AbstractView {
     } else {
       state.setArticlesOpenedPage(pageDestination);
       await setArticlesToShowBasedOnState();
-      await navigateTo("/");
+      await navigateTo(`/page/${pageDestination}`);
     }
     
     window.scrollTo({

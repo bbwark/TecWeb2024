@@ -51,6 +51,7 @@ export default class extends AbstractView {
 
   async getHtml() {
     const isOwner = this.params.isOwner;
+    const articleId = new URL(window.location.href).pathname.split('/').pop();
     return `
         <div id="header-detail" class="p-4 bg-gray-100 flex justify-end space-x-2">
             ${
@@ -60,14 +61,14 @@ export default class extends AbstractView {
                   isOwner || state.isAdmin
                     ? `
                     <button 
-                      data-action="delete-article" 
-                      data-article-id="${state.articleIdDetailOpened}" 
+                      data-action="delete-article"
+                      data-article-id="${articleId}" 
                       class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
                       Delete
                     </button>
                     <button 
-                      data-action="edit-article" 
-                      data-article-id="${state.articleIdDetailOpened}" 
+                      data-action="edit-article"
+                      data-article-id="${articleId}" 
                       class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                       Modify
                     </button>
@@ -102,7 +103,7 @@ export default class extends AbstractView {
   }
 
   async articleEditButton(articleId) {
-    state.setArticleModifying(articleId);
+    state.setArticleModifying(parseInt(articleId));
     await navigateTo("/modify-article");
   }
 

@@ -19,7 +19,6 @@ const state = {
   articlesOpenedPage: 1,
   articleModifying: 0,
   articlesToShow: null,
-  articleIdDetailOpened: 0,
   articleShowCaseState: articleShowCaseState.ALL_ARTICLES,
   openedTag: null,
   userIdArticlesToShow: null,
@@ -59,11 +58,6 @@ const state = {
 
   setArticlesToShow(params) {
     this.articlesToShow = params;
-    this.saveState();
-  },
-
-  setArticleIdDetailOpened(articleId) {
-    this.articleIdDetailOpened = articleId;
     this.saveState();
   },
 

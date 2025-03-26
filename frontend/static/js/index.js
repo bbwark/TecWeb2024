@@ -39,7 +39,8 @@ const router = async () => {
 
   const routes = [
     { path: "/", view: ArticleShowcase },
-    { path: "/article-detail", view: ArticleDetail },
+    { path: "/page/:page", view: ArticleShowcase },
+    { path: "/article-detail/:id", view: ArticleDetail },
     { path: "/modify-article", view: ModifyArticle },
     { path: "/login", view: Login },
     { path: "/settings", view: Settings },
@@ -63,15 +64,22 @@ const router = async () => {
     };
   }
 
-  if (match.route.path === "/") {
+  const params = getParams(match);
+
+  if (match.route.path === "/page/:page") {
+    const pageNum = parseInt(params.page) || 1;
+    state.setArticlesOpenedPage(pageNum);
+    await setArticlesToShowBasedOnState();
+  } else if (match.route.path === "/") {
     await setArticlesToShowBasedOnState();
   }
+  
   
   if (currentView) {
     currentView.onUnmount();
   }
   
-  const view = new match.route.view(getParams(match));
+  const view = new match.route.view(params);
 
   document.querySelector("#app").innerHTML = await view.getHtml();
   

@@ -115,10 +115,11 @@ export default class extends AbstractView {
           : ""
       }
       <div class="mt-4 text-right">
-        <button class="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                data-action="show-article-detail" data-article-id="${this.params.articleId}">
-          Read more →
-        </button>
+        <a href="/article-detail/${this.params.articleId}" 
+           data-link
+           class="text-blue-600 hover:text-blue-800 font-medium">
+          Read more
+        </a>
       </div>
     </div>
   `;
@@ -133,7 +134,7 @@ export default class extends AbstractView {
     
     switch(action) {
       case 'show-article-detail':
-        this.showArticleDetail(articleId);
+        this.handleDetailClick(e);
         break;
       case 'edit-article':
         this.articleEditButton(articleId);
@@ -156,8 +157,12 @@ export default class extends AbstractView {
 
   async showArticleDetail(articleId) {
     console.log("showArticleDetail", articleId);
-    state.setArticleIdDetailOpened(articleId);
     await navigateTo("/article-detail");
+  }
+
+  handleDetailClick(e) {
+    e.preventDefault();
+    navigateTo(`/article-detail/${this.params.articleId}`);
   }
 
   stripMarkdown(markdown) {
