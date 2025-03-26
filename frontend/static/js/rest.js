@@ -88,6 +88,9 @@ const getAllArticles = async () => {
 
 const getRecentArticles = async (page) => {
   try {
+    if (page < 1) {
+      page = 1;
+    }
     const response = await axios.get(
       `${config.apiBaseUrl}/articles/recent/${page}`
     );
