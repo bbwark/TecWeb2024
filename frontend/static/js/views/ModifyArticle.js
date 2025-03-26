@@ -164,9 +164,8 @@ export default class ModifyArticle extends AbstractView {
   }
 
   async articleCancelButton() {
-    history.back();
-    document.querySelector("#app").innerHTML =
-      await new ArticleShowcase().getHtml();
+    state.setArticleModifying(0);
+    window.history.back();
   }
 
   async toggleMarkdownPreview() {
