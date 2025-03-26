@@ -1,15 +1,43 @@
 import { state } from "../../config.js";
 import rest from "../../rest.js";
-import { escapeHtml, removeAlert, showAlert, validatePassword } from "../../utilities.js";
+import { removeAlert, showAlert, validatePassword } from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
     this.setTitle("Change Password");
-
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+  }
+  
+  onMount() {
     const app = document.querySelector("#app");
-    if (!app.changePassword) app.changePassword = this.changePassword;
+    app.addEventListener('click', this.boundHandlers.click);
+    console.log("ChangePassword mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    console.log("ChangePassword unmounted: event listeners removed");
+  }
+  
+  handleClick(e) {
+    if (!document.getElementById('change-password')) return;
+    
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    switch(action) {
+      case 'change-password':
+        this.changePassword();
+        break;
+    }
   }
 
   async getHtml() {
@@ -26,7 +54,11 @@ export default class extends AbstractView {
                     <label for="new-password" class="block text-sm font-medium text-gray-700">New Password:</label>
                     <input type="password" id="new-password" name="newPassword" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <button onclick="app.changePassword()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Change Password</button>
+                <button 
+                  data-action="change-password" 
+                  class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Change Password
+                </button>
             </div>
           </div>
         </div>
@@ -37,8 +69,6 @@ export default class extends AbstractView {
     let oldPasswordInserted = document.getElementById("old-password");
     let newPasswordInserted = document.getElementById("new-password");
     if (oldPasswordInserted && newPasswordInserted) {
-      escapeHtml(oldPasswordInserted.value);
-      escapeHtml(newPasswordInserted.value);
 
       const isOldPasswordCorrect = await rest.checkPassword(
         oldPasswordInserted.value
