@@ -68,14 +68,10 @@ const state = {
   },
 
   setArticleShowcaseState(state) {
-    switch (state) {
-      case articleShowCaseState.USER_ARTICLES:
-      case articleShowCaseState.TAG_ARTICLES:
-      case articleShowCaseState.ALL_ARTICLES:
-        this.articleShowCaseState = state;
-        break;
-      default:
-        this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;
+    if (Object.values(articleShowCaseState).includes(state)) {
+      this.articleShowCaseState = state;
+    } else {
+      this.articleShowCaseState = articleShowCaseState.ALL_ARTICLES;
     }
     this.saveState();
   },
