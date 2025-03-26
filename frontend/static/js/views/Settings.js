@@ -9,7 +9,7 @@ import rest from "../rest.js";
 import Login from "./Login.js";
 import { navigateTo } from "../index.js";
 
-export default class extends AbstractView {
+export default class Settings extends AbstractView {
   constructor(params) {
     super(params);
     this.setTitle("Settings");
@@ -20,10 +20,34 @@ export default class extends AbstractView {
       "deleteAccount",
       "userList",
     ];
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+    
+    this.currentComponent = null;
+  }
+
+  onMount() {
     const app = document.querySelector("#app");
-    if (!app.setSettingsContent)
-      app.setSettingsContent = this.setSettingsContent;
-    if (!app.logout) app.logout = this.logout;
+    app.addEventListener('click', this.boundHandlers.click);
+    
+    setTimeout(() => {
+      this.setSettingsContent(state.lastSettingsOpened);
+    }, 0);
+    
+    console.log("Settings mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    
+    if (this.currentComponent && typeof this.currentComponent.onUnmount === 'function') {
+      this.currentComponent.onUnmount();
+    }
+    
+    console.log("Settings unmounted: event listeners removed");
   }
 
   async getHtml() {
@@ -32,37 +56,44 @@ export default class extends AbstractView {
       history.pushState(null, null, "/login");
       return await new Login().getHtml();
     } else {
-
-      setTimeout(() => {
-        this.setSettingsContent(state.lastSettingsOpened);
-      }, 0);
-
       return `
-            <div class="min-h-screen flex bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div id="settings-view" class="min-h-screen flex bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
                 <div class="w-1/4 bg-white p-6 rounded-l-lg shadow-lg">
                     <h1 class="text-2xl font-extrabold text-left text-gray-900 mb-4">Settings</h1>
                     <nav class="settings-nav">
                         <ul class="space-y-4">
-                            <li id="nav-change-password" onclick="app.setSettingsContent('${
-                              this.components[0]
-                            }')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Change Password</li>
-                            <li id="nav-change-name" onclick="app.setSettingsContent('${
-                              this.components[1]
-                            }')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Change Name</li>
+                            <li id="nav-change-password" data-action="set-content" data-component="${this.components[0]}" 
+                                class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">
+                                Change Password
+                            </li>
+                            <li id="nav-change-name" data-action="set-content" data-component="${this.components[1]}" 
+                                class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">
+                                Change Name
+                            </li>
                             ${
                               state.isAdmin
-                                ? `<li id="nav-create-user" onclick="app.setSettingsContent('${this.components[2]}')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Create User</li>`
+                                ? `<li id="nav-create-user" data-action="set-content" data-component="${this.components[2]}" 
+                                   class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">
+                                   Create User
+                                   </li>`
                                 : ""
                             }
-                            <li id="nav-delete-account" onclick="app.setSettingsContent('${
-                              this.components[3]
-                            }')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">Delete Account</li>
+                            <li id="nav-delete-account" data-action="set-content" data-component="${this.components[3]}" 
+                                class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">
+                                Delete Account
+                            </li>
                             ${
                               state.isAdmin
-                                ? `<li id="nav-user-list" onclick="app.setSettingsContent('${this.components[4]}')" class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">View Users</li>`
+                                ? `<li id="nav-user-list" data-action="set-content" data-component="${this.components[4]}" 
+                                   class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">
+                                   View Users
+                                   </li>`
                                 : ""
                             }
-                            <li id="nav-logout" onclick="app.logout()" class="cursor-pointer text-lg text-red-500 hover:text-red-700 focus:text-red-700 focus:outline-none">Logout</li>
+                            <li id="nav-logout" data-action="logout" 
+                                class="cursor-pointer text-lg text-red-500 hover:text-red-700 focus:text-red-700 focus:outline-none">
+                                Logout
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -74,7 +105,30 @@ export default class extends AbstractView {
     }
   }
 
+  handleClick(e) {
+    if (!document.getElementById('settings-view')) return;
+    
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    switch(action) {
+      case 'set-content':
+        this.setSettingsContent(target.dataset.component);
+        break;
+      case 'logout':
+        this.logout();
+        break;
+    }
+  }
+
   async setSettingsContent(componentName) {
+    if (this.currentComponent && typeof this.currentComponent.onUnmount === 'function') {
+      this.currentComponent.onUnmount();
+      console.log(`Component ${state.lastSettingsOpened} unmounted`);
+    }
+    
     let components = {
       changePassword: new ChangePassword(),
       changeName: new ChangeName(),
@@ -82,13 +136,27 @@ export default class extends AbstractView {
       deleteAccount: new DeleteAccount(),
       userList: new UserList(),
     };
+    
     state.setLastSettingsOpened(componentName);
-    document.querySelector("#settings-content").innerHTML = await components[
-      componentName
-    ].getHtml();
+    this.currentComponent = components[componentName];
+    
+    const contentContainer = document.querySelector("#settings-content");
+    if (contentContainer) {
+      contentContainer.innerHTML = await this.currentComponent.getHtml();
+      
+      if (typeof this.currentComponent.onMount === 'function') {
+        this.currentComponent.onMount();
+        console.log(`Component ${componentName} mounted`);
+      }
+    }
   }
 
   async logout() {
+    if (this.currentComponent && typeof this.currentComponent.onUnmount === 'function') {
+      this.currentComponent.onUnmount();
+      console.log(`Component ${state.lastSettingsOpened} unmounted`);
+    }
+    
     state.clearState();
     state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
     state.setArticlesToShow(
