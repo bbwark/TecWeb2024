@@ -61,7 +61,10 @@ articleController.get("/by-user-id/:id/:page", async (req, res) => {
 
 articleController.get("/recent/:page", async (req, res) => {
   try {
-    const page = parseInt(req.params.page, 10) || 1;
+    let page = parseInt(req.params.page, 10) || 1;
+    if (page < 1) {
+      page = 1;
+    }
     const articles = await articleService.getRecentArticles(page);
     res.status(200).json(articles);
   } catch (error) {
