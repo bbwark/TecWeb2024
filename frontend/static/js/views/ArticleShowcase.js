@@ -68,6 +68,7 @@ export default class extends AbstractView {
         totalArticles = await rest.getNumberOfArticles();
         break;
     }
-    return Math.ceil(totalArticles / config.numberOfArticlesPerPage);
+    const numberOfPages = Math.ceil(totalArticles / config.numberOfArticlesPerPage);
+    return numberOfPages === 0 ? 1 : numberOfPages;
   }
 }
