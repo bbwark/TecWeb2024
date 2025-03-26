@@ -103,14 +103,16 @@ export default class ModifyArticle extends AbstractView {
 
   async articleSaveButton(isNew, articleId = 0) {
     const title = document.getElementById("title").value;
+    const subtitle = document.getElementById("subtitle").value;
     const content = document.getElementById("content").value;
     const tags = document.getElementById("tags").value;
 
     escapeHtml(title);
+    escapeHtml(subtitle);
     escapeHtml(content);
     escapeHtml(tags);
 
-    if (title && content && tags) {
+    if (title && subtitle && content && tags) {
       const tagRegex = /#?[a-zA-Z0-9]+/g;
       const matches = tags.match(tagRegex);
       const transformedTags = matches
@@ -118,8 +120,9 @@ export default class ModifyArticle extends AbstractView {
         .filter((tag, index, self) => self.indexOf(tag) === index);
 
       const article = {
-        title: title,
-        content: content,
+        title: title.trim(),
+        subtitle: subtitle.trim(),
+        content: content.trim(),
         tags: transformedTags,
       };
       if (isNew) {

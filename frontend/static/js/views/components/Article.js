@@ -33,6 +33,7 @@ export default class extends AbstractView {
               onclick="app.showArticleDetail(${this.params.articleId})">
             ${this.params.title}
           </h2>
+          <h3 class="text-lg text-gray-700 italic mb-3">${this.params.subtitle || ""}</h3>
           <p class="text-sm text-gray-600 mb-2">
             By <span class="font-medium">${
               !authorName ? "Account Deleted" : authorName

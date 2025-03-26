@@ -4,6 +4,7 @@ export default class ArticleDTO {
   constructor(
     articleId = "",
     title = "",
+    subtitle = "",
     content = "",
     authorId = 0,
     publishedDate = "",
@@ -14,6 +15,7 @@ export default class ArticleDTO {
   ) {
     this.articleId = articleId;
     this.title = title;
+    this.subtitle = subtitle;
     this.content = content;
     this.authorId = authorId;
     this.publishedDate = publishedDate;

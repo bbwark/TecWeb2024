@@ -40,6 +40,7 @@ export default class extends AbstractView {
               <div class="flex flex-wrap mb-4">
                 <div class="w-full lg:w-[70%] pr-4">
                   <h2 class="text-3xl font-bold text-gray-900 break-words">${article.title}</h2>
+                  <h3 class="text-xl text-gray-700 mt-1 mb-2 italic">${article.subtitle}</h3>
                   <p class="text-sm text-gray-600 mt-2">
                     By <a class="text-blue-600 hover:underline" onclick="app.goToArticleShowcaseUser('${article.authorId}')">${authorName}</a>
                   </p>

@@ -266,6 +266,7 @@ const articleBuilder = (data) => {
   return new ArticleDTO(
     data.id,
     data.title,
+    data.subtitle,
     data.content,
     data.userId,
     data.createdAt,
