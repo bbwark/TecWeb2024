@@ -2,7 +2,6 @@ import { state } from "../../config.js";
 import { navigateTo } from "../../index.js";
 import rest from "../../rest.js";
 import {
-  escapeHtml,
   setArticlesToShowBasedOnState,
   showAlert,
 } from "../../utilities.js";
@@ -12,9 +11,37 @@ export default class extends AbstractView {
   constructor(params) {
     super(params);
     this.setTitle("Delete Account");
-
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+  }
+  
+  onMount() {
     const app = document.querySelector("#app");
-    if (!app.deleteAccount) app.deleteAccount = this.deleteAccount;
+    app.addEventListener('click', this.boundHandlers.click);
+    console.log("DeleteAccount mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    console.log("DeleteAccount unmounted: event listeners removed");
+  }
+  
+  handleClick(e) {
+    if (!document.getElementById('delete-account-form')) return;
+    
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    switch(action) {
+      case 'delete-account':
+        this.deleteAccount();
+        break;
+    }
   }
 
   async getHtml() {
@@ -27,7 +54,12 @@ export default class extends AbstractView {
                     <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
                     <input type="password" id="password" name="password" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <button onclick="app.deleteAccount()" type="submit" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete Account</button>
+                <button 
+                  data-action="delete-account" 
+                  type="submit" 
+                  class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                    Delete Account
+                </button>
             </div>
           </div>
         </div>
@@ -37,7 +69,6 @@ export default class extends AbstractView {
   async deleteAccount() {
     let passwordInserted = document.getElementById("password");
     if (passwordInserted) {
-      escapeHtml(passwordInserted.value);
 
       const isPasswordCorrect = await rest.checkPassword(
         passwordInserted.value
