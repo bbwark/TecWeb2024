@@ -103,6 +103,16 @@ function removeAlert(attachToId, afterDelay = 0) {
   }
 }
 
+function sanitizeHtml(input) {
+  if (!input) return '';
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 export {
   setArticlesToShowBasedOnState,
   validatePassword,
@@ -110,4 +120,5 @@ export {
   decodeTags,
   showAlert,
   removeAlert,
+  sanitizeHtml
 };

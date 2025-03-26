@@ -1,6 +1,7 @@
 import { showAlert, validatePassword } from "../../utilities.js";
 import rest from "../../rest.js";
 import AbstractView from "../AbstractView.js";
+import { sanitizeHtml } from "../../utilities.js";
 
 export default class extends AbstractView {
   constructor(params) {
