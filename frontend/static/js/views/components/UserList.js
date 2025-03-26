@@ -8,28 +8,75 @@ export default class extends AbstractView {
   constructor(params) {
     super(params);
     this.setTitle("User List");
-
+    
+    this.paginationComponent = null;
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+  }
+  
+  onMount() {
     const app = document.querySelector("#app");
-    if (!app.loadUsers) app.loadUsers = this.loadUsers;
-    if (!app.toggleAdmin) app.toggleAdmin = this.toggleAdmin;
-    if (!app.deleteUser) app.deleteUser = this.deleteUser;
+    app.addEventListener('click', this.boundHandlers.click);
+    
+    if (this.paginationComponent) {
+      this.paginationComponent.onMount();
+    }
+    
+    if (state.isAdmin) {
+      setTimeout(() => {
+        this.loadUsers();
+      }, 0);
+    }
+    
+    console.log("UserList mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    
+    if (this.paginationComponent) {
+      this.paginationComponent.onUnmount();
+    }
+    
+    console.log("UserList unmounted: event listeners removed");
+  }
+  
+  handleClick(e) {
+    if (!document.getElementById('user-list-table')) return;
+    
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    if (action === 'toggle-admin' || action === 'delete-user') {
+      const userId = parseInt(target.dataset.userId);
+      
+      switch(action) {
+        case 'toggle-admin':
+          this.toggleAdmin(userId, target.checked);
+          break;
+        case 'delete-user':
+          this.deleteUser(userId);
+          break;
+      }
+    }
   }
 
   async getHtml() {
     const totalUsers = await rest.getNumberOfUsers();
     const numberOfPages = Math.ceil(totalUsers / config.numberOfUsersPerPage);
-    const paginationView = new Pagination({
+    
+    this.paginationComponent = new Pagination({
       currentPage: state.usersOpenedPage,
       totalPages: numberOfPages,
       isFromUserList: true,
     });
-    const paginationHtml = await paginationView.getHtml();
-
-    if (state.isAdmin) {
-      setTimeout(() => {
-        this.loadUsers();
-      }, 0);
-    } // Allow to load users after injecting the HTML
+    
+    const paginationHtml = await this.paginationComponent.getHtml();
 
     return `
         <h1 class="text-2xl font-bold mb-4">User List</h1>
@@ -55,57 +102,71 @@ export default class extends AbstractView {
   }
 
   async loadUsers() {
-    let users = await rest.getUsersPaginated(state.usersOpenedPage);
     const userListTbody = document.getElementById("user-list-tbody");
-    userListTbody.innerHTML = "";
+    if (!userListTbody) return; 
+    
+    try {
+      let users = await rest.getUsersPaginated(state.usersOpenedPage);
+      userListTbody.innerHTML = "";
 
-    users.forEach((user) => {
-      let tr = document.createElement("tr");
-      tr.classList.add("hover:bg-gray-50", "w-full");
+      users.forEach((user) => {
+        let tr = document.createElement("tr");
+        tr.classList.add("hover:bg-gray-50", "w-full");
 
-      tr.innerHTML = `
-            <td class="p-4">${user.username}</td>
-            <td class="p-4">${user.name}</td>
-            <td class="p-4">
-                <input onclick="app.toggleAdmin(${user.id})" type="checkbox" ${
-        user.isAdmin ? "checked" : ""
-      }
-                data-id="${
-                  user.id
-                }" class="admin-checkbox h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-            </td>
-            <td class="p-4">
-                <button onclick="app.deleteUser(${user.id})" data-id="${
-        user.id
-      }" class="delete-user-btn text-red-500 hover:text-red-700">Delete</button>
-            </td>
-        `;
+        tr.innerHTML = `
+              <td class="p-4">${user.username}</td>
+              <td class="p-4">${user.name}</td>
+              <td class="p-4">
+                  <input 
+                    type="checkbox" 
+                    ${user.isAdmin ? "checked" : ""}
+                    data-action="toggle-admin"
+                    data-user-id="${user.id}" 
+                    class="admin-checkbox h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+              </td>
+              <td class="p-4">
+                  <button 
+                    data-action="delete-user" 
+                    data-user-id="${user.id}" 
+                    class="delete-user-btn text-red-500 hover:text-red-700">
+                    Delete
+                  </button>
+              </td>
+          `;
 
-      userListTbody.appendChild(tr);
-    });
+        userListTbody.appendChild(tr);
+      });
+    } catch (error) {
+      userListTbody.innerHTML = `
+        <tr class="w-full">
+          <td colspan="4" class="p-4 text-red-500">Error loading users: ${error.message}</td>
+        </tr>
+      `;
+    }
   }
 
-  async toggleAdmin(userId) {
-    let adminCheckbox = document.querySelector(
-      `.admin-checkbox[data-id="${userId}"]`
-    );
-    if (adminCheckbox) {
-      try {
-        await rest.updateUserAdmin(userId, { isAdmin: adminCheckbox.checked });
-      } catch (error) {
-        adminCheckbox.checked = !adminCheckbox.checked;
-        showAlert(error.message, "red", "user-list-table");
+  async toggleAdmin(userId, isChecked) {
+    if (!document.getElementById('user-list-table')) return; 
+    
+    try {
+      await rest.updateUserAdmin(userId, { isAdmin: isChecked });
+    } catch (error) {
+      const checkbox = document.querySelector(`.admin-checkbox[data-user-id="${userId}"]`);
+      if (checkbox) {
+        checkbox.checked = !isChecked;
       }
+      showAlert(error.message, "red", "user-list-table");
     }
   }
 
   async deleteUser(userId) {
+    if (!document.getElementById('user-list-table')) return; 
+    
     try {
       await rest.deleteUser(userId);
+      this.loadUsers();
     } catch (error) {
       showAlert(error.message, "red", "user-list-table");
     }
-    const app = document.querySelector("#app");
-    app.loadUsers();
   }
 }
