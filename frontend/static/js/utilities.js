@@ -1,15 +1,6 @@
 import { articleShowCaseState, state } from "./config.js";
 import rest from "./rest.js";
 
-function escapeHtml(unsafe) {
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
 async function setArticlesToShowBasedOnState() {
   switch (state.articleShowCaseState) {
     case articleShowCaseState.ALL_ARTICLES:
@@ -113,7 +104,6 @@ function removeAlert(attachToId, afterDelay = 0) {
 }
 
 export {
-  escapeHtml,
   setArticlesToShowBasedOnState,
   validatePassword,
   encodeTags,
