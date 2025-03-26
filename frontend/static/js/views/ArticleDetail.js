@@ -58,7 +58,7 @@ export default class extends AbstractView {
                 </div>
               </div>
               
-              <div class="mt-6 prose prose-lg">${article.content}</div>            
+              <div class="mt-6 prose prose-lg">${marked.parse(article.content)}</div>            
               <div class="mt-6">
                 <div class="mt-2 flex flex-wrap gap-2">
                   ${article.tags.map(tag => `
