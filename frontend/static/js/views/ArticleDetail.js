@@ -14,25 +14,51 @@ export default class extends AbstractView {
       state.setArticlesOpenedPage(1);
       state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
     }
+    
+    this.headerComponent = null;
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+  }
+
+  onMount() {
     const app = document.querySelector("#app");
-    if (!app.goToArticleShowcaseTag)
-      app.goToArticleShowcaseTag = this.goToArticleShowcaseTag;
-    if (!app.goToArticleShowcaseUser)
-      app.goToArticleShowcaseUser = this.goToArticleShowcaseUser;
+    app.addEventListener('click', this.boundHandlers.click);
+    
+    if (this.headerComponent) {
+      this.headerComponent.onMount();
+    }
+    
+    console.log("ArticleDetail mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    
+    if (this.headerComponent) {
+      this.headerComponent.onUnmount();
+    }
+    
+    console.log("ArticleDetail unmounted: event listeners removed");
   }
 
   async getHtml() {
     const article = await rest.getArticleById(state.articleIdDetailOpened);
-    const headerView = new HeaderDetail({
+    
+    this.headerComponent = new HeaderDetail({
       isOwner: article.authorId === state.userId,
     });
+    
     this.setTitle(article.title);
-    const headerHtml = await headerView.getHtml();
+    const headerHtml = await this.headerComponent.getHtml();
+    
     const data = await rest.getUserById(article.authorId);
     const authorName = data.name;
     
     return `
-      <div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <div id="article-detail-view" class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
         ${headerHtml}
         <div class="max-w-3xl mx-auto">
           <div class="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -42,7 +68,9 @@ export default class extends AbstractView {
                   <h2 class="text-3xl font-bold text-gray-900 break-words">${article.title}</h2>
                   <h3 class="text-xl text-gray-700 mt-1 mb-2 italic">${article.subtitle}</h3>
                   <p class="text-sm text-gray-600 mt-2">
-                    By <a class="text-blue-600 hover:underline" onclick="app.goToArticleShowcaseUser('${article.authorId}')">${authorName}</a>
+                    By <a class="text-blue-600 hover:underline" 
+                          data-action="show-user-articles" 
+                          data-user-id="${article.authorId}">${authorName}</a>
                   </p>
                 </div>
                 <div class="w-full lg:w-[30%] text-right text-sm text-gray-600 mt-3 lg:mt-0">
@@ -63,7 +91,8 @@ export default class extends AbstractView {
               <div class="mt-6">
                 <div class="mt-2 flex flex-wrap gap-2">
                   ${article.tags.map(tag => `
-                    <a onclick="app.goToArticleShowcaseTag('${tag}')" 
+                    <a data-action="show-tag-articles" 
+                       data-tag="${tag}" 
                        class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full hover:bg-blue-200 cursor-pointer">
                       #${tag}
                     </a>
@@ -75,6 +104,24 @@ export default class extends AbstractView {
         </div>
       </div>
     `;
+  }
+
+  handleClick(e) {
+    if (!document.getElementById('article-detail-view')) return;
+    
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    switch(action) {
+      case 'show-tag-articles':
+        this.goToArticleShowcaseTag(target.dataset.tag);
+        break;
+      case 'show-user-articles':
+        this.goToArticleShowcaseUser(target.dataset.userId);
+        break;
+    }
   }
 
   async goToArticleShowcaseTag(tag) {
