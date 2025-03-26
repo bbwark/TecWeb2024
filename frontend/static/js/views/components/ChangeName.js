@@ -76,7 +76,7 @@ export default class extends AbstractView {
 
       if (isPasswordCorrect) {
         try {
-          await rest.updateUser(state.userId, { name: newNameInserted.value });
+          await rest.updateUser(state.userId, { name: sanitizeHtml(newNameInserted.value) });
           showAlert("Name changed successfully", "green", "change-name");
         } catch (error) {
           showAlert(error.message, "red", "change-name");

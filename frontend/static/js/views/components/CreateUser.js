@@ -87,9 +87,9 @@ export default class extends AbstractView {
     ) {
 
       let user = {
-        username: usernameInserted.value,
+        username: sanitizeHtml(usernameInserted.value),
         password: passwordInserted.value,
-        name: nameInserted.value,
+        name: sanitizeHtml(nameInserted.value),
         isAdmin: isAdminInserted.checked,
       };
 

@@ -139,8 +139,8 @@ export default class ModifyArticle extends AbstractView {
         .filter((tag, index, self) => self.indexOf(tag) === index);
 
       const article = {
-        title: title.trim(),
-        subtitle: subtitle.trim(),
+        title: sanitizeHtml(title.trim()),
+        subtitle: sanitizeHtml(subtitle.trim()),
         content: content.trim(),
         tags: transformedTags,
       };
