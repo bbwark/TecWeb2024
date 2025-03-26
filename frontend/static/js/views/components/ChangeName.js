@@ -1,15 +1,43 @@
 import { state } from "../../config.js";
 import rest from "../../rest.js";
-import { escapeHtml, showAlert } from "../../utilities.js";
+import { showAlert } from "../../utilities.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
     this.setTitle("Change Name");
-
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+  }
+  
+  onMount() {
     const app = document.querySelector("#app");
-    if (!app.changeName) app.changeName = this.changeName;
+    app.addEventListener('click', this.boundHandlers.click);
+    console.log("ChangeName mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    console.log("ChangeName unmounted: event listeners removed");
+  }
+
+  handleClick(e) {
+    if (!document.getElementById('change-name')) return;
+    
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    switch(action) {
+      case 'change-name':
+        this.changeName();
+        break;
+    }
   }
 
   async getHtml() {
@@ -26,7 +54,11 @@ export default class extends AbstractView {
                     <label for="new-name" class="block text-sm font-medium text-gray-700">New Name:</label>
                     <input type="text" id="new-name" name="newName" class="mt-1 p-2 block w-full border border-gray-300 rounded" required>
                 </div>
-                <button onclick="app.changeName()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Change Name</button>
+                <button 
+                  data-action="change-name" 
+                  class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Change Name
+                </button>
             </div>
           </div>
         </div>
@@ -37,8 +69,6 @@ export default class extends AbstractView {
     let passwordInserted = document.getElementById("password");
     let newNameInserted = document.getElementById("new-name");
     if (passwordInserted && newNameInserted) {
-      escapeHtml(passwordInserted.value);
-      escapeHtml(newNameInserted.value);
 
       const isPasswordCorrect = await rest.checkPassword(
         passwordInserted.value
@@ -47,6 +77,7 @@ export default class extends AbstractView {
       if (isPasswordCorrect) {
         try {
           await rest.updateUser(state.userId, { name: newNameInserted.value });
+          showAlert("Name changed successfully", "green", "change-name");
         } catch (error) {
           showAlert(error.message, "red", "change-name");
         }
