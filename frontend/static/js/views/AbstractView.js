@@ -10,4 +10,10 @@ export default class {
     async getHtml() {
         return "";
     }
+    
+    onMount() {
+    }
+    
+    onUnmount() {
+    }
 }
