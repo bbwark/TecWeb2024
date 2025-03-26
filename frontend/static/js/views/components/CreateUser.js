@@ -1,4 +1,4 @@
-import { escapeHtml, showAlert, validatePassword } from "../../utilities.js";
+import { showAlert, validatePassword } from "../../utilities.js";
 import rest from "../../rest.js";
 import AbstractView from "../AbstractView.js";
 
@@ -6,9 +6,37 @@ export default class extends AbstractView {
   constructor(params) {
     super(params);
     this.setTitle("Create User");
-
+    
+    this.boundHandlers = {
+      click: this.handleClick.bind(this)
+    };
+  }
+  
+  onMount() {
     const app = document.querySelector("#app");
-    if (!app.createUser) app.createUser = this.createUser;
+    app.addEventListener('click', this.boundHandlers.click);
+    console.log("CreateUser mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    console.log("CreateUser unmounted: event listeners removed");
+  }
+  
+  handleClick(e) {
+    if (!document.getElementById('create-user')) return;
+    
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    switch(action) {
+      case 'create-user':
+        this.createUser();
+        break;
+    }
   }
 
   async getHtml() {
@@ -33,12 +61,18 @@ export default class extends AbstractView {
                     <label for="is-admin" class="text-sm font-medium text-gray-700">Admin </label>
                     <input type="checkbox" id="is-admin" name="isAdmin" class="ml-2 mt-1">
                 </div>
-                <button onclick="app.createUser()" type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Create User</button>
+                <button 
+                  data-action="create-user" 
+                  type="submit" 
+                  class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                    Create User
+                </button>
             </div>
           </div>
         </div>
         `;
   }
+  
   async createUser() {
     let usernameInserted = document.getElementById("username");
     let passwordInserted = document.getElementById("password");
@@ -51,9 +85,6 @@ export default class extends AbstractView {
       nameInserted &&
       isAdminInserted
     ) {
-      escapeHtml(usernameInserted.value);
-      escapeHtml(passwordInserted.value);
-      escapeHtml(nameInserted.value);
 
       let user = {
         username: usernameInserted.value,
