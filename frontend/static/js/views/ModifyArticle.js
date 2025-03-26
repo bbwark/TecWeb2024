@@ -20,11 +20,17 @@ export default class ModifyArticle extends AbstractView {
     this.isNew = state.articleModifying === 0 ? true : false;
     this.setTitle(this.isNew ? "New Article" : "Edit Article");
   
+    this.setupEventHandlers();
+  }
+
+  setupEventHandlers() {
     const app = document.querySelector("#app");
-    if (!app.articleSaveButton) app.articleSaveButton = this.articleSaveButton;
-    if (!app.articleCancelButton) app.articleCancelButton = this.articleCancelButton;
-    if (!app.toggleMarkdownPreview) app.toggleMarkdownPreview = this.toggleMarkdownPreview;
-    if (!app.updateMarkdownPreview) app.updateMarkdownPreview = this.updateMarkdownPreview;
+    if (!app.hasOwnProperty('eventHandlersInitialized')) {
+      app.addEventListener('click', this.handleClick.bind(this));
+      app.addEventListener('change', this.handleChange.bind(this));
+      app.addEventListener('input', this.handleInput.bind(this));
+      app.eventHandlersInitialized = true;
+    }
   }
 
   async getHtml() {
@@ -44,60 +50,70 @@ export default class ModifyArticle extends AbstractView {
       }
 
       return `
-            <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-                <div class="max-w-2xl w-full space-y-8">
-                    <div>
-                        <h1 class="text-3xl font-extrabold text-center text-gray-900">
-                            ${this.isNew ? "Create New Article" : "Edit Article"
-        }
-                        </h1>
-                    </div>
-                    <div id="article-form" class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-md">
-                        <div>
-                            <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
-                            <input type="text" id="title" name="title" value="${article.title
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl w-full space-y-8">
+          <div>
+              <h1 class="text-3xl font-extrabold text-center text-gray-900">
+                  ${this.isNew ? "Create New Article" : "Edit Article"}
+              </h1>
+          </div>
+          <div id="article-form" class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-md">
+              <div>
+                  <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
+                  <input type="text" id="title" name="title" value="${article.title
         }" 
-                                   class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
-                                   required>
-                        </div>
-                        
-                        <div>
-                            <label for="content" class="block text-sm font-medium text-gray-700">Content:</label>
-                            <textarea id="content" name="content" rows="10" 
-                                      class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
-                                      required>${article.content}</textarea>
-                        </div>
-                        
-                        <div class="flex items-center">
-                            <input type="checkbox" id="preview-checkbox" onchange="app.toggleMarkdownPreview()" class="mr-2">
-                            <label for="preview-checkbox" class="text-sm font-medium text-gray-700">Show Markdown Preview</label>
-                        </div>
-                        <div id="preview" class="p-4 bg-gray-100 rounded border border-gray-300 mb-4 overflow-auto max-h-96" style="display:none;"></div>
-                        
-                        <div>
-                            <label for="tags" class="block text-sm font-medium text-gray-700">Tags:</label>
-                            <input type="text" id="tags" name="tags" value="${article.tags
+                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                         required>
+              </div>
+
+              <div>
+                  <label for="subtitle" class="block text-sm font-medium text-gray-700">Subtitle:</label>
+                  <input type="text" id="subtitle" name="subtitle" value="${article.subtitle
+        }" 
+                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                         required>
+              </div>
+              
+              <div>
+                  <label for="content" class="block text-sm font-medium text-gray-700">Content:</label>
+                  <textarea id="content" name="content" rows="10" 
+                            class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                            required>${article.content}</textarea>
+              </div>
+              
+              <div class="flex items-center">
+                  <input type="checkbox" id="preview-checkbox" class="mr-2">
+                  <label for="preview-checkbox" class="text-sm font-medium text-gray-700">Show Markdown Preview</label>
+              </div>
+              <div id="preview" class="p-4 bg-gray-100 rounded border border-gray-300 mb-4 overflow-auto max-h-96" style="display:none;"></div>
+              
+              <div>
+                  <label for="tags" class="block text-sm font-medium text-gray-700">Tags:</label>
+                  <input type="text" id="tags" name="tags" value="${article.tags
           .map((tag) => `#${tag}`)
           .join(", ")}" 
-                                   class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
-                                   required>
-                        </div>
-                        
-                        <div class="flex justify-between">
-                            <button id="cancel-button" onclick="app.articleCancelButton()" 
-                                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md shadow-sm hover:bg-gray-300">
-                                Cancel
-                            </button>
-                            <button id="save-button" onclick="app.articleSaveButton(${this.isNew
-        }, ${this.articleId})" 
-                                    class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700">
-                                ${this.isNew ? "Save" : "Update"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                         required>
+              </div>
+              
+              <div class="flex justify-between">
+                  <button 
+                      data-action="cancel-article" 
+                      class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md shadow-sm hover:bg-gray-300">
+                      Cancel
+                  </button>
+                  <button 
+                      data-action="save-article" 
+                      data-is-new="${this.isNew}" 
+                      data-article-id="${this.articleId}" 
+                      class="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700">
+                      ${this.isNew ? "Save" : "Update"}
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+`;
     }
   }
 
@@ -165,10 +181,8 @@ export default class ModifyArticle extends AbstractView {
         `;
       previewDiv.style.display = 'block';
       
-      contentTextarea.addEventListener('input', this.updateMarkdownPreview);
     } else {
       previewDiv.style.display = 'none';
-      contentTextarea.removeEventListener('input', this.updateMarkdownPreview);
     }
   }
   
@@ -184,6 +198,34 @@ export default class ModifyArticle extends AbstractView {
       if (contentContainer) {
         contentContainer.innerHTML = htmlContent;
       }
+    }
+  }
+
+  handleClick(e) {
+    const target = e.target.closest('[data-action]');
+    if (!target) return;
+    
+    const action = target.dataset.action;
+    
+    switch(action) {
+      case 'save-article':
+        this.articleSaveButton(target.dataset.isNew === 'true', parseInt(target.dataset.articleId));
+        break;
+      case 'cancel-article':
+        this.articleCancelButton();
+        break;
+    }
+  }
+
+  handleChange(e) {
+    if (e.target.id === 'preview-checkbox') {
+      this.toggleMarkdownPreview();
+    }
+  }
+
+  handleInput(e) {
+    if (e.target.id === 'content' && document.getElementById('preview-checkbox').checked) {
+      this.updateMarkdownPreview();
     }
   }
 }
