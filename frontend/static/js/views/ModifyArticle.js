@@ -4,7 +4,6 @@ import rest from "../rest.js";
 import AbstractView from "./AbstractView.js";
 import ArticleShowcase from "./ArticleShowcase.js";
 import {
-  escapeHtml,
   removeAlert,
   setArticlesToShowBasedOnState,
   showAlert,
@@ -20,17 +19,27 @@ export default class ModifyArticle extends AbstractView {
     this.isNew = state.articleModifying === 0 ? true : false;
     this.setTitle(this.isNew ? "New Article" : "Edit Article");
   
-    this.setupEventHandlers();
+    this.boundHandlers = {
+      click: this.handleClick.bind(this),
+      change: this.handleChange.bind(this),
+      input: this.handleInput.bind(this)
+    };
   }
 
-  setupEventHandlers() {
+  onMount() {
     const app = document.querySelector("#app");
-    if (!app.hasOwnProperty('eventHandlersInitialized')) {
-      app.addEventListener('click', this.handleClick.bind(this));
-      app.addEventListener('change', this.handleChange.bind(this));
-      app.addEventListener('input', this.handleInput.bind(this));
-      app.eventHandlersInitialized = true;
-    }
+    app.addEventListener('click', this.boundHandlers.click);
+    app.addEventListener('change', this.boundHandlers.change);
+    app.addEventListener('input', this.boundHandlers.input);
+    console.log("ModifyArticle mounted: event listeners added");
+  }
+  
+  onUnmount() {
+    const app = document.querySelector("#app");
+    app.removeEventListener('click', this.boundHandlers.click);
+    app.removeEventListener('change', this.boundHandlers.change);
+    app.removeEventListener('input', this.boundHandlers.input);
+    console.log("ModifyArticle unmounted: event listeners removed");
   }
 
   async getHtml() {
@@ -50,7 +59,7 @@ export default class ModifyArticle extends AbstractView {
       }
 
       return `
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div id="modify-article-view" class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl w-full space-y-8">
           <div>
               <h1 class="text-3xl font-extrabold text-center text-gray-900">
@@ -60,24 +69,25 @@ export default class ModifyArticle extends AbstractView {
           <div id="article-form" class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow-md">
               <div>
                   <label for="title" class="block text-sm font-medium text-gray-700">Title:</label>
-                  <input type="text" id="title" name="title" value="${article.title
-        }" 
+                  <input type="text" id="title" name="title" value="${article.title}" 
                          class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
                          required>
               </div>
 
               <div>
                   <label for="subtitle" class="block text-sm font-medium text-gray-700">Subtitle:</label>
-                  <input type="text" id="subtitle" name="subtitle" value="${article.subtitle
-        }" 
+                  <input type="text" id="subtitle" name="subtitle" value="${article.subtitle}" 
                          class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
                          required>
               </div>
               
               <div>
-                  <label for="content" class="block text-sm font-medium text-gray-700">Content:</label>
+                  <label for="content" class="block text-sm font-medium text-gray-700">Content (Markdown):</label>
+                  <div class="text-xs text-gray-500 mb-1">
+                      Supporta formattazione Markdown: ## Titoli, **grassetto**, *corsivo*, - liste, [link](url)
+                  </div>
                   <textarea id="content" name="content" rows="10" 
-                            class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                            class="font-mono mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
                             required>${article.content}</textarea>
               </div>
               
@@ -89,9 +99,7 @@ export default class ModifyArticle extends AbstractView {
               
               <div>
                   <label for="tags" class="block text-sm font-medium text-gray-700">Tags:</label>
-                  <input type="text" id="tags" name="tags" value="${article.tags
-          .map((tag) => `#${tag}`)
-          .join(", ")}" 
+                  <input type="text" id="tags" name="tags" value="${article.tags.map((tag) => `#${tag}`).join(", ")}" 
                          class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
                          required>
               </div>
@@ -122,11 +130,6 @@ export default class ModifyArticle extends AbstractView {
     const subtitle = document.getElementById("subtitle").value;
     const content = document.getElementById("content").value;
     const tags = document.getElementById("tags").value;
-
-    escapeHtml(title);
-    escapeHtml(subtitle);
-    escapeHtml(content);
-    escapeHtml(tags);
 
     if (title && subtitle && content && tags) {
       const tagRegex = /#?[a-zA-Z0-9]+/g;
@@ -202,6 +205,8 @@ export default class ModifyArticle extends AbstractView {
   }
 
   handleClick(e) {
+    if (!document.getElementById('modify-article-view')) return;
+    
     const target = e.target.closest('[data-action]');
     if (!target) return;
     
@@ -218,12 +223,16 @@ export default class ModifyArticle extends AbstractView {
   }
 
   handleChange(e) {
+    if (!document.getElementById('modify-article-view')) return;
+    
     if (e.target.id === 'preview-checkbox') {
       this.toggleMarkdownPreview();
     }
   }
 
   handleInput(e) {
+    if (!document.getElementById('modify-article-view')) return;
+    
     if (e.target.id === 'content' && document.getElementById('preview-checkbox').checked) {
       this.updateMarkdownPreview();
     }
