@@ -73,44 +73,46 @@ export default class extends AbstractView {
     const isOwner = this.params.isOwner;
     const articleId = new URL(window.location.href).pathname.split('/').pop();
     return `
-        <div id="header-detail" class="p-4 bg-gray-100 flex justify-between items-center sticky top-0 z-10 transition-transform duration-300 ease-in-out">
-            <h1 class="text-4xl font-bold text-blue-600">PressPortal</h1>
-            <div class="flex space-x-2">
-                ${
-                  state.isLogged
-                    ? `
+        <div id="header-detail" class="p-4 bg-gray-100 sticky top-0 z-10 transition-transform duration-300 ease-in-out">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                <h1 class="text-4xl font-bold text-blue-600 mb-3 sm:mb-0">PressPortal</h1>
+                <div class="flex flex-wrap gap-2">
                     ${
-                      isOwner || state.isAdmin
+                      state.isLogged
                         ? `
+                        ${
+                          isOwner || state.isAdmin
+                            ? `
+                            <button 
+                              data-action="delete-article"
+                              data-article-id="${articleId}" 
+                              class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                              Delete
+                            </button>
+                            <button 
+                              data-action="edit-article"
+                              data-article-id="${articleId}" 
+                              class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                              Modify
+                            </button>
+                        `
+                            : ""
+                        }
                         <button 
-                          data-action="delete-article"
-                          data-article-id="${articleId}" 
-                          class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-                          Delete
-                        </button>
-                        <button 
-                          data-action="edit-article"
-                          data-article-id="${articleId}" 
-                          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                          Modify
+                          data-action="go-to-settings" 
+                          class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                          Settings
                         </button>
                     `
-                        : ""
+                        : `
+                        <button 
+                          data-action="go-to-login" 
+                          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                          Login
+                        </button>
+                    `
                     }
-                    <button 
-                      data-action="go-to-settings" 
-                      class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
-                      Settings
-                    </button>
-                `
-                    : `
-                    <button 
-                      data-action="go-to-login" 
-                      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                      Login
-                    </button>
-                `
-                }
+                </div>
             </div>
         </div>
     `;

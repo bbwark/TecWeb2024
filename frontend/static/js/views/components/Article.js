@@ -37,7 +37,7 @@ export default class extends AbstractView {
     const content = this.stripMarkdown(this.params.content);
 
     return `
-    <div class="article article-${this.params.articleId} p-6 bg-white rounded-lg shadow-md mb-6 min-h-[250px] flex flex-col w-full mx-auto">
+    <div class="article article-${this.params.articleId} p-6 bg-white rounded-lg shadow-md mb-6 min-h-[250px] flex flex-col w-[100%]">
       <div class="flex justify-between items-start mb-4">
         <div class="flex-1 pr-4">
           <h2 class="text-2xl font-bold cursor-pointer text-blue-600 hover:underline mb-2"

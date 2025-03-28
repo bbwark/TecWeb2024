@@ -100,20 +100,16 @@ export default class extends AbstractView {
     const headerHtml = await this.headerComponent.getHtml();
 
     return `
-        <div id="article-showcase" class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-          ${headerHtml}
-          <div class="max-w-6xl mx-auto">
-            <div class="w-full lg:w-4/5 xl:w-3/4 mx-auto">
-              <div class="p-4">
-                <div id="article-list" class="mt-4">
-                  ${articleHtml.join("")}
-                </div>
-                ${paginationHtml}
-              </div>
-            </div>
-          </div>
+    <div id="article-showcase" class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      ${headerHtml}
+      <div class="max-w-4xl mx-auto">
+        <div id="article-list" class="mt-4 flex flex-col items-center">
+          ${articleHtml.join("")}
         </div>
-        `;
+        ${paginationHtml}
+      </div>
+    </div>
+    `;
   }
 
   async numberOfPages() {
