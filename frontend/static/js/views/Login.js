@@ -5,7 +5,7 @@ import {
   removeAlert,
   setArticlesToShowBasedOnState,
   showAlert,
-} from "../utilities.js";
+} from "../utilities/utilities.js";
 import AbstractView from "./AbstractView.js";
 
 export default class Login extends AbstractView {
@@ -105,8 +105,19 @@ export default class Login extends AbstractView {
           state.setArticleModifying(0);
           await navigateTo("/");
           
-          showAlert("Login successful", "green", "header");
-          removeAlert("header", 3000);
+          showAlert("Login successful", "green", "header-showcase", [], {
+            position: 'below',
+            width: 'custom',
+            maxWidth: 'max-w-4xl',
+            customClass: 'mx-auto mt-2 mb-4',
+            useContainer: true,
+            containerId: 'login-alerts-container'
+          });
+
+          removeAlert("header-showcase", 1200, {
+            useContainer: true,
+            containerId: 'login-alerts-container'
+          });
         }
       } catch (error) {
         console.error(error);
