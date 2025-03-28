@@ -15,7 +15,6 @@ export default class extends AbstractView {
       state.setArticleShowcaseState(articleShowCaseState.ALL_ARTICLES);
     }
     
-    // Get article ID exclusively from URL params
     this.articleId = params.id ? parseInt(params.id) : null;
     
     if (!this.articleId) {
@@ -75,7 +74,6 @@ export default class extends AbstractView {
       const data = await rest.getUserById(article.authorId);
       const authorName = data.name;
       
-      // Rest of the HTML generation remains the same
       return `
         <div id="article-detail-view" class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
           ${headerHtml}
