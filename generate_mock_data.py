@@ -40,7 +40,7 @@ for i in range(1, num_articles + 1):
         'id': i,
         'title': fake.sentence(nb_words=6)[:-1],  # Remove period
         'subtitle': fake.sentence(nb_words=4)[:-1],
-        'content': fake.paragraphs(nb=random.randint(5, 15)),
+        'content': fake.paragraphs(nb=random.randint(5, 100)),
         'tags': '#' + '#'.join(fake.words(nb=random.randint(1, 5))) + '#',
         'userId': user_id,
         'createdAt': created_at,
