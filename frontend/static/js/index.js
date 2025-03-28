@@ -75,6 +75,7 @@ const router = async () => {
     state.setArticlesOpenedPage(pageNum);
     await setArticlesToShowBasedOnState();
   } else if (match.route.path === "/") {
+    state.setArticlesOpenedPage(1);
     await setArticlesToShowBasedOnState();
   }
 
