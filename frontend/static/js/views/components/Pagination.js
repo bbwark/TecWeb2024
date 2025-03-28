@@ -46,8 +46,6 @@ export default class extends AbstractView {
     const target = e.target.closest('[data-action="change-page"]');
     if (!target) return;
     
-    console.log("Pagination click detected on:", target);
-    
     const page = parseInt(target.dataset.page);
     if (isNaN(page)) return;
     
