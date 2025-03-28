@@ -57,11 +57,11 @@ export default class Settings extends AbstractView {
       return await new Login().getHtml();
     } else {
       return `
-            <div id="settings-view" class="min-h-screen flex bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-                <div class="w-1/4 bg-white p-6 rounded-l-lg shadow-lg">
+            <div id="settings-view" class="min-h-screen flex flex-col sm:flex-row bg-gray-50 py-6 px-4 sm:py-12 sm:px-6 lg:px-8">
+                <div class="w-full sm:w-1/4 bg-white p-6 rounded-t-lg sm:rounded-t-none sm:rounded-tl-lg sm:rounded-bl-lg shadow-lg mb-4 sm:mb-0">
                     <h1 class="text-2xl font-extrabold text-left text-gray-900 mb-4">Settings</h1>
                     <nav class="settings-nav">
-                        <ul class="space-y-4">
+                        <ul class="flex flex-wrap sm:flex-col sm:space-y-4 gap-3 sm:gap-0">
                             <li id="nav-change-password" data-action="set-content" data-component="${this.components[0]}" 
                                 class="cursor-pointer text-lg text-blue-600 hover:text-blue-800 focus:text-blue-800 focus:outline-none">
                                 Change Password
@@ -97,8 +97,8 @@ export default class Settings extends AbstractView {
                         </ul>
                     </nav>
                 </div>
-                <div class="w-3/4 p-6 bg-white rounded-r-lg shadow-lg ml-4 overflow-hidden">
-                    <div id="settings-content" class="bg-gray-50 p-6 rounded-md shadow-inner min-h-full max-w-full"></div>
+                <div class="w-full sm:w-3/4 p-6 bg-white rounded-b-lg sm:rounded-b-none sm:rounded-r-lg shadow-lg sm:ml-4 overflow-hidden">
+                    <div id="settings-content" class="bg-gray-50 p-4 sm:p-6 rounded-md shadow-inner min-h-full max-w-full"></div>
                 </div>
             </div>
         `;
