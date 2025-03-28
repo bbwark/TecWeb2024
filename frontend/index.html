@@ -6,8 +6,15 @@
     <link rel="stylesheet" href="/static/css/output.css">
     <title>Single Page App</title>
   </head>
-  <body>
-    <div id="app"></div>
+  <body class="flex flex-col min-h-screen">
+    <div id="app" class="flex-grow"></div>
+    
+    <footer class="bg-gray-100 py-4 mt-auto border-t border-gray-200">
+      <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+        Made by <a href="https://github.com/bbwark" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-medium">bbwark</a>
+      </div>
+    </footer>
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="/static/js/index.js"></script>
