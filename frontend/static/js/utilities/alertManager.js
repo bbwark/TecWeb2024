@@ -49,12 +49,14 @@ class AlertManager {
       
       this.remove(attachToId, 0, options);
       
-      const alertHtml = this._createAlertHtml(message, color, attachToId, secondaryMessages, options);
-      this._displayAlert(container, alertHtml, attachToId, options);
+      const mergedOptions = this._getOptions(options);
+      
+      const alertHtml = this._createAlertHtml(message, color, attachToId, secondaryMessages, mergedOptions);
+      this._displayAlert(container, alertHtml, mergedOptions);
       
       this.activeAlerts.set(attachToId, {
         element: document.querySelector(`[role="alert"][data-for="${attachToId}"]`),
-        options
+        options: mergedOptions
       });
       
       return this;
@@ -133,8 +135,6 @@ class AlertManager {
      * @returns {string} - HTML string for the alert
      */
     _createAlertHtml(message, color, attachToId, secondaryMessages, options) {
-      const mergedOptions = this._getOptions(options);
-      
       // Create secondary content if provided
       let itemsSpecify = "";
       if (secondaryMessages.length > 0) {
@@ -155,8 +155,8 @@ class AlertManager {
       
       // Handle width classes
       let widthClasses = "";
-      if (mergedOptions.width === 'custom' && mergedOptions.maxWidth) {
-        widthClasses = `${mergedOptions.maxWidth} ${mergedOptions.customClass}`;
+      if (options.width === 'custom' && options.maxWidth) {
+        widthClasses = `${options.maxWidth} ${options.customClass}`;
       }
       
       // Construct and return the alert HTML
@@ -179,16 +179,13 @@ class AlertManager {
      * @private
      * @param {HTMLElement} container - The element to attach the alert to
      * @param {string} alertHtml - The HTML content of the alert
-     * @param {string} attachToId - ID of the element the alert is attached to
      * @param {Object} options - Configuration options
      */
-    _displayAlert(container, alertHtml, attachToId, options) {
-      const mergedOptions = this._getOptions(options);
-      
-      if (mergedOptions.useContainer) {
-        this._displayInContainer(container, alertHtml, mergedOptions);
+    _displayAlert(container, alertHtml, options) {
+      if (options.useContainer) {
+        this._displayInContainer(container, alertHtml, options);
       } else {
-        this._displayAdjacentToElement(container, alertHtml, mergedOptions);
+        this._displayAdjacentToElement(container, alertHtml, options);
       }
     }
     
