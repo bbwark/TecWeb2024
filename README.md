@@ -101,7 +101,7 @@ The project includes a mock data generator that creates sample content for testi
 
 3. The script will create a `mock_data.sql` file containing INSERT statements for:
    - Admin users
-   - Multiple journalist accounts
+   - Multiple journalist accounts (with password being " ", a whitespace) **IMPORTANT!**
    - Sample articles with various publication dates
    - A diverse collection of tags
 
@@ -111,6 +111,8 @@ The project includes a mock data generator that creates sample content for testi
    ```
 
 This allows you to quickly populate your database with realistic content for testing all features without having to manually create users and articles. The mock data includes a variety of article lengths, publication dates, and tag combinations to simulate a real-world news portal environment.
+
+
 
 ## Troubleshooting
 
