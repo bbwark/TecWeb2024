@@ -1,6 +1,6 @@
 import { articleShowCaseState, state } from "../../config.js";
 import { navigateTo } from "../../index.js";
-import { setArticlesToShowBasedOnState } from "../../utilities.js";
+import { setArticlesToShowBasedOnState } from "../../utilities/utilities.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {

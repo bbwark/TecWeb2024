@@ -8,7 +8,7 @@ import {
   setArticlesToShowBasedOnState,
   showAlert,
   sanitizeHtml
-} from "../utilities.js";
+} from "../utilities/utilities.js";
 import Login from "./Login.js";
 import { navigateTo } from "../index.js";
 

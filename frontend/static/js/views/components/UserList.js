@@ -2,7 +2,7 @@ import AbstractView from "../AbstractView.js";
 import rest from "../../rest.js";
 import { config, state } from "../../config.js";
 import Pagination from "./Pagination.js";
-import { showAlert } from "../../utilities.js";
+import { showAlert } from "../../utilities/utilities.js";
 
 export default class extends AbstractView {
   constructor(params) {

@@ -1,7 +1,7 @@
 import { config, state } from "./config.js";
 import ArticleDTO from "./models/articleDTO.js";
 import UserDTO from "./models/userDTO.js";
-import { decodeTags, encodeTags } from "./utilities.js";
+import { decodeTags, encodeTags } from "./utilities/utilities.js";
 
 // token interceptor
 axios.interceptors.request.use(

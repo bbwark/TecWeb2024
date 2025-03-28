@@ -4,7 +4,7 @@ import rest from "../../rest.js";
 import {
   setArticlesToShowBasedOnState,
   showAlert,
-} from "../../utilities.js";
+} from "../../utilities/utilities.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {

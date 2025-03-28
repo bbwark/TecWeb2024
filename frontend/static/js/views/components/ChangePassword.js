@@ -1,6 +1,6 @@
 import { state } from "../../config.js";
 import rest from "../../rest.js";
-import { removeAlert, showAlert, validatePassword } from "../../utilities.js";
+import { removeAlert, showAlert, validatePassword } from "../../utilities/utilities.js";
 import AbstractView from "../AbstractView.js";
 
 export default class extends AbstractView {

@@ -4,7 +4,7 @@ import ModifyArticle from "./views/ModifyArticle.js";
 import Login from "./views/Login.js";
 import Settings from "./views/Settings.js";
 import { articleShowCaseState, state } from "./config.js";
-import { setArticlesToShowBasedOnState } from "./utilities.js";
+import { setArticlesToShowBasedOnState } from "./utilities/utilities.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
