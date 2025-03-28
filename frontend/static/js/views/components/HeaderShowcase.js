@@ -8,24 +8,44 @@ export default class extends AbstractView {
     super(params);
     
     this.boundHandlers = {
-      click: this.handleClick.bind(this)
+      click: this.handleClick.bind(this),
+      scroll: this.handleScroll.bind(this)
     };
+    
+    this.lastScrollTop = 0;
   }
   
   onMount() {
     const app = document.querySelector("#app");
     app.addEventListener('click', this.boundHandlers.click);
+    window.addEventListener('scroll', this.boundHandlers.scroll);
     console.log("HeaderShowcase mounted: event listeners added");
   }
   
   onUnmount() {
     const app = document.querySelector("#app");
     app.removeEventListener('click', this.boundHandlers.click);
+    window.removeEventListener('scroll', this.boundHandlers.scroll);
     console.log("HeaderShowcase unmounted: event listeners removed");
   }
   
+  handleScroll() {
+    const header = document.getElementById('header-showcase');
+    if (!header) return;
+    
+    const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (currentScrollTop > this.lastScrollTop && currentScrollTop > 250) {
+      header.classList.add('-translate-y-full');
+    } else {
+      header.classList.remove('-translate-y-full');
+    }
+    
+    this.lastScrollTop = currentScrollTop;
+  }
+  
   handleClick(e) {
-    if (!document.getElementById('header')) return;
+    if (!document.getElementById('header-showcase')) return;
     
     const target = e.target.closest('[data-action]');
     if (!target) return;
@@ -52,38 +72,41 @@ export default class extends AbstractView {
     const { isLogged } = this.params;
     const showcaseState = state.articleShowCaseState;
     return `
-        <div id="header" class="p-4 bg-gray-100 flex justify-end space-x-2">
-            ${
-              isLogged
-                ? `
-                <button id="show-articles" 
-                        data-action="show-articles" 
-                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                    ${
-                      showcaseState === articleShowCaseState.ALL_ARTICLES
-                        ? "My Articles"
-                        : "Recent Articles"
-                    }
-                </button>
-                <button id="new-article" 
-                        data-action="new-article" 
-                        class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                  New Article
-                </button>
-                <button id="settings" 
-                        data-action="go-to-settings" 
-                        class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
-                  Settings
-                </button>
-            `
-                : `
-                <button id="login-button" 
-                        data-action="go-to-login" 
-                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                  Login
-                </button>
-            `
-            }
+        <div id="header-showcase" class="p-4 bg-gray-100 flex justify-between items-center sticky top-0 z-10 transition-transform duration-300 ease-in-out">
+            <h1 class="text-4xl font-bold text-blue-600">PressPortal</h1>
+            <div class="flex space-x-2">
+                ${
+                  isLogged
+                    ? `
+                    <button id="show-articles" 
+                            data-action="show-articles" 
+                            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        ${
+                          showcaseState === articleShowCaseState.ALL_ARTICLES
+                            ? "My Articles"
+                            : "Recent Articles"
+                        }
+                    </button>
+                    <button id="new-article" 
+                            data-action="new-article" 
+                            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                      New Article
+                    </button>
+                    <button id="settings" 
+                            data-action="go-to-settings" 
+                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                      Settings
+                    </button>
+                `
+                    : `
+                    <button id="login-button" 
+                            data-action="go-to-login" 
+                            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                      Login
+                    </button>
+                `
+                }
+            </div>
         </div>
     `;
   }

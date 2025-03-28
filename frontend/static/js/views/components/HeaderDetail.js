@@ -8,20 +8,40 @@ export default class extends AbstractView {
     super(params);
     
     this.boundHandlers = {
-      click: this.handleClick.bind(this)
+      click: this.handleClick.bind(this),
+      scroll: this.handleScroll.bind(this)
     };
+    
+    this.lastScrollTop = 0;
   }
   
   onMount() {
     const app = document.querySelector("#app");
     app.addEventListener('click', this.boundHandlers.click);
+    window.addEventListener('scroll', this.boundHandlers.scroll);
     console.log("HeaderDetail mounted: event listeners added");
   }
   
   onUnmount() {
     const app = document.querySelector("#app");
     app.removeEventListener('click', this.boundHandlers.click);
+    window.removeEventListener('scroll', this.boundHandlers.scroll);
     console.log("HeaderDetail unmounted: event listeners removed");
+  }
+  
+  handleScroll() {
+    const header = document.getElementById('header-detail');
+    if (!header) return;
+    
+    const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (currentScrollTop > this.lastScrollTop && currentScrollTop > 400) {
+      header.classList.add('-translate-y-full');
+    } else {
+      header.classList.remove('-translate-y-full');
+    }
+    
+    this.lastScrollTop = currentScrollTop;
   }
   
   handleClick(e) {
@@ -53,42 +73,45 @@ export default class extends AbstractView {
     const isOwner = this.params.isOwner;
     const articleId = new URL(window.location.href).pathname.split('/').pop();
     return `
-        <div id="header-detail" class="p-4 bg-gray-100 flex justify-end space-x-2">
-            ${
-              state.isLogged
-                ? `
+        <div id="header-detail" class="p-4 bg-gray-100 flex justify-between items-center sticky top-0 z-10 transition-transform duration-300 ease-in-out">
+            <h1 class="text-4xl font-bold text-blue-600">PressPortal</h1>
+            <div class="flex space-x-2">
                 ${
-                  isOwner || state.isAdmin
+                  state.isLogged
                     ? `
+                    ${
+                      isOwner || state.isAdmin
+                        ? `
+                        <button 
+                          data-action="delete-article"
+                          data-article-id="${articleId}" 
+                          class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                          Delete
+                        </button>
+                        <button 
+                          data-action="edit-article"
+                          data-article-id="${articleId}" 
+                          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                          Modify
+                        </button>
+                    `
+                        : ""
+                    }
                     <button 
-                      data-action="delete-article"
-                      data-article-id="${articleId}" 
-                      class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-                      Delete
-                    </button>
-                    <button 
-                      data-action="edit-article"
-                      data-article-id="${articleId}" 
-                      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                      Modify
+                      data-action="go-to-settings" 
+                      class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                      Settings
                     </button>
                 `
-                    : ""
+                    : `
+                    <button 
+                      data-action="go-to-login" 
+                      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                      Login
+                    </button>
+                `
                 }
-                <button 
-                  data-action="go-to-settings" 
-                  class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
-                  Settings
-                </button>
-            `
-                : `
-                <button 
-                  data-action="go-to-login" 
-                  class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                  Login
-                </button>
-            `
-            }
+            </div>
         </div>
     `;
   }
