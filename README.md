@@ -83,6 +83,35 @@ The implementation focuses on fundamentals of web development without relying on
 - Tag-based article filtering
 - Responsive design
 
+## Mock Data Generator
+
+The project includes a mock data generator that creates sample content for testing and development purposes. This utility creates a SQL file with realistic test data to populate your database with administrators, journalists, articles, and tags.
+
+### Using the Mock Data Generator
+
+1. Install the required Python dependencies:
+   ```
+   pip install faker
+   ```
+
+2. Run the generator script:
+   ```
+   python generate_mock_data.py
+   ```
+
+3. The script will create a `mock_data.sql` file containing INSERT statements for:
+   - Admin users
+   - Multiple journalist accounts
+   - Sample articles with various publication dates
+   - A diverse collection of tags
+
+4. Import the generated SQL into your PostgreSQL database:
+   ```
+   psql -U postgres -d PressPortal -f mock_data.sql
+   ```
+
+This allows you to quickly populate your database with realistic content for testing all features without having to manually create users and articles. The mock data includes a variety of article lengths, publication dates, and tag combinations to simulate a real-world news portal environment.
+
 ## Troubleshooting
 
 - **Database Connection Issues**: Ensure PostgreSQL is running and credentials are correct in databaseconn.js
