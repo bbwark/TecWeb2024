@@ -1,3 +1,7 @@
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
 import ArticleShowcase from "./views/ArticleShowcase.js";
 import ArticleDetail from "./views/ArticleDetail.js";
 import ModifyArticle from "./views/ModifyArticle.js";
@@ -73,24 +77,27 @@ const router = async () => {
   } else if (match.route.path === "/") {
     await setArticlesToShowBasedOnState();
   }
-  
-  
+
+
   if (currentView) {
     currentView.onUnmount();
   }
-  
+
   const view = new match.route.view(params);
 
   document.querySelector("#app").innerHTML = await view.getHtml();
-  
+
   view.onMount();
-  
+
   currentView = view;
-  
+
   window._appCurrentView = view;
 };
 
-window.addEventListener("popstate", router);
+window.addEventListener("popstate", async (e) => {
+  await router();
+  window.scrollTo(0, 0);
+});
 
 window.addEventListener("load", () => {
   state.loadState();

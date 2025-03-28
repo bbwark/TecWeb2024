@@ -163,6 +163,7 @@ export default class extends AbstractView {
   handleDetailClick(e) {
     e.preventDefault();
     navigateTo(`/article-detail/${this.params.articleId}`);
+    window.scrollTo(0, 0);
   }
 
   stripMarkdown(markdown) {
