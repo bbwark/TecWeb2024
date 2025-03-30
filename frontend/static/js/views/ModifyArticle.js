@@ -151,16 +151,17 @@ export default class ModifyArticle extends AbstractView {
       } else {
         await rest.updateArticle(articleId, article);
       }
+      await setArticlesToShowBasedOnState();
+      state.setArticleModifying(0);
+      await navigateTo("/");
+      showAlert("Article published successfully", "green", "header");
+      removeAlert("header", 3000);
     } else {
       showAlert("Please fill in all fields", "red", "article-form");
       removeAlert("article-form", 5000);
     }
 
-    await setArticlesToShowBasedOnState();
-    state.setArticleModifying(0);
-    await navigateTo("/");
-    showAlert("Article published successfully", "green", "header");
-    removeAlert("header", 3000);
+    
   }
 
   async articleCancelButton() {
